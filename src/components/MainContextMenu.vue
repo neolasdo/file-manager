@@ -4,7 +4,7 @@
       <v-list dense tile>
         <v-list-item @click="openFormModal">
           <v-list-item-icon>
-            <v-icon>mdi-plus</v-icon>
+            <v-icon>add</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>New folder</v-list-item-title>
@@ -12,7 +12,7 @@
         </v-list-item>
         <v-list-item @click="openUploadModal">
           <v-list-item-icon>
-            <v-icon>mdi-upload</v-icon>
+            <v-icon>upload_file</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Upload</v-list-item-title>
@@ -30,8 +30,8 @@
     name: 'DocumentContextMenu',
     computed: {
       ...mapState({
-        selectedItems: state => state.selectedItems,
-        current: state => state.current,
+        selectedItems: state => state.fileManager.selectedItems,
+        current: state => state.fileManager.current,
       }),
     },
     data() {
@@ -43,12 +43,12 @@
     },
     methods: {
       ...mapActions({
-        createFolder: 'createFolder',
-        editFolder: 'editFolder',
-        editFile: 'editFile',
-        resetSelectedFiles: 'resetSelectedFiles',
-        openUploadModal: 'openUploadModal',
-        openFormModal: 'openFormModal',
+        createFolder: 'fileManager/createFolder',
+        editFolder: 'fileManager/editFolder',
+        editFile: 'fileManager/editFile',
+        resetSelectedFiles: 'fileManager/resetSelectedFiles',
+        openUploadModal: 'fileManager/openUploadModal',
+        openFormModal: 'fileManager/openFormModal',
       }),
       showContextMenu(e) {
         this.showMenu = false;

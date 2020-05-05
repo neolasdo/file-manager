@@ -1,7 +1,7 @@
 <template>
   <div>
     <file-context-menu ref="fileContextMenu"/>
-    <div class="file-section" v-if="files && files.length">
+    <div class="file-section text-left" v-if="files && files.length">
       <h4>Files</h4>
       <v-row>
         <v-col v-for="(item, index) in files" :key="index" cols="2">
@@ -11,7 +11,7 @@
                     @dblclick.stop.prevent="download()"
                     @contextmenu.prevent.stop="showMenuContextFile(item, $event)">
               <v-card-text>
-                <v-img src="/assets/pdf.png" alt=""></v-img>
+                <v-img :src="fileThumbnail(item)" alt=""></v-img>
               </v-card-text>
               <v-card-subtitle class="text-truncate">{{ item.name }}</v-card-subtitle>
             </v-card>
@@ -26,6 +26,7 @@
   import {mapActions, mapState} from 'vuex'
   import {formatSize} from '@/helpers/file'
   import FileContextMenu from './FileContextMenu'
+  import {getFileExtension} from "../helpers/file";
 
 
   export default {
@@ -34,17 +35,42 @@
     },
     computed: {
       ...mapState({
-        files: state => state.files,
-        selectedItems: state => state.selectedFiles,
-      }),
+        files: state => state.fileManager.files,
+        selectedItems: state => state.fileManager.selectedFiles,
+      })
     },
     methods: {
       ...mapActions({
-        resetSelectedFiles: 'resetSelectedFiles',
-        removeFileSelected: 'removeFileSelected',
-        addFileSelected: 'addFileSelected',
-        download: 'download',
+        resetSelectedFiles: 'fileManager/resetSelectedFiles',
+        removeFileSelected: 'fileManager/removeFileSelected',
+        addFileSelected: 'fileManager/addFileSelected',
       }),
+      fileThumbnail(item) {
+        let fileExtension = getFileExtension(item.path)
+        switch (fileExtension) {
+          case 'doc': case 'docx': {
+            return require('../assets/doc.png')
+          }
+          case 'pdf': return require('../assets/pdf.png')
+          case 'ppt': case 'pptx': return require('../assets/ppt.png')
+          case 'xls': case 'xlsx': return require('../assets/excel.png')
+          case 'png': case 'jpg': case 'jpeg': return require('../assets/image.png')
+          default: return require('../assets/default.png')
+        }
+      },
+      download() {
+        let endpoint = this.$store.$endpoints.download
+
+        this.$store.$axios({
+          method: endpoint.method,
+          url: endpoint.url,
+          data: this.selectedItems
+        }).then(res => {
+          console.log(res)
+        }).catch(error => {
+          console.log(error)
+        })
+      },
       checkFileSelected(item) {
         let index = this.selectedItems.findIndex(element => {
           return element.id === item.id;
@@ -84,14 +110,14 @@
 
 <style>
   .file-card.active {
-    color: #4385f4;
-    background-color: #e5e5e5;
-    border: 1px solid #4385f4
+    color: #4385f4 !important;
+    background-color: #e5e5e5 !important;
+    border: 1px solid #4385f4 !important
   }
 
   .file-card:not(.active) {
-    color: #000;
-    background-color: #fff;
-    border: 1px solid #fff
+    color: #000 !important;
+    background-color: #fff !important;
+    border: 1px solid #fff !important
   }
 </style>

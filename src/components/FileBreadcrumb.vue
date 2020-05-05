@@ -1,18 +1,21 @@
 <template>
-  <v-breadcrumbs :items="breadcrumb" class="pa-3 custom-breadcrumb">
-    <template v-slot:item="{ item }">
-      <v-breadcrumbs-item :href="'#'" @click="openFolder(item)" :disabled="item.disabled">
-        {{ item.text.toUpperCase() }}
-      </v-breadcrumbs-item>
-    </template>
-    <template v-slot:divider>
-      <v-icon>mdi-chevron-right</v-icon>
-    </template>
-  </v-breadcrumbs>
+  <div>
+    <v-breadcrumbs v-if="keyword === ''" :items="breadcrumb" class="pa-3 custom-breadcrumb">
+      <template v-slot:item="{ item }">
+        <v-breadcrumbs-item :href="'#'" @click="openFolder(item)" :disabled="item.disabled">
+          {{ item.text.toUpperCase() }}
+        </v-breadcrumbs-item>
+      </template>
+      <template v-slot:divider>
+        <v-icon>navigate_next</v-icon>
+      </template>
+    </v-breadcrumbs>
+    <h3 v-if="keyword !== ''" style="line-height: 45px">Search result</h3>
+  </div>
 </template>
 
 <script>
-  import {mapActions} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
   export default {
     props: {
       breadcrumb: {
@@ -22,9 +25,14 @@
         }
       },
     },
+    computed: {
+      ...mapState({
+        keyword: state => state.fileManager.keyword,
+      }),
+    },
     methods: {
       ...mapActions({
-        getByFolder: 'getByFolder',
+        getByFolder: 'fileManager/getByFolder',
       }),
       openFolder(item) {
         this.getByFolder(item)

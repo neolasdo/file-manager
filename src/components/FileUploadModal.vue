@@ -14,7 +14,7 @@
               :thread="3" :drop="false" :drop-directory="false"
               :add-index="false" v-model="files" ref="upload">
               <v-btn color="primary" dark tile>
-                <v-icon>mdi-plus</v-icon>Select
+                <v-icon>add</v-icon>Select
               </v-btn>
             </file-upload>
             <v-simple-table>
@@ -78,6 +78,7 @@
     },
     data() {
       return {
+        reload: false,
         files: [],
         size: 1024 * 1024 * 10,
         accept: 'image/png,image/gif,image/jpeg,image/webp',
@@ -88,19 +89,32 @@
     },
     methods: {
       ...mapActions({
-        hideUploadModal: 'hideUploadModal',
+        hideUploadModal: 'fileManager/hideUploadModal',
+        getByFolder: 'fileManager/getByFolder',
       }),
       closeModal() {
         this.files = []
         this.hideUploadModal()
+        if (this.reload) {
+          this.getByFolder(this.current)
+        }
       },
       async uploadAll(file) {
         let formData = new FormData();
         formData.append('file', file);
-        return await this.$axios.post('upload', formData, {
+        let uploadEndpoint = this.$store.$endpoints.upload
+        return await this.$store.$axios({
+          method: uploadEndpoint.method,
+          url: uploadEndpoint.url,
+          data: formData,
           headers: {
             'Content-Type': 'multipart/form-data'
           }
+        }).then(res => {
+          console.log(res)
+          this.reload = true
+        }).catch(err => {
+          console.log(err)
         });
       },
       formatSize(size) {
@@ -109,8 +123,8 @@
     },
     computed: {
       ...mapState({
-        current: state => state.current,
-        showDialog: state => state.showUploadModal,
+        current: state => state.fileManager.current,
+        showDialog: state => state.fileManager.showUploadModal,
       }),
     },
   }

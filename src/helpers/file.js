@@ -21,30 +21,26 @@ export function formatSize(num, MAX) {
   return d + suffix;
 }
 
-export function getFileExtension(filename) {
-  let filenameExtension = filename.replace(/^.*[\\/]/, '');
+export function getFileExtension(filePath) {
+  let filenameExtension = filePath.replace(/^.*[\\/]/, '');
   filenameExtension = filenameExtension.split(/#|\?/g)[0];
   return (typeof filenameExtension !== undefined && filenameExtension.indexOf('.') !== -1) ? filenameExtension.split('.').pop().toLowerCase() : false;
 }
 
-export function isDocumentFile(filename) {
-  return getFileExtension(filename) && fileType.offices.includes(getFileExtension(filename))
+export function isDocumentFile(filePath) {
+  return getFileExtension(filePath) && fileType.offices.includes(getFileExtension(filePath))
 }
 
-export function isImageFile(filename) {
-  return getFileExtension(filename) && fileType.images.includes(getFileExtension(filename))
+export function isImageFile(filePath) {
+  return getFileExtension(filePath) && fileType.images.includes(getFileExtension(filePath))
 }
 
-export function isVideoFile(filename) {
-  return getFileExtension(filename) && fileType.videos.includes(getFileExtension(filename))
-}
-
-export function canPreview(filename) {
-  return isDocumentFile(filename) || isImageFile(filename) || isVideoFile(filename)
+export function canPreview(filePath) {
+  return isDocumentFile(filePath) || isImageFile(filePath)
 }
 
 export function allFileTypes() {
-  let types = fileType.offices.concat(fileType.images, fileType.videos);
+  let types = fileType.offices.concat(fileType.images);
   let allTypes = [];
   types.forEach((item) => {
     allTypes.push({

@@ -18,7 +18,7 @@ let all = {
                 {
                   name: 'File 1',
                   id: 1,
-                  path: 'http://localhost/file1',
+                  path: 'https://image.shutterstock.com/image-vector/example-signlabel-features-speech-bubble-600w-1223219908.jpg',
                   mime: 'document/pdf',
                   size: 125123123,
                   created_at: '2019-01-01'
@@ -26,7 +26,7 @@ let all = {
                 {
                   name: 'File 2',
                   id: 2,
-                  path: 'http://localhost/file2',
+                  path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_250kB.ppt',
                   mime: 'document/pdf',
                   size: 12512223,
                   created_at: '2019-01-01'
@@ -34,7 +34,7 @@ let all = {
                 {
                   name: 'File 3',
                   id: 3,
-                  path: 'http://localhost/file3',
+                  path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_250kB.ppt',
                   mime: 'document/pdf',
                   size: 12512312,
                   created_at: '2019-01-01'
@@ -42,7 +42,7 @@ let all = {
                 {
                   name: 'File 4',
                   id: 4,
-                  path: 'http://localhost/file4',
+                  path: 'https://file-examples.com/wp-content/uploads/2017/02/file-sample_500kB.doc',
                   mime: 'document/pdf',
                   size: 1251231,
                   created_at: '2019-01-01'
@@ -54,7 +54,7 @@ let all = {
             {
               name: 'File 5',
               id: 5,
-              path: 'http://localhost/file5',
+              path: 'https://file-examples.com/wp-content/uploads/2017/02/file-sample_500kB.docx',
               mime: 'document/pdf',
               size: 125133,
               created_at: '2019-01-01'
@@ -62,7 +62,7 @@ let all = {
             {
               name: 'File 6',
               id: 6,
-              path: 'http://localhost/file6',
+              path: 'https://file-examples.com/wp-content/uploads/2017/02/file-sample_1MB.docx',
               mime: 'document/pdf',
               size: 12512344,
               created_at: '2019-01-01'
@@ -70,7 +70,7 @@ let all = {
             {
               name: 'File 7',
               id: 7,
-              path: 'http://localhost/file7',
+              path: 'https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_1000.xls',
               mime: 'document/pdf',
               size: 1211111,
               created_at: '2019-01-01'
@@ -78,7 +78,7 @@ let all = {
             {
               name: 'File 8',
               id: 8,
-              path: 'http://localhost/file8',
+              path: 'https://file-examples.com/wp-content/uploads/2017/02/file_example_XLSX_1000.xlsx',
               mime: 'document/pdf',
               size: 125123112,
               created_at: '2019-01-01'
@@ -103,7 +103,7 @@ let all = {
                 {
                   name: 'File 9',
                   id: 9,
-                  path: 'http://localhost/file9',
+                  path: 'https://file-examples.com/wp-content/uploads/2017/02/file_example_XLSX_1000.xlsx',
                   mime: 'document/pdf',
                   size: 1251111,
                   created_at: '2019-01-01'
@@ -111,7 +111,7 @@ let all = {
                 {
                   name: 'File 10',
                   id: 10,
-                  path: 'http://localhost/file10',
+                  path: 'https://file-examples.com/wp-content/uploads/2017/10/file-example_PDF_500_kB.pdf',
                   mime: 'document/pdf',
                   size: 2512223,
                   created_at: '2019-01-01'
@@ -119,7 +119,7 @@ let all = {
                 {
                   name: 'File 11',
                   id: 11,
-                  path: 'http://localhost/file11',
+                  path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_250kB.ppt',
                   mime: 'document/pdf',
                   size: 12512312,
                   created_at: '2019-01-01'
@@ -127,7 +127,7 @@ let all = {
                 {
                   name: 'File 12',
                   id: 12,
-                  path: 'http://localhost/file12',
+                  path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_1MB.ppt',
                   mime: 'document/pdf',
                   size: 1251231,
                   created_at: '2019-01-01'
@@ -146,7 +146,7 @@ let all = {
               name: 'File 13',
               id: 13,
               isDir: false,
-              path: 'http://localhost:3000/sample.pdf',
+              path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_JPG_1MB.jpg',
               mime: 'document/pdf',
               size: 125133,
               created_at: '2019-01-01'
@@ -155,7 +155,7 @@ let all = {
               name: 'File 14',
               id: 14,
               isDir: false,
-              path: 'http://localhost/file14',
+              path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_PNG_1MB.png',
               mime: 'document/pdf',
               size: 12512344,
               created_at: '2019-01-01'
@@ -164,7 +164,7 @@ let all = {
               name: 'File 15',
               id: 15,
               isDir: false,
-              path: 'http://localhost/file15',
+              path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_GIF_1MB.gif',
               mime: 'document/pdf',
               size: 1211111,
               created_at: '2019-01-01'
@@ -173,7 +173,7 @@ let all = {
               name: 'File 16',
               id: 16,
               isDir: false,
-              path: 'http://localhost/file16',
+              path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_favicon.ico',
               mime: 'document/pdf',
               size: 125123112,
               created_at: '2019-01-01'

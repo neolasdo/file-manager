@@ -1,65 +1,74 @@
 <template>
-  <v-card class="mt-3">
-    <file-toolbar/>
-    <v-container class="pa-0">
-      <v-row no-gutters>
-        <v-col cols="6">
-          <file-breadcrumb :breadcrumb="formattedBreadcrumb"/>
-        </v-col>
-        <v-col cols="6" class="pa-2 text-right">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn icon small dark active-class="active" v-on="on" :color="showDetail ? 'primary': 'secondary'" @click="showDetail = !showDetail">
-                <v-icon>mdi-information-outline</v-icon>
-              </v-btn>
-            </template>
-            <span v-if="showDetail">Click to hide detail</span>
-            <span v-if="!showDetail">Click to show detail</span>
-          </v-tooltip>
-          <v-menu offset-y>
-            <template v-slot:activator="{ on }">
-              <v-btn text small v-on="on" light class="ml-2" tile>
-                アクション <v-icon>mdi-sort</v-icon>
-              </v-btn>
-            </template>
-            <v-list tile dense>
-              <v-list-item>
-                <v-list-item-title>署名依頼</v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>承認依頼</v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>ダウンロード</v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-title>削除</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-col>
-      </v-row>
-    </v-container>
+  <v-app>
+    <v-card class="mt-3">
+      <file-toolbar>
+        <template slot="addition_menu_item">
+          <slot name="toolbar_addition_menu_item"></slot>
+        </template>
+        <template slot="search_box_prepend">
+          <slot name="toolbar_search_box_prepend"></slot>
+        </template>
+      </file-toolbar>
+      <v-container class="pa-0">
+        <v-row no-gutters>
+          <v-col cols="6">
+            <file-breadcrumb :breadcrumb="formattedBreadcrumb"/>
+          </v-col>
+          <v-col cols="6" class="pa-2 text-right">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn icon small dark active-class="active" v-on="on" :color="showDetail ? 'primary': 'secondary'" @click="showDetail = !showDetail">
+                  <v-icon>info_outline</v-icon>
+                </v-btn>
+              </template>
+              <span v-if="showDetail">Click to hide detail</span>
+              <span v-if="!showDetail">Click to show detail</span>
+            </v-tooltip>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                <v-btn text small v-on="on" light class="ml-2" tile>
+                  アクション <v-icon>sort</v-icon>
+                </v-btn>
+              </template>
+              <v-list tile dense>
+                <v-list-item>
+                  <v-list-item-title>署名依頼</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>承認依頼</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>ダウンロード</v-list-item-title>
+                </v-list-item>
+                <v-list-item>
+                  <v-list-item-title>削除</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </v-col>
+        </v-row>
+      </v-container>
 
-    <v-container style="background-color: #e0e0e0">
-      <v-row>
-        <v-col :cols="showDetail ? 9: 12">
-          <v-container class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
-            <folder-list ref="folderList" @show-context-menu="hideMainContextMenu()"/>
-            <file-list ref="fileList" @show-context-menu="hideMainContextMenu()"/>
-          </v-container>
-          <main-context-menu ref="contextMenu"/>
-        </v-col>
-        <v-col v-if="showDetail" cols="3">
-          <detail-card @close="showDetail=false"/>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-divider></v-divider>
-    <file-upload-modal ref="uploadModal"></file-upload-modal>
-    <form-modal ref="formModal"></form-modal>
-    <span class="pa-2 font-italic caption">Use CTRL + left mouse button click to select multiple file & folder</span>
-  </v-card>
+      <v-container style="background-color: #e0e0e0">
+        <v-row>
+          <v-col :cols="showDetail ? 9: 12">
+            <v-container class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
+              <folder-list ref="folderList" @show-context-menu="hideMainContextMenu()"/>
+              <file-list ref="fileList" @show-context-menu="hideMainContextMenu()"/>
+            </v-container>
+            <main-context-menu ref="contextMenu"/>
+          </v-col>
+          <v-col v-if="showDetail" cols="3">
+            <detail-card @close="showDetail=false"/>
+          </v-col>
+        </v-row>
+      </v-container>
+      <v-divider></v-divider>
+      <file-upload-modal ref="uploadModal"></file-upload-modal>
+      <form-modal ref="formModal"></form-modal>
+      <span class="pa-2 font-italic caption">Use CTRL + left mouse button click to select multiple file & folder</span>
+    </v-card>
+  </v-app>
 </template>
 
 <script>
@@ -102,11 +111,12 @@
     },
     computed: {
       ...mapState({
-        breadcrumb: state => state.breadcrumb,
-        list: state => state.list,
-        selectedItems: state => state.selectedFiles,
-        isLoading: state => state.isLoading,
-        current: state => state.current,
+        breadcrumb: state => state.fileManager.breadcrumb,
+        list: state => state.fileManager.list,
+        selectedItems: state => state.fileManager.selectedFiles,
+        isLoading: state => state.fileManager.isLoading,
+        current: state => state.fileManager.current,
+        keywordState: state => state.fileManager.keyword,
       }),
       formattedBreadcrumb() {
         return this.breadcrumb.map(item => {
@@ -117,14 +127,16 @@
     },
     methods: {
       ...mapActions({
-        getByFolder: 'getByFolder',
-        createFolder: 'createFolder',
-        resetSelectedFiles: 'resetSelectedFiles',
+        getByFolder: 'fileManager/getByFolder',
+        createFolder: 'fileManager/createFolder',
+        resetSelectedFiles: 'fileManager/resetSelectedFiles',
       }),
       showMainContextMenu(e) {
-        this.$refs.contextMenu.showContextMenu(e)
-        this.$refs.folderList.hideContextMenu()
-        this.$refs.fileList.hideContextMenu()
+        if (this.keywordState === '') {
+          this.$refs.contextMenu.showContextMenu(e)
+          this.$refs.folderList.hideContextMenu()
+          this.$refs.fileList.hideContextMenu()
+        }
       },
       hideMainContextMenu() {
         this.$refs.contextMenu.hideContextMenu()

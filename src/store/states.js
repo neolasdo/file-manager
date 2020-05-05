@@ -1,5 +1,7 @@
 export default {
   files: [],
+  keyword: '',
+  filter: {},
   folders: [],
   current: {
     name: '',

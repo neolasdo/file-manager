@@ -38,20 +38,20 @@
     },
     computed: {
       ...mapState({
-        selectedFiles: state => state.selectedFiles,
-        selectedFolder: state => state.selectedFolder,
-        current: state => state.current,
-        showFormModal: state => state.showFormModal,
-        formCreate: state => state.formCreate,
+        selectedFiles: state => state.fileManager.selectedFiles,
+        selectedFolder: state => state.fileManager.selectedFolder,
+        current: state => state.fileManager.current,
+        showFormModal: state => state.fileManager.showFormModal,
+        formCreate: state => state.fileManager.formCreate,
       }),
     },
     methods: {
       ...mapActions({
-        openUploadModal: 'openUploadModal',
-        hideFormModal: 'hideFormModal',
-        createFolder: 'createFolder',
-        editFolderName: 'editFolderName',
-        editFile: 'editFile',
+        openUploadModal: 'fileManager/openUploadModal',
+        hideFormModal: 'fileManager/hideFormModal',
+        createFolder: 'fileManager/createFolder',
+        editFolderName: 'fileManager/editFolderName',
+        editFile: 'fileManager/editFile',
       }),
       submitForm() {
         if (this.formType === formTypes.createFolder) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="folder-section" v-if="folders && folders.length">
+    <div class="folder-section text-left" v-if="folders && folders.length">
       <h4>Folders</h4>
       <v-row>
         <v-col v-for="(item, index) in folders" :key="index" cols="3">
@@ -12,7 +12,7 @@
                     @dblclick.stop.prevent="openFolder(item)">
               <v-list-item dense>
                 <v-list-item-icon>
-                  <v-icon large>mdi-folder</v-icon>
+                  <v-icon large>folder</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>{{ item.name }}</v-list-item-title>
@@ -30,6 +30,7 @@
 <script>
   import {mapActions, mapState} from 'vuex'
   import FolderContextMenu from './FolderContextMenu'
+
   export default {
     components: {
       'folder-context-menu': FolderContextMenu
@@ -42,14 +43,14 @@
     },
     computed: {
       ...mapState({
-        folders: state => state.folders,
-        selectedFolder: state => state.selectedFolder,
+        folders: state => state.fileManager.folders,
+        selectedFolder: state => state.fileManager.selectedFolder,
       }),
     },
     methods: {
       ...mapActions({
-        getByFolder: 'getByFolder',
-        selectFolder: 'selectFolder',
+        getByFolder: 'fileManager/getByFolder',
+        selectFolder: 'fileManager/selectFolder',
       }),
       openFolder(item) {
         this.getByFolder(item)
@@ -70,14 +71,14 @@
 </script>
 <style>
   .dir-card.active {
-    color: #4385f4;
-    background-color: #e5e5e5;
-    border: 1px solid #4385f4
+    color: #4385f4 !important;
+    background-color: #e5e5e5 !important;
+    border: 1px solid #4385f4 !important
   }
 
   .dir-card:not(.active) {
-    color: #000;
-    background-color: #fff;
-    border: 1px solid #fff
+    color: #000 !important;
+    background-color: #fff !important;
+    border: 1px solid #fff !important
   }
 </style>

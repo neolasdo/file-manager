@@ -38,8 +38,8 @@ export default {
     state.isLoading = false;
   },
   UPDATE_LIST(state, payload) {
-    state.files = payload.files
-    state.folders = payload.children
+    state.files = payload.files ? payload.files: []
+    state.folders = payload.children ? payload.children: []
   },
   UPDATE_CURRENT(state, payload) {
     if (payload && payload.id) {
@@ -73,5 +73,13 @@ export default {
         }
       ]
     }
+  },
+  SEARCH(state, payload) {
+    state.keyword = payload.keyword
+    state.filter = payload.filter
+  },
+  RESET_SEARCH(state) {
+    state.keyword = ''
+    state.filter = {}
   }
 }

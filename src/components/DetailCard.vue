@@ -2,7 +2,7 @@
   <v-card class="mx-auto pa-2" min-height="500px" tile>
     <div class="d-flex flex-row-reverse">
       <v-btn icon @click="close">
-        <v-icon>mdi-close</v-icon>
+        <v-icon>clear</v-icon>
       </v-btn>
     </div>
     <v-card-text>
@@ -39,9 +39,9 @@
     name: 'DetailCard',
     computed: {
       ...mapState({
-        selectedFiles: state => state.selectedFiles,
-        selectedFolder: state => state.selectedFolder,
-        current: state => state.current,
+        selectedFiles: state => state.fileManager.selectedFiles,
+        selectedFolder: state => state.fileManager.selectedFolder,
+        current: state => state.fileManager.current,
       }),
       formattedBreadcrumb() {
         return this.breadcrumb.map(item => {

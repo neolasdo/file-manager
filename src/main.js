@@ -1,43 +1,57 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
 import Vuex from 'vuex'
-import states from './store/states'
-import actions from './store/actions'
-import getters from "./store/getters";
-import mutations from "./store/mutations";
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
-import 'vuetify/dist/vuetify.min.css'
+import axios from 'axios'
+import fileManager from './store/store'
+import vuetify from "./plugins/vuetify";
 
 Vue.use(Vuex)
-Vue.use(Vuetify)
-const vuetify = new Vuetify({
-  icons: {
-    iconfont: 'mdi'
-  },
-  theme: {
-    dark: {
-      primary: '#3f51b5',
-      secondary: '#b0bec5',
-      accent: '#8c9eff',
-      error: '#b71c1c',
-      info: '#26A69A',
-      warning: '#FFC107',
-      success: '#00E676'
-    }
-  },
-})
 Vue.config.productionTip = false
 
-const store = new Vuex.Store({
-  state() {
-    return states
+const store = new Vuex.Store({})
+const endpoints = {
+  get: {
+    url: 'index',
+    method: 'get'
   },
-  actions: actions,
-  getters: getters,
-  mutations: mutations
-})
+  search: {
+    url: 'search',
+    method: 'get'
+  },
+  download: {
+    url: 'download',
+    method: 'post'
+  },
+  createFolder: {
+    url: 'folder/create',
+    method: 'post'
+  },
+  upload: {
+    url: 'upload',
+    method: 'post'
+  },
+  delete: {
+    url: 'delete',
+    method: 'delete'
+  },
+  editFolder: {
+    url: 'folder/edit',
+    method: 'put'
+  },
+  editFile: {
+    url: 'file/edit',
+    method: 'put'
+  },
+  deleteFolder: {
+    url: 'folder/delete',
+    method: 'delete'
+  }
+}
+
+store.$axios = axios
+store.$endpoints = endpoints
+
+store.registerModule('fileManager', fileManager)
 
 new Vue({
   store,

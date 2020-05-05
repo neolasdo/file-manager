@@ -4,7 +4,7 @@
       <v-list dense tile>
         <v-list-item @click="openFolder">
           <v-list-item-icon>
-            <v-icon>mdi-folder-open</v-icon>
+            <v-icon>folder_open</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Open</v-list-item-title>
@@ -12,7 +12,7 @@
         </v-list-item>
         <v-list-item @click="openFormModal()">
           <v-list-item-icon>
-            <v-icon>mdi-pencil</v-icon>
+            <v-icon>edit</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Rename</v-list-item-title>
@@ -20,7 +20,7 @@
         </v-list-item>
         <v-list-item @click="deleteFolder(item)">
           <v-list-item-icon>
-            <v-icon>mdi-delete</v-icon>
+            <v-icon>delete</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Delete</v-list-item-title>
@@ -53,15 +53,15 @@
     },
     computed: {
       ...mapState({
-        current: state => state.current,
+        current: state => state.fileManager.current,
       }),
     },
     methods: {
       ...mapActions({
-        getByFolder: 'getByFolder',
-        deleteFolder: 'deleteFolder',
-        editFolderName: 'editFolderName',
-        openFormModal: 'openFormModal',
+        getByFolder: 'fileManager/getByFolder',
+        deleteFolder: 'fileManager/deleteFolder',
+        editFolderName: 'fileManager/editFolderName',
+        openFormModal: 'fileManager/openFormModal',
       }),
       showContext(e) {
         this.showMenu = false;
