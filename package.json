@@ -52,6 +52,7 @@
   ],
   "files": [
     "dist/*",
+    "dist/**/*",
     "src/*"
   ],
   "main": "./dist/file-manager.common.js",

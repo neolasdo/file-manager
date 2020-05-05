@@ -1,14 +1,7 @@
 <template>
   <v-app>
     <v-card class="mt-3">
-      <file-toolbar>
-        <template slot="addition_menu_item">
-          <slot name="toolbar_addition_menu_item"></slot>
-        </template>
-        <template slot="search_box_prepend">
-          <slot name="toolbar_search_box_prepend"></slot>
-        </template>
-      </file-toolbar>
+      <file-toolbar/>
       <v-container class="pa-0">
         <v-row no-gutters>
           <v-col cols="6">
@@ -32,16 +25,16 @@
               </template>
               <v-list tile dense>
                 <v-list-item>
-                  <v-list-item-title>署名依頼</v-list-item-title>
+                  <v-list-item-title>Name: ASC</v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title>承認依頼</v-list-item-title>
+                  <v-list-item-title>Name: DESC</v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title>ダウンロード</v-list-item-title>
+                  <v-list-item-title>Create date: ASC</v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title>削除</v-list-item-title>
+                  <v-list-item-title>Create date: DESC</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -53,8 +46,8 @@
         <v-row>
           <v-col :cols="showDetail ? 9: 12">
             <v-container class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
-              <folder-list ref="folderList" @show-context-menu="hideMainContextMenu()"/>
-              <file-list ref="fileList" @show-context-menu="hideMainContextMenu()"/>
+              <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
+              <file-list ref="fileList" @show-context-menu="showFileContextMenu()"/>
             </v-container>
             <main-context-menu ref="contextMenu"/>
           </v-col>
@@ -137,6 +130,14 @@
           this.$refs.folderList.hideContextMenu()
           this.$refs.fileList.hideContextMenu()
         }
+      },
+      showFolderContextMenu() {
+        this.$refs.contextMenu.hideContextMenu()
+        this.$refs.fileList.hideContextMenu()
+      },
+      showFileContextMenu() {
+        this.$refs.contextMenu.hideContextMenu()
+        this.$refs.folderList.hideContextMenu()
       },
       hideMainContextMenu() {
         this.$refs.contextMenu.hideContextMenu()

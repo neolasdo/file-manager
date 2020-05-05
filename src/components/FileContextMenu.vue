@@ -67,7 +67,7 @@
         deleteSelected: 'fileManager/deleteSelected',
         openFormModal: 'fileManager/openFormModal',
       }),
-      showContext(e) {
+      showContextMenu(e) {
         this.showMenu = false;
         this.x = e.clientX;
         this.y = e.clientY;
@@ -88,7 +88,7 @@
           console.log(error)
         })
       },
-      hideContext() {
+      hideContextMenu() {
         this.showMenu = false;
       },
       canPreview() {

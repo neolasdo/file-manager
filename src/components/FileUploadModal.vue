@@ -90,13 +90,13 @@
     methods: {
       ...mapActions({
         hideUploadModal: 'fileManager/hideUploadModal',
-        getByFolder: 'fileManager/getByFolder',
+        reloadAction: 'fileManager/reload',
       }),
       closeModal() {
         this.files = []
         this.hideUploadModal()
         if (this.reload) {
-          this.getByFolder(this.current)
+          this.reloadAction()
         }
       },
       async uploadAll(file) {

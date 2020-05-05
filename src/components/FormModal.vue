@@ -12,7 +12,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="hideFormModal">Close</v-btn>
+        <v-btn color="blue darken-1" text @click="hideFormModal(reload)">Close</v-btn>
         <v-btn color="blue darken-1" :disabled="oldName === name" text @click="submitForm()">Save</v-btn>
       </v-card-actions>
     </v-card>
@@ -31,6 +31,7 @@
     name: 'FormModal',
     data() {
       return {
+        reload: false,
         name: '',
         oldName: '',
         formType: formTypes.createFolder
@@ -55,12 +56,21 @@
       }),
       submitForm() {
         if (this.formType === formTypes.createFolder) {
-          this.createFolder()
+          this.createFolder({
+            name: this.name
+          })
         } else if (this.formType === formTypes.editFolder) {
-          this.editFolderName()
+          this.editFolderName({
+            id: this.selectedFolder.id,
+            name: this.name
+          })
         } else if (this.formType === formTypes.editFile) {
-          this.editFile()
+          this.editFile({
+            id: this.selectedFiles[0].id,
+            name: this.name
+          })
         }
+        this.reload = true
       },
     },
     watch: {

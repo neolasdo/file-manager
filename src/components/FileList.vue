@@ -9,7 +9,7 @@
             <v-card class="pa-2 file-card" :class="{'active': checkFileSelected(item)}" ref="files"
                     @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
                     @dblclick.stop.prevent="download()"
-                    @contextmenu.prevent.stop="showMenuContextFile(item, $event)">
+                    @contextmenu.prevent.stop="showContextMenu(item, $event)">
               <v-card-text>
                 <v-img :src="fileThumbnail(item)" alt=""></v-img>
               </v-card-text>
@@ -26,7 +26,7 @@
   import {mapActions, mapState} from 'vuex'
   import {formatSize} from '@/helpers/file'
   import FileContextMenu from './FileContextMenu'
-  import {getFileExtension} from "../helpers/file";
+  import { getFileThumbnail} from "../helpers/file";
 
 
   export default {
@@ -46,17 +46,7 @@
         addFileSelected: 'fileManager/addFileSelected',
       }),
       fileThumbnail(item) {
-        let fileExtension = getFileExtension(item.path)
-        switch (fileExtension) {
-          case 'doc': case 'docx': {
-            return require('../assets/doc.png')
-          }
-          case 'pdf': return require('../assets/pdf.png')
-          case 'ppt': case 'pptx': return require('../assets/ppt.png')
-          case 'xls': case 'xlsx': return require('../assets/excel.png')
-          case 'png': case 'jpg': case 'jpeg': return require('../assets/image.png')
-          default: return require('../assets/default.png')
-        }
+        return getFileThumbnail(item)
       },
       download() {
         let endpoint = this.$store.$endpoints.download
@@ -93,16 +83,16 @@
           this.addFileSelected(item);
         }
       },
-      showMenuContextFile(item, e) {
+      showContextMenu(item, e) {
         this.$emit('show-context-menu')
         if (!this.checkFileSelected(item)) {
           this.resetSelectedFiles()
           this.addFileSelected(item);
         }
-        this.$refs.fileContextMenu.showContext(e)
+        this.$refs.fileContextMenu.showContextMenu(e)
       },
       hideContextMenu() {
-        this.$refs.fileContextMenu.hideContext()
+        this.$refs.fileContextMenu.hideContextMenu()
       }
     }
   }

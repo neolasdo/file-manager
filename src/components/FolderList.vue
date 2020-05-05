@@ -7,7 +7,7 @@
           <v-hover v-slot:default="{ hover }">
             <v-card class="pa-2 dir-card" :class="{'active': checkFolderSelected(item)}"
                     :elevation="hover ? 8 : 4" ref="folders" tile
-                    @contextmenu.prevent.stop="showFolderContextMenu(item, $event)"
+                    @contextmenu.prevent.stop="showContextMenu(item, $event)"
                     @click.prevent.stop="selectFolder(item)"
                     @dblclick.stop.prevent="openFolder(item)">
               <v-list-item dense>
@@ -23,7 +23,7 @@
         </v-col>
       </v-row>
     </div>
-    <folder-context-menu ref="folderContextMenu" :item="selectedItem"/>
+    <folder-context-menu ref="folderContextMenu" :item="selectedFolder"/>
   </div>
 </template>
 
@@ -55,13 +55,13 @@
       openFolder(item) {
         this.getByFolder(item)
       },
-      showFolderContextMenu(item, e) {
+      showContextMenu(item, e) {
         this.$emit('show-context-menu')
-        this.selectedItem = item
-        this.$refs.folderContextMenu.showContext(e)
+        this.selectFolder(item)
+        this.$refs.folderContextMenu.showContextMenu(e)
       },
       hideContextMenu() {
-        this.$refs.folderContextMenu.hideContext()
+        this.$refs.folderContextMenu.hideContextMenu()
       },
       checkFolderSelected(item) {
         return this.selectedFolder && item.id === this.selectedFolder.id

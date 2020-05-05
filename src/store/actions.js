@@ -2,6 +2,7 @@ import getByFolder from "../data/files";
 
 export default {
   async getByFolder({ commit }, item) {
+    console.log(item)
     let getEndpoint = this.$endpoints.get
     commit('LOADING')
     commit('UPDATE_BREADCRUMB', item);
@@ -120,13 +121,20 @@ export default {
   openFormModal({ commit }, createForm) {
     commit('OPEN_FORM_MODAL', createForm)
   },
-  hideFormModal({ commit }) {
+  hideFormModal({ commit, dispatch }, reload) {
     commit('HIDE_FORM_MODAL')
+    if (reload) {
+      dispatch('reload')
+    }
   },
   search({ commit }, payload) {
     commit('SEARCH', payload)
   },
-  reload({ commit }, payload) {
-    commit('SEARCH', payload)
+  reload({ state, dispatch }) {
+    if (state.keyword !== '') {
+      dispatch('search', {keyword: state.keyword, filter: state.filter })
+    } else {
+      dispatch('getByFolder', state.current)
+    }
   }
 }

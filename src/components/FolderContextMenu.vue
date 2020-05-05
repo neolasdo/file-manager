@@ -63,7 +63,7 @@
         editFolderName: 'fileManager/editFolderName',
         openFormModal: 'fileManager/openFormModal',
       }),
-      showContext(e) {
+      showContextMenu(e) {
         this.showMenu = false;
         this.x = e.clientX;
         this.y = e.clientY;
@@ -71,7 +71,7 @@
           this.showMenu = true;
         });
       },
-      hideContext() {
+      hideContextMenu() {
         this.showMenu = false;
       },
       openFolder() {
