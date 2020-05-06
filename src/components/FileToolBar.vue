@@ -45,7 +45,7 @@
           </v-card>
         </v-menu>
         <v-btn icon tile small slot="append" @click="search({keyword: keyword, filter: filter })">
-          <v-icon>mdi-search</v-icon>
+          <v-icon>mdi-magnify</v-icon>
         </v-btn>
       </v-text-field>
       <v-spacer></v-spacer>

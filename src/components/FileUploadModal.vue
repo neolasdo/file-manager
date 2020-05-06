@@ -48,7 +48,7 @@
                     <v-icon v-if="file.error && file.error !== 'compressing' && $refs.upload.features.html5"
                             @click.prevent="$refs.upload.update(file, {active: true, error: '', progress: '0.00'})">mdi-reload
                     </v-icon>
-                    <v-icon small @click="$refs.upload.remove(file)">mdi-trash</v-icon>
+                    <v-icon small @click="$refs.upload.remove(file)">mdi-delete</v-icon>
                   </td>
                 </tr>
                 </tbody>
