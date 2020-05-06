@@ -6,16 +6,12 @@
           {{ item.text.toUpperCase() }}
         </v-breadcrumbs-item>
       </template>
-      <template v-slot:divider>
-        <v-icon>navigate_next</v-icon>
-      </template>
     </v-breadcrumbs>
     <h3 v-if="keyword !== ''" style="line-height: 45px">Search result</h3>
   </div>
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   export default {
     props: {
       breadcrumb: {
@@ -26,14 +22,14 @@
       },
     },
     computed: {
-      ...mapState({
-        keyword: state => state.fileManager.keyword,
-      }),
+      keyword() {
+        return this.$fileStore.state.keyword
+      },
     },
     methods: {
-      ...mapActions({
-        getByFolder: 'fileManager/getByFolder',
-      }),
+      getByFolder(payload) {
+        this.$fileStore.dispatch('getByFolder', payload)
+      },
       openFolder(item) {
         this.getByFolder(item)
       }

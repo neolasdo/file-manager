@@ -2,7 +2,7 @@
   <v-card class="mx-auto pa-2" min-height="500px" tile>
     <div class="d-flex flex-row-reverse">
       <v-btn icon @click="close">
-        <v-icon>clear</v-icon>
+        <v-icon>mdi-close</v-icon>
       </v-btn>
     </div>
     <v-card-text>
@@ -33,21 +33,18 @@
 
 <script>
   import {formatSize} from '@/helpers/file'
-  import {mapState} from 'vuex'
 
   export default {
     name: 'DetailCard',
     computed: {
-      ...mapState({
-        selectedFiles: state => state.fileManager.selectedFiles,
-        selectedFolder: state => state.fileManager.selectedFolder,
-        current: state => state.fileManager.current,
-      }),
-      formattedBreadcrumb() {
-        return this.breadcrumb.map(item => {
-          item.disabled = item.id === this.current.id;
-          return item;
-        })
+      selectedFiles() {
+        return this.$fileStore.state.selectedFiles
+      },
+      selectedFolder() {
+        return this.$fileStore.state.selectedFolder
+      },
+      current() {
+        return this.$fileStore.state.current
       },
     },
     methods: {

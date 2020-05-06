@@ -4,7 +4,7 @@
     <v-card dark color="secondary" v-if="showModal" ref="previewCard">
       <v-toolbar dark color="secondary">
         <v-btn icon dark @click="closeModal">
-          <v-icon>close</v-icon>
+          <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn text @click="closeModal">Close</v-btn>

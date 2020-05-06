@@ -12,7 +12,7 @@
                     @dblclick.stop.prevent="openFolder(item)">
               <v-list-item dense>
                 <v-list-item-icon>
-                  <v-icon large>folder</v-icon>
+                  <v-icon large>mdi-folder</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
                   <v-list-item-title>{{ item.name }}</v-list-item-title>
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   import FolderContextMenu from './FolderContextMenu'
 
   export default {
@@ -42,16 +41,20 @@
       }
     },
     computed: {
-      ...mapState({
-        folders: state => state.fileManager.folders,
-        selectedFolder: state => state.fileManager.selectedFolder,
-      }),
+      folders() {
+        return this.$fileStore.state.folders
+      },
+      selectedFolder() {
+        return this.$fileStore.state.selectedFolder
+      },
     },
     methods: {
-      ...mapActions({
-        getByFolder: 'fileManager/getByFolder',
-        selectFolder: 'fileManager/selectFolder',
-      }),
+      getByFolder(payload) {
+        this.$fileStore.dispatch('getByFolder', payload)
+      },
+      selectFolder(payload) {
+        this.$fileStore.dispatch('selectFolder', payload)
+      },
       openFolder(item) {
         this.getByFolder(item)
       },

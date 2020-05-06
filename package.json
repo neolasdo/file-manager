@@ -51,8 +51,7 @@
   ],
   "files": [
     "dist/*",
-    "dist/**/*",
-    "src/*"
+    "dist/**/*"
   ],
   "main": "./dist/file-manager.common.js",
   "browser": "./dist/file-manager.umd.js"

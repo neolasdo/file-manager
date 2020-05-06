@@ -6,7 +6,7 @@
           <template v-slot:activator="{ on }">
             <v-btn small tile text v-on="on">
               検索
-              <v-icon>arrow_drop_down</v-icon>
+              <v-icon>mdi-menu</v-icon>
             </v-btn>
           </template>
           <v-card tile max-width="500px">
@@ -45,14 +45,14 @@
           </v-card>
         </v-menu>
         <v-btn icon tile small slot="append" @click="search({keyword: keyword, filter: filter })">
-          <v-icon>search</v-icon>
+          <v-icon>mdi-search</v-icon>
         </v-btn>
       </v-text-field>
       <v-spacer></v-spacer>
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
           <v-btn tile v-on="on" dark outlined>
-            <v-icon>add</v-icon> New
+            <v-icon>mdi-plus</v-icon> New
           </v-btn>
         </template>
         <v-list tile dense>
@@ -67,7 +67,7 @@
       <v-menu offset-y v-if="selectedFiles.length">
         <template v-slot:activator="{ on }">
           <v-btn v-on="on" icon class="ml-2" dark>
-            <v-icon>menu</v-icon>
+            <v-icon>mdi-menu</v-icon>
           </v-btn>
         </template>
         <v-list tile dense>
@@ -90,7 +90,6 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   import {allFileTypes} from "../helpers/file";
 
   export default {
@@ -121,18 +120,26 @@
       }
     },
     computed: {
-      ...mapState({
-        selectedFiles: state => state.fileManager.selectedFiles,
-        current: state => state.fileManager.current,
-        keywordState: state => state.fileManager.keyword,
-      }),
+      selectedFiles() {
+        return this.$fileStore.state.selectedFiles
+      },
+      current() {
+        return this.$fileStore.state.current
+      },
+      keywordState() {
+        return this.$fileStore.state.keywordState
+      },
     },
     methods: {
-      ...mapActions({
-        openUploadModal: 'fileManager/openUploadModal',
-        openFormModal: 'fileManager/openFormModal',
-        search: 'fileManager/search',
-      }),
+      openUploadModal() {
+        this.$fileStore.dispatch('openUploadModal')
+      },
+      openFormModal(payload) {
+        this.$fileStore.dispatch('openFormModal', payload)
+      },
+      search(payload) {
+        this.$fileStore.dispatch('search', payload)
+      },
       getAllType() {
         let allTypes = [];
         allTypes.push({text: 'すべて', value: ''})

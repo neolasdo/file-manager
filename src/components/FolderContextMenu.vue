@@ -4,7 +4,7 @@
       <v-list dense tile>
         <v-list-item @click="openFolder">
           <v-list-item-icon>
-            <v-icon>folder_open</v-icon>
+            <v-icon>mdi-folder-open</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Open</v-list-item-title>
@@ -12,7 +12,7 @@
         </v-list-item>
         <v-list-item @click="openFormModal()">
           <v-list-item-icon>
-            <v-icon>edit</v-icon>
+            <v-icon>mdi-pencil</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Rename</v-list-item-title>
@@ -20,7 +20,7 @@
         </v-list-item>
         <v-list-item @click="deleteFolder(item)">
           <v-list-item-icon>
-            <v-icon>delete</v-icon>
+            <v-icon>mdi-trash</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Delete</v-list-item-title>
@@ -32,7 +32,6 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   export default {
     props: {
       item: {
@@ -52,17 +51,23 @@
       }
     },
     computed: {
-      ...mapState({
-        current: state => state.fileManager.current,
-      }),
+      current() {
+        return this.$fileStore.state.current
+      },
     },
     methods: {
-      ...mapActions({
-        getByFolder: 'fileManager/getByFolder',
-        deleteFolder: 'fileManager/deleteFolder',
-        editFolderName: 'fileManager/editFolderName',
-        openFormModal: 'fileManager/openFormModal',
-      }),
+      getByFolder(payload) {
+        this.$fileStore.dispatch('getByFolder', payload)
+      },
+      deleteFolder(payload) {
+        this.$fileStore.dispatch('deleteFolder', payload)
+      },
+      editFolderName(payload) {
+        this.$fileStore.dispatch('editFolderName', payload)
+      },
+      openFormModal(payload) {
+        this.$fileStore.dispatch('openFormModal', payload)
+      },
       showContextMenu(e) {
         this.showMenu = false;
         this.x = e.clientX;

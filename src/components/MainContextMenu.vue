@@ -4,7 +4,7 @@
       <v-list dense tile>
         <v-list-item @click="openFormModal">
           <v-list-item-icon>
-            <v-icon>add</v-icon>
+            <v-icon>mdi-plus</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>New folder</v-list-item-title>
@@ -12,7 +12,7 @@
         </v-list-item>
         <v-list-item @click="openUploadModal">
           <v-list-item-icon>
-            <v-icon>upload_file</v-icon>
+            <v-icon>mdi-file-upload</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Upload</v-list-item-title>
@@ -24,15 +24,15 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
-
   export default {
     name: 'DocumentContextMenu',
     computed: {
-      ...mapState({
-        selectedItems: state => state.fileManager.selectedItems,
-        current: state => state.fileManager.current,
-      }),
+      selectedItems() {
+        return this.$fileStore.state.selectedItems
+      },
+      current() {
+        return this.$fileStore.state.current
+      },
     },
     data() {
       return {
@@ -42,14 +42,24 @@
       }
     },
     methods: {
-      ...mapActions({
-        createFolder: 'fileManager/createFolder',
-        editFolder: 'fileManager/editFolder',
-        editFile: 'fileManager/editFile',
-        resetSelectedFiles: 'fileManager/resetSelectedFiles',
-        openUploadModal: 'fileManager/openUploadModal',
-        openFormModal: 'fileManager/openFormModal',
-      }),
+      createFolder(payload) {
+        this.$fileStore.dispatch('createFolder', payload)
+      },
+      editFolder(payload) {
+        this.$fileStore.dispatch('editFolder', payload)
+      },
+      editFile(payload) {
+        this.$fileStore.dispatch('editFile', payload)
+      },
+      resetSelectedFiles() {
+        this.$fileStore.dispatch('resetSelectedFiles')
+      },
+      openUploadModal() {
+        this.$fileStore.dispatch('openUploadModal')
+      },
+      openFormModal(payload) {
+        this.$fileStore.dispatch('openFormModal', payload)
+      },
       showContextMenu(e) {
         this.showMenu = false;
         this.x = e.clientX;

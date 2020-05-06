@@ -2,8 +2,8 @@ import Vue from 'vue'
 import App from './App.vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import fileManager from './store/store'
 import vuetify from "./plugins/vuetify";
+import Manager from '../../file-manager'
 
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -47,11 +47,7 @@ const endpoints = {
     method: 'delete'
   }
 }
-
-store.$axios = axios
-store.$endpoints = endpoints
-
-store.registerModule('fileManager', fileManager)
+Vue.use(Manager, { store, axios, endpoints });
 
 new Vue({
   store,

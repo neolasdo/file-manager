@@ -2,7 +2,6 @@ import getByFolder from "../data/files";
 
 export default {
   async getByFolder({ commit }, item) {
-    console.log(item)
     let getEndpoint = this.$endpoints.get
     commit('LOADING')
     commit('UPDATE_BREADCRUMB', item);

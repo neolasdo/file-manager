@@ -11,7 +11,7 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn icon small dark active-class="active" v-on="on" :color="showDetail ? 'primary': 'secondary'" @click="showDetail = !showDetail">
-                  <v-icon>info_outline</v-icon>
+                  <v-icon>mdi-info-outline</v-icon>
                 </v-btn>
               </template>
               <span v-if="showDetail">Click to hide detail</span>
@@ -20,7 +20,7 @@
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn text small v-on="on" light class="ml-2" tile>
-                  アクション <v-icon>sort</v-icon>
+                  アクション <v-icon>mdi-sort</v-icon>
                 </v-btn>
               </template>
               <v-list tile dense>
@@ -65,7 +65,6 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   import FileToolBar from './FileToolBar'
   import FileBreadcrumb from './FileBreadcrumb'
   import FolderList from './FolderList'
@@ -103,27 +102,35 @@
       }
     },
     computed: {
-      ...mapState({
-        breadcrumb: state => state.fileManager.breadcrumb,
-        list: state => state.fileManager.list,
-        selectedItems: state => state.fileManager.selectedFiles,
-        isLoading: state => state.fileManager.isLoading,
-        current: state => state.fileManager.current,
-        keywordState: state => state.fileManager.keyword,
-      }),
       formattedBreadcrumb() {
-        return this.breadcrumb.map(item => {
+        return this.$fileStore.state.breadcrumb.map(item => {
           item.disabled = item.id === this.current.id;
           return item;
         })
       },
+      selectedItems() {
+        return this.$fileStore.state.selectedFiles
+      },
+      isLoading() {
+        return this.$fileStore.state.isLoading
+      },
+      current() {
+        return this.$fileStore.state.current
+      },
+      keywordState() {
+        return this.$fileStore.state.keywordState
+      },
     },
     methods: {
-      ...mapActions({
-        getByFolder: 'fileManager/getByFolder',
-        createFolder: 'fileManager/createFolder',
-        resetSelectedFiles: 'fileManager/resetSelectedFiles',
-      }),
+      getByFolder(payload) {
+        this.$fileStore.dispatch('getByFolder', payload)
+      },
+      createFolder(payload) {
+        this.$fileStore.dispatch('createFolder', payload)
+      },
+      resetSelectedFiles() {
+        this.$fileStore.dispatch('resetSelectedFiles')
+      },
       showMainContextMenu(e) {
         if (this.keywordState === '') {
           this.$refs.contextMenu.showContextMenu(e)

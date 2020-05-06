@@ -14,7 +14,7 @@
               :thread="3" :drop="false" :drop-directory="false"
               :add-index="false" v-model="files" ref="upload">
               <v-btn color="primary" dark tile>
-                <v-icon>add</v-icon>Select
+                <v-icon>mdi-plus</v-icon>Select
               </v-btn>
             </file-upload>
             <v-simple-table>
@@ -48,7 +48,7 @@
                     <v-icon v-if="file.error && file.error !== 'compressing' && $refs.upload.features.html5"
                             @click.prevent="$refs.upload.update(file, {active: true, error: '', progress: '0.00'})">mdi-reload
                     </v-icon>
-                    <v-icon small @click="$refs.upload.remove(file)">mdi-delete</v-icon>
+                    <v-icon small @click="$refs.upload.remove(file)">mdi-trash</v-icon>
                   </td>
                 </tr>
                 </tbody>
@@ -67,7 +67,6 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   import {formatSize} from "@/helpers/file";
   import FileUpload from 'vue-upload-component'
 
@@ -88,10 +87,12 @@
       }
     },
     methods: {
-      ...mapActions({
-        hideUploadModal: 'fileManager/hideUploadModal',
-        reloadAction: 'fileManager/reload',
-      }),
+      hideUploadModal() {
+        this.$fileStore.dispatch('hideUploadModal')
+      },
+      reloadAction() {
+        this.$fileStore.dispatch('reload')
+      },
       closeModal() {
         this.files = []
         this.hideUploadModal()
@@ -122,10 +123,12 @@
       },
     },
     computed: {
-      ...mapState({
-        current: state => state.fileManager.current,
-        showDialog: state => state.fileManager.showUploadModal,
-      }),
+      current() {
+        return this.$fileStore.state.current
+      },
+      showDialog() {
+        return this.$fileStore.state.showUploadModal
+      },
     },
   }
 </script>

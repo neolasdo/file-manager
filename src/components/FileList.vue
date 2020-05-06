@@ -23,7 +23,6 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   import {formatSize} from '@/helpers/file'
   import FileContextMenu from './FileContextMenu'
   import { getFileThumbnail} from "../helpers/file";
@@ -34,17 +33,25 @@
       'file-context-menu': FileContextMenu
     },
     computed: {
-      ...mapState({
-        files: state => state.fileManager.files,
-        selectedItems: state => state.fileManager.selectedFiles,
-      })
+      files() {
+        return this.$fileStore.state.files
+      },
+      selectedItems() {
+        return this.$fileStore.state.selectedFiles
+      },
     },
     methods: {
-      ...mapActions({
-        resetSelectedFiles: 'fileManager/resetSelectedFiles',
-        removeFileSelected: 'fileManager/removeFileSelected',
-        addFileSelected: 'fileManager/addFileSelected',
-      }),
+      resetSelectedFiles() {
+        this.$fileStore.dispatch('resetSelectedFiles')
+      },
+
+      removeFileSelected(payload) {
+        this.$fileStore.dispatch('removeFileSelected', payload)
+      },
+
+      addFileSelected(payload) {
+        this.$fileStore.dispatch('addFileSelected', payload)
+      },
       fileThumbnail(item) {
         return getFileThumbnail(item)
       },

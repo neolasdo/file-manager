@@ -20,7 +20,6 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
   let formTypes = {
     createFolder: 0,
     editFolder: 1,
@@ -38,22 +37,38 @@
       }
     },
     computed: {
-      ...mapState({
-        selectedFiles: state => state.fileManager.selectedFiles,
-        selectedFolder: state => state.fileManager.selectedFolder,
-        current: state => state.fileManager.current,
-        showFormModal: state => state.fileManager.showFormModal,
-        formCreate: state => state.fileManager.formCreate,
-      }),
+      selectedFiles() {
+        return this.$fileStore.state.selectedFiles
+      },
+      selectedFolder() {
+        return this.$fileStore.state.selectedFolder
+      },
+      current() {
+        return this.$fileStore.state.current
+      },
+      showFormModal() {
+        return this.$fileStore.state.showFormModal
+      },
+      formCreate() {
+        return this.$fileStore.state.formCreate
+      },
     },
     methods: {
-      ...mapActions({
-        openUploadModal: 'fileManager/openUploadModal',
-        hideFormModal: 'fileManager/hideFormModal',
-        createFolder: 'fileManager/createFolder',
-        editFolderName: 'fileManager/editFolderName',
-        editFile: 'fileManager/editFile',
-      }),
+      openUploadModal() {
+        this.$fileStore.dispatch('openUploadModal')
+      },
+      hideFormModal(payload) {
+        this.$fileStore.dispatch('hideFormModal', payload)
+      },
+      createFolder(payload) {
+        this.$fileStore.dispatch('createFolder', payload)
+      },
+      editFolderName(payload) {
+        this.$fileStore.dispatch('editFolderName', payload)
+      },
+      editFile(payload) {
+        this.$fileStore.dispatch('editFile', payload)
+      },
       submitForm() {
         if (this.formType === formTypes.createFolder) {
           this.createFolder({
