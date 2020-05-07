@@ -7,8 +7,7 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <file-upload class="btn btn-primary dropdown-toggle"
-              :custom-action="uploadAll"
+            <file-upload :custom-action="uploadAll"
               :extensions="extensions" :accept="accept"
               :multiple="true" :directory="false" :size="size || 0"
               :thread="3" :drop="false" :drop-directory="false"

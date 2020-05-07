@@ -11,7 +11,7 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn icon small dark active-class="active" v-on="on" :color="showDetail ? 'primary': 'secondary'" @click="showDetail = !showDetail">
-                  <v-icon>mdi-info-outline</v-icon>
+                  <v-icon>mdi-information-outline</v-icon>
                 </v-btn>
               </template>
               <span v-if="showDetail">Click to hide detail</span>

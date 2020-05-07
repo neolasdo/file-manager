@@ -38,7 +38,7 @@
       },
       selectedItems() {
         return this.$fileStore.state.selectedFiles
-      },
+      }
     },
     methods: {
       resetSelectedFiles() {

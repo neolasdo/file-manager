@@ -4,7 +4,7 @@
       <v-text-field dark v-model="keyword">
         <v-menu v-model="menu" slot="prepend-inner" :close-on-content-click="false" :nudge-width="200" offset-y>
           <template v-slot:activator="{ on }">
-            <v-btn small tile text v-on="on">
+            <v-btn tile small v-on="on">
               検索
               <v-icon>mdi-menu</v-icon>
             </v-btn>
