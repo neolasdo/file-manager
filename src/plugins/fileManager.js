@@ -1,4 +1,5 @@
 import optionsDefaults from "./defaultOpts";
+import store from "../store/store";
 import FileManager from "../components/FileManager";
 import DetailCard from "../components/DetailCard";
 import FileBreadcrumb from "../components/FileBreadcrumb";
@@ -12,14 +13,20 @@ import FolderList from "../components/FolderList";
 import FormModal from "../components/FormModal";
 import MainContextMenu from "../components/MainContextMenu";
 
-import store from "../store/store";
+let Vue;
+class Manager {
+  store
 
-export default {
-  install(Vue, opts) {
-    const options = {...optionsDefaults, ...opts}
-    if (!options || !options.store) {
-      throw new Error('Please initialise plugin with a Vuex store.')
+  constructor(opts = optionsDefaults) {
+    if (!Vue && typeof window !== 'undefined' && window.Vue) {
+      install(window.Vue);
     }
+    if (!Vue) {
+      throw new Error(`[file-manager] must call Vue.use(Vuex) before creating a store instance.`);
+    }
+
+    const options = {...optionsDefaults, ...opts}
+
     if (!options.endpoints ||
       !options.endpoints.get ||
       !options.endpoints.search ||
@@ -33,20 +40,54 @@ export default {
     ) {
       throw new Error('Please initialise plugin with endpoints list (get, search, download, createFolder, upload, delete, editFolder, editFile, deleteFolder).')
     }
+
     store.$axios = options.axios
     store.$endpoints = options.endpoints
     Vue.prototype.$fileStore = store;
-    Vue.component('file-manager', FileManager)
-    Vue.component('detail-card', DetailCard)
-    Vue.component('file-breadcrumb', FileBreadcrumb)
-    Vue.component('file-context-menu', FileContextMenu)
-    Vue.component('file-list', FileList)
-    Vue.component('file-preview-modal', FilePreviewModal)
-    Vue.component('file-tool-bar', FileToolBar)
-    Vue.component('file-upload-modal', FileUploadModal)
-    Vue.component('folder-context-menu', FolderContextMenu)
-    Vue.component('folder-list', FolderList)
-    Vue.component('form-modal', FormModal)
-    Vue.component('main-context-menu', MainContextMenu)
+    this.store = store
   }
+
+  changeEndpoint(name, opts = {}) {
+    let endpoints = Vue.prototype.$fileStore.$endpoints;
+    if (!endpoints[name]) {
+      throw new Error(`[file-manager] please init File Manager with endpoint `+ name)
+    }
+    endpoints[name] = opts;
+    Vue.prototype.$fileStore.$endpoints = endpoints
+  }
+
+  getEndpoints() {
+    return Vue.prototype.$fileStore.$endpoints
+  }
+}
+
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    {
+      console.error(
+        '[file manager] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  _Vue.component('file-manager', FileManager)
+  _Vue.component('detail-card', DetailCard)
+  _Vue.component('file-breadcrumb', FileBreadcrumb)
+  _Vue.component('file-context-menu', FileContextMenu)
+  _Vue.component('file-list', FileList)
+  _Vue.component('file-preview-modal', FilePreviewModal)
+  _Vue.component('file-tool-bar', FileToolBar)
+  _Vue.component('file-upload-modal', FileUploadModal)
+  _Vue.component('folder-context-menu', FolderContextMenu)
+  _Vue.component('folder-list', FolderList)
+  _Vue.component('form-modal', FormModal)
+  _Vue.component('main-context-menu', MainContextMenu)
+
+  Vue = _Vue;
+}
+
+export default {
+  Manager,
+  install
 }

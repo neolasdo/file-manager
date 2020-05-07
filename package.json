@@ -9,7 +9,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-lib": "vue-cli-service build --target lib --name file-manager ./src/plugins/Manager.js"
+    "build-lib": "vue-cli-service build --target lib --name file-manager ./src/plugins/fileManager.js"
   },
   "dependencies": {
     "axios": "^0.19.2",
