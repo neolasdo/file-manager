@@ -2,7 +2,7 @@
   <div>
     <v-toolbar color="primary" dark>
       <v-text-field dark v-model="keyword">
-        <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
+        <v-menu v-model="menu" slot="prepend-inner" :close-on-content-click="false" :nudge-width="200" offset-y>
           <template v-slot:activator="{ on }">
             <v-btn small tile text v-on="on">
               検索
