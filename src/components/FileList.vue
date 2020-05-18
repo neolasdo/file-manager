@@ -12,8 +12,8 @@
                     @contextmenu.prevent.stop="showContextMenu(item, $event)">
               <v-card-text>
                 <v-img :src="fileThumbnail(item)" alt=""></v-img>
+                <h4 class="text-truncate pt-2">{{ item.name }}</h4>
               </v-card-text>
-              <v-card-subtitle class="text-truncate">{{ item.name }}</v-card-subtitle>
             </v-card>
           </v-hover>
         </v-col>
@@ -56,9 +56,9 @@
         return getFileThumbnail(item)
       },
       download() {
-        let endpoint = this.$store.$endpoints.download
+        let endpoint = this.$fileStore.$endpoints.download
 
-        this.$store.$axios({
+        this.$fileStore.$axios({
           method: endpoint.method,
           url: endpoint.url,
           data: this.selectedItems

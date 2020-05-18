@@ -79,7 +79,7 @@
       download() {
         let endpoint = this.$store.$endpoints.download
 
-        this.$store.$axios({
+        this.$fileStore.$axios({
           method: endpoint.method,
           url: endpoint.url,
           data: this.selectedItems

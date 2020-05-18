@@ -1,92 +1,94 @@
 <template>
-  <div>
-    <v-toolbar color="primary" dark>
-      <v-text-field dark v-model="keyword">
-        <v-menu v-model="menu" slot="prepend-inner" :close-on-content-click="false" :nudge-width="200" offset-y>
-          <template v-slot:activator="{ on }">
-            <v-btn tile small v-on="on">
-              検索
-              <v-icon>mdi-menu</v-icon>
-            </v-btn>
-          </template>
-          <v-card tile max-width="500px">
-            <v-container>
-              <v-row align="center">
-                <v-col cols="4">
-                  <v-subheader>タイプ</v-subheader>
-                </v-col>
-                <v-col cols="8">
-                  <v-select v-model="filter.fileType" :items="getAllType()" item-text="text" item-value="value"
-                            menu-props="auto" label="タイプ" hide-details single-line>
-                  </v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-subheader>作成日</v-subheader>
-                </v-col>
-                <v-col cols="8">
-                  <v-select v-model="filter.createdDate" :items="timeRanges" item-text="text" item-value="value"
-                            menu-props="auto" label="作成日" hide-details single-line>
-                  </v-select>
-                </v-col>
-                <v-col cols="4">
-                  <v-subheader>ステータス</v-subheader>
-                </v-col>
-                <v-col cols="8">
-                  <v-select v-model="filter.status" :items="statusList" item-text="text" item-value="value"
-                            menu-props="auto" label="ステータス" hide-details single-line>
-                  </v-select>
-                </v-col>
-              </v-row>
-              <v-card-actions class="justify-center">
-                <v-btn color="secondary" tile @click="menu = false">リセット</v-btn>
-                <v-btn color="primary" tile @click="menu = false">検索</v-btn>
-              </v-card-actions>
-            </v-container>
-          </v-card>
-        </v-menu>
-        <v-btn icon tile small slot="append" @click="search({keyword: keyword, filter: filter })">
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </v-text-field>
-      <v-spacer></v-spacer>
-      <v-menu offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn tile v-on="on" dark outlined>
-            <v-icon>mdi-plus</v-icon> New
-          </v-btn>
-        </template>
-        <v-list tile dense>
-          <v-list-item @click="openUploadModal">
-            <v-list-item-title>Upload</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="openFormModal(true)">
-            <v-list-item-title>Add Folder</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <v-menu offset-y v-if="selectedFiles.length">
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" icon class="ml-2" dark>
-            <v-icon>mdi-menu</v-icon>
-          </v-btn>
-        </template>
-        <v-list tile dense>
-          <v-list-item>
-            <v-list-item-title>署名依頼</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>承認依頼</v-list-item-title>
-          </v-list-item>
-          <v-list-item @click="download">
-            <v-list-item-title>Download</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>Delete</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-toolbar>
-  </div>
+    <div>
+        <v-toolbar color="primary" dark>
+            <v-text-field dark v-model="keyword">
+                <span slot="prepend-inner">
+                  <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
+                  <template v-slot:activator="{ on }">
+                    <v-btn tile small v-on="on">
+                      検索
+                      <v-icon>mdi-menu</v-icon>
+                    </v-btn>
+                  </template>
+                  <v-card tile max-width="500px">
+                    <v-container>
+                        <slot name="searchFilter" v-bind:filter="filter">
+                          <v-row align="center">
+                            <v-col cols="4">
+                              <v-subheader>タイプ</v-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                              <v-select v-model="filter.fileType" :items="getAllType()" item-text="text" item-value="value"
+                                        menu-props="auto" label="タイプ" hide-details single-line>
+                              </v-select>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-subheader>作成日</v-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                              <v-select v-model="filter.createdDate" :items="timeRanges" item-text="text" item-value="value"
+                                        menu-props="auto" label="作成日" hide-details single-line>
+                              </v-select>
+                            </v-col>
+                            <v-col cols="4">
+                              <v-subheader>ステータス</v-subheader>
+                            </v-col>
+                            <v-col cols="8">
+                              <v-select v-model="filter.status" :items="statusList" item-text="text" item-value="value"
+                                        menu-props="auto" label="ステータス" hide-details single-line>
+                              </v-select>
+                            </v-col>
+                          </v-row>
+                        </slot>
+                      <v-card-actions class="justify-center">
+                        <v-btn color="secondary" tile @click="menu = false">リセット</v-btn>
+                        <v-btn color="primary" tile @click="menu = false">検索</v-btn>
+                      </v-card-actions>
+                    </v-container>
+                  </v-card>
+                </v-menu>
+                </span>
+                <v-btn icon small slot="append" @click="search({keyword: keyword, filter: filter })">
+                    <v-icon>mdi-magnify</v-icon>
+                </v-btn>
+            </v-text-field>
+            <v-spacer></v-spacer>
+            <v-menu offset-y>
+                <template v-slot:activator="{ on }">
+                    <v-btn tile v-on="on" dark outlined>
+                        <v-icon>mdi-plus</v-icon>
+                        New
+                    </v-btn>
+                </template>
+                <v-list tile dense>
+                    <v-list-item @click="openUploadModal">
+                        <v-list-item-title>Upload</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="openFormModal(true)">
+                        <v-list-item-title>Add Folder</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+            <v-menu offset-y v-if="selectedFiles.length">
+                <template v-slot:activator="{ on }">
+                    <v-btn v-on="on" icon class="ml-2" dark>
+                        <v-icon>mdi-menu</v-icon>
+                    </v-btn>
+                </template>
+                <v-list tile dense>
+                    <slot name="additionMenuItem" v-bind:selectedFiles="selectedFiles">
+
+                    </slot>
+                    <v-list-item @click="download">
+                        <v-list-item-title>Download</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item @click="deleteSelected">
+                        <v-list-item-title>Delete</v-list-item-title>
+                    </v-list-item>
+                </v-list>
+            </v-menu>
+        </v-toolbar>
+    </div>
 </template>
 
 <script>
@@ -134,6 +136,9 @@
       openUploadModal() {
         this.$fileStore.dispatch('openUploadModal')
       },
+      deleteSelected() {
+        this.$fileStore.dispatch('deleteSelected')
+      },
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
       },
@@ -146,9 +151,9 @@
         return allTypes.concat(allFileTypes())
       },
       download() {
-        let endpoint = this.$store.$endpoints.download
+        let endpoint = this.$fileStore.$endpoints.download
 
-        this.$store.$axios({
+        this.$fileStore.$axios({
           method: endpoint.method,
           url: endpoint.url,
           data: this.selectedFiles
