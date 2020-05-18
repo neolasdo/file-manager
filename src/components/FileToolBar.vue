@@ -5,7 +5,7 @@
                 <span slot="prepend-inner">
                   <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
                   <template v-slot:activator="{ on }">
-                    <v-btn tile small v-on="on">
+                    <v-btn tile small v-on="on" text>
                       検索
                       <v-icon>mdi-menu</v-icon>
                     </v-btn>
@@ -48,7 +48,7 @@
                   </v-card>
                 </v-menu>
                 </span>
-                <v-btn icon small slot="append" @click="search({keyword: keyword, filter: filter })">
+                <v-btn tile text small slot="append" @click="search({keyword: keyword, filter: filter })">
                     <v-icon>mdi-magnify</v-icon>
                 </v-btn>
             </v-text-field>

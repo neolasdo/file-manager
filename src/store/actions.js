@@ -9,7 +9,9 @@ export default {
     await this.$axios({
       method: getEndpoint.method,
       url: getEndpoint.url,
-      data: item && item.id
+      params: {
+        folder_id: item && item.id
+      }
     }).then(res => {
       commit('UPDATE_LIST', res)
       commit('UPDATE_CURRENT', res)

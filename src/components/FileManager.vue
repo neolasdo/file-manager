@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="file-manager-app">
     <v-card class="mt-3">
       <file-toolbar>
         <template v-slot:searchFilter="slotProps">
@@ -53,14 +53,14 @@
 
       <v-container fluid style="background-color: #e0e0e0">
         <v-row>
-          <v-col :cols="showDetail ? 9: 12">
+          <v-col cols="6" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
             <v-container class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
               <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
               <file-list ref="fileList" @show-context-menu="showFileContextMenu()"/>
             </v-container>
             <main-context-menu ref="contextMenu"/>
           </v-col>
-          <v-col v-if="showDetail" cols="3">
+          <v-col v-if="showDetail" cols="6" md="3" sm="4">
             <detail-card @close="showDetail=false"/>
           </v-col>
         </v-row>

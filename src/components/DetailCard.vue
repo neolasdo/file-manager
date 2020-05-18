@@ -1,6 +1,14 @@
 <template>
     <v-card class="mx-auto pa-2" min-height="500px" tile>
         <v-container fluid class="pa-0">
+            <v-toolbar flat>
+                <v-toolbar-title v-text="title"></v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-btn icon @click="close">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+            </v-toolbar>
+
             <v-tabs>
                 <v-tab>
                     <v-icon left>mdi-information-outline</v-icon>
@@ -18,8 +26,22 @@
                                 Folder id: {{ selectedFolder.id }}<br>
                                 Folder name: {{ selectedFolder.name }}<br>
                             </v-col>
-                            <v-col cols="12" v-if="selectedFiles.length">
-                                <b>{{ selectedFiles.length }} items selected</b>
+                            <v-col cols="12" v-if="selectedFiles.length > 1">
+                                <v-list dense>
+                                    <v-subheader>Files</v-subheader>
+                                    <v-list-item-group>
+                                        <v-list-item v-for="(item, i) in selectedFiles" :key="i">
+                                            <v-list-item-content>
+                                                <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
+                                            </v-list-item-content>
+                                            <v-list-item-action>
+                                                <v-btn icon small>
+                                                    <v-icon @click="removeFileSelected(i)" color="grey lighten-1">mdi-close</v-icon>
+                                                </v-btn>
+                                            </v-list-item-action>
+                                        </v-list-item>
+                                    </v-list-item-group>
+                                </v-list>
                             </v-col>
                             <v-col cols="12" v-if="selectedFiles.length === 1">
                                 File id: {{ selectedFiles[0].id }}<br>
@@ -65,6 +87,16 @@
       current() {
         return this.$fileStore.state.current
       },
+      title() {
+        if (this.selectedFiles.length === 1) {
+          return this.selectedFiles[0].name
+        } else if (this.selectedFolder.name) {
+          return this.selectedFolder.name
+        } else if (this.selectedFiles.length > 1) {
+          return this.selectedFiles.length + ' files selected'
+        }
+        return ''
+      }
     },
     methods: {
       formatSize(size) {
@@ -72,7 +104,10 @@
       },
       close() {
         this.$emit('close')
-      }
+      },
+      removeFileSelected(payload) {
+        this.$fileStore.dispatch('removeFileSelected', payload)
+      },
     }
   }
 </script>

@@ -4,7 +4,7 @@
     <div class="file-section text-left" v-if="files && files.length">
       <h4>Files</h4>
       <v-row>
-        <v-col v-for="(item, index) in files" :key="index" cols="2">
+        <v-col v-for="(item, index) in files" :key="index" cols="6" md="2" sm="3">
           <v-hover v-slot:default="{ hover }">
             <v-card class="pa-2 file-card" :class="{'active': checkFileSelected(item)}" ref="files"
                     @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
@@ -12,7 +12,7 @@
                     @contextmenu.prevent.stop="showContextMenu(item, $event)">
               <v-card-text>
                 <v-img :src="fileThumbnail(item)" alt=""></v-img>
-                <h4 class="text-truncate pt-2">{{ item.name }}</h4>
+                <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
               </v-card-text>
             </v-card>
           </v-hover>
@@ -116,5 +116,10 @@
     color: #000 !important;
     background-color: #fff !important;
     border: 1px solid #fff !important
+  }
+
+  h4.file-name {
+    font-size: 1em !important;
+    font-weight: bold;
   }
 </style>

@@ -5,11 +5,14 @@ import fileStore from './store/store'
 import vuetify from "./plugins/vuetify";
 import endpoints from "./configs/endpoints";
 import permissions from "./configs/permissions";
+import axios from 'axios'
 
 
 let optionsDefaults = {
   endpoints: endpoints,
-  axios: require('axios'),
+  axios: axios.create({
+    baseURL: 'http://localhost:8001'
+  }),
   permissions: permissions
 }
 
