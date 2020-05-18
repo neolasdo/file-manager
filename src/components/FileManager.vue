@@ -11,7 +11,7 @@
           </slot>
         </template>
       </file-toolbar>
-      <v-container class="pa-0">
+      <v-container fluid class="pa-0">
         <v-row no-gutters>
           <v-col cols="6">
             <file-breadcrumb :breadcrumb="formattedBreadcrumb"/>
@@ -51,7 +51,7 @@
         </v-row>
       </v-container>
 
-      <v-container style="background-color: #e0e0e0">
+      <v-container fluid style="background-color: #e0e0e0">
         <v-row>
           <v-col :cols="showDetail ? 9: 12">
             <v-container class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">

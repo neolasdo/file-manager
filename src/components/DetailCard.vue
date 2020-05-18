@@ -1,10 +1,5 @@
 <template>
   <v-card class="mx-auto pa-2" min-height="500px" tile>
-    <div class="d-flex flex-row-reverse">
-      <v-btn icon @click="close">
-        <v-icon>mdi-close</v-icon>
-      </v-btn>
-    </div>
     <v-card-text>
       <v-container fluid class="pa-0">
         <v-row>

@@ -55,12 +55,12 @@ export function getFileThumbnail(item) {
   let fileExtension = getFileExtension(item.path)
   switch (fileExtension) {
     case 'doc': case 'docx': {
-      return require('../assets/doc.png')
+      return require('@/assets/doc.png')
     }
-    case 'pdf': return require('../assets/pdf.png')
-    case 'ppt': case 'pptx': return require('../assets/ppt.png')
-    case 'xls': case 'xlsx': return require('../assets/excel.png')
-    case 'png': case 'jpg': case 'jpeg': return require('../assets/image.png')
-    default: return require('../assets/default.png')
+    case 'pdf': return require('@/assets/pdf.png')
+    case 'ppt': case 'pptx': return require('@/assets/ppt.png')
+    case 'xls': case 'xlsx': return require('@/assets/excel.png')
+    case 'png': case 'jpg': case 'jpeg': return require('@/assets/image.png')
+    default: return require('@/assets/default.png')
   }
 }
