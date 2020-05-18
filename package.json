@@ -1,6 +1,6 @@
 {
   "name": "@neolasdo/file-manager",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/neolasdo/file-manager"
@@ -11,8 +11,7 @@
     "lint": "vue-cli-service lint",
     "build-lib": "vue-cli-service build --target lib --name file-manager ./src/plugins/fileManager.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.3.0",
     "@vue/cli-plugin-eslint": "~4.3.0",
