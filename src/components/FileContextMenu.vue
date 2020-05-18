@@ -3,14 +3,14 @@
     <v-menu v-model="showMenu" :position-x="x" :position-y="y" absolute offset-y>
       <v-list dense tile>
         <v-list-item @click="preview" v-if="canPreview()">
-          <v-list-item-icon>
+          <v-list-item-icon v-if="$permissions.view">
             <v-icon>mdi-eye</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Preview</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="selectedItems.length === 1" @click="openFormModal()">
+        <v-list-item v-if="selectedItems.length === 1 && $permissions.edit" @click="openFormModal()">
           <v-list-item-icon>
             <v-icon>mdi-pencil</v-icon>
           </v-list-item-icon>
@@ -18,7 +18,7 @@
             <v-list-item-title>Rename</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="download">
+        <v-list-item @click="download" v-if="$permissions.download">
           <v-list-item-icon>
             <v-icon>mdi-download</v-icon>
           </v-list-item-icon>
@@ -26,7 +26,7 @@
             <v-list-item-title>Download</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="deleteAll()">
+        <v-list-item @click="deleteAll()" v-if="$permissions.delete">
           <v-list-item-icon>
             <v-icon>mdi-delete</v-icon>
           </v-list-item-icon>

@@ -10,7 +10,7 @@
             <v-list-item-title>Open</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="openFormModal()">
+        <v-list-item @click="openFormModal()" v-if="$permissions.edit">
           <v-list-item-icon>
             <v-icon>mdi-pencil</v-icon>
           </v-list-item-icon>
@@ -18,7 +18,7 @@
             <v-list-item-title>Rename</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="deleteFolder(item)">
+        <v-list-item @click="deleteFolder(item)" v-if="$permissions.delete">
           <v-list-item-icon>
             <v-icon>mdi-delete</v-icon>
           </v-list-item-icon>

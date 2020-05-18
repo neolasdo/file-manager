@@ -1,29 +1,48 @@
 <template>
-  <v-card class="mx-auto pa-2" min-height="500px" tile>
-    <v-card-text>
-      <v-container fluid class="pa-0">
-        <v-row>
-          <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
-            <b>Please select a file or folder to view detail</b>
-          </v-col>
-          <v-col cols="12" v-if="selectedFolder.hasOwnProperty('id')">
-            Folder id: {{ selectedFolder.id }}<br>
-            Folder name: {{ selectedFolder.name }}<br>
-          </v-col>
-          <v-col cols="12" v-if="selectedFiles.length">
-            <b>{{ selectedFiles.length }} items selected</b>
-          </v-col>
-          <v-col cols="12" v-if="selectedFiles.length === 1">
-            File id: {{ selectedFiles[0].id }}<br>
-            File name: {{ selectedFiles[0].name }}<br>
-            File type: {{ selectedFiles[0].mime }}<br>
-            File size: {{ formatSize(selectedFiles[0].size) }}<br>
-            Created: {{ selectedFiles[0].created_at }}<br>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card-text>
-  </v-card>
+    <v-card class="mx-auto pa-2" min-height="500px" tile>
+        <v-container fluid class="pa-0">
+            <v-tabs>
+                <v-tab>
+                    <v-icon left>mdi-information-outline</v-icon>
+                </v-tab>
+                <v-tab v-if="selectedFiles.length === 1">
+                    <v-icon left>mdi-comment-multiple-outline</v-icon>
+                </v-tab>
+                <v-tab-item>
+                    <v-card-text>
+                        <v-row>
+                            <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
+                                <b>Please select a file or folder to view detail</b>
+                            </v-col>
+                            <v-col cols="12" v-if="selectedFolder.hasOwnProperty('id')">
+                                Folder id: {{ selectedFolder.id }}<br>
+                                Folder name: {{ selectedFolder.name }}<br>
+                            </v-col>
+                            <v-col cols="12" v-if="selectedFiles.length">
+                                <b>{{ selectedFiles.length }} items selected</b>
+                            </v-col>
+                            <v-col cols="12" v-if="selectedFiles.length === 1">
+                                File id: {{ selectedFiles[0].id }}<br>
+                                File name: {{ selectedFiles[0].name }}<br>
+                                File type: {{ selectedFiles[0].mime }}<br>
+                                File size: {{ formatSize(selectedFiles[0].size) }}<br>
+                                Created: {{ selectedFiles[0].created_at }}<br>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-tab-item>
+                <v-tab-item v-if="selectedFiles.length === 1">
+                    <v-card-text>
+                        <v-row>
+                          <v-col cols="12">
+                            COMMENTS
+                          </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-tab-item>
+            </v-tabs>
+        </v-container>
+    </v-card>
 </template>
 
 <script>
@@ -31,6 +50,11 @@
 
   export default {
     name: 'DetailCard',
+    data() {
+      return {
+        tab: null,
+      }
+    },
     computed: {
       selectedFiles() {
         return this.$fileStore.state.selectedFiles

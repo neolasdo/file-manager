@@ -2,7 +2,7 @@
   <div>
     <v-menu v-model="showMenu" :position-x="x" :position-y="y" absolute offset-y>
       <v-list dense tile>
-        <v-list-item @click="openFormModal">
+        <v-list-item @click="openFormModal" v-if="$permissions.create">
           <v-list-item-icon>
             <v-icon>mdi-plus</v-icon>
           </v-list-item-icon>
@@ -10,7 +10,7 @@
             <v-list-item-title>New folder</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="openUploadModal">
+        <v-list-item @click="openUploadModal" v-if="$permissions.upload">
           <v-list-item-icon>
             <v-icon>mdi-file-upload</v-icon>
           </v-list-item-icon>

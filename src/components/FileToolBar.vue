@@ -53,7 +53,7 @@
                 </v-btn>
             </v-text-field>
             <v-spacer></v-spacer>
-            <v-menu offset-y>
+            <v-menu offset-y v-if="$permissions.upload || $permissions.create">
                 <template v-slot:activator="{ on }">
                     <v-btn tile v-on="on" dark outlined>
                         <v-icon>mdi-plus</v-icon>
@@ -61,15 +61,15 @@
                     </v-btn>
                 </template>
                 <v-list tile dense>
-                    <v-list-item @click="openUploadModal">
+                    <v-list-item v-if="$permissions.upload" @click="openUploadModal">
                         <v-list-item-title>Upload</v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="openFormModal(true)">
+                    <v-list-item v-if="$permissions.create" @click="openFormModal(true)">
                         <v-list-item-title>Add Folder</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
-            <v-menu offset-y v-if="selectedFiles.length">
+            <v-menu offset-y v-if="selectedFiles.length && ($permissions.download || $permissions.delete)">
                 <template v-slot:activator="{ on }">
                     <v-btn v-on="on" icon class="ml-2" dark>
                         <v-icon>mdi-menu</v-icon>
@@ -79,10 +79,10 @@
                     <slot name="additionMenuItem" v-bind:selectedFiles="selectedFiles">
 
                     </slot>
-                    <v-list-item @click="download">
+                    <v-list-item v-if="$permissions.download" @click="download">
                         <v-list-item-title>Download</v-list-item-title>
                     </v-list-item>
-                    <v-list-item @click="deleteSelected">
+                    <v-list-item v-if="$permissions.delete" @click="deleteSelected">
                         <v-list-item-title>Delete</v-list-item-title>
                     </v-list-item>
                 </v-list>
