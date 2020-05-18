@@ -34,7 +34,7 @@ class Manager {
     const options =
       {
         endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
-        axios: {...optionsDefaults.axios, ...opts.axios},
+        axios: opts.axios ? opts.axios : optionsDefaults.axios,
         permissions: {...optionsDefaults.permissions, ...opts.permissions},
       }
 
