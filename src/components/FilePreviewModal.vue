@@ -43,10 +43,10 @@
         return "https://docs.google.com/viewerng/viewer?url=" + this.item.path + "&embedded=true"
       },
       isDocType() {
-        return isDocumentFile(this.item.path)
+        return isDocumentFile(this.item)
       },
       isImageType() {
-        return isImageFile(this.item.path)
+        return isImageFile(this.item)
       }
     },
     methods: {

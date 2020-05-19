@@ -14,13 +14,16 @@ import MainContextMenu from "@/components/MainContextMenu";
 import endpoints from "@/configs/endpoints";
 import permissions from "@/configs/permissions";
 import lang from "@/lang";
+import file from "./configs/file";
 
 let optionsDefaults = {
   endpoints: endpoints,
   axios: require('axios'),
   permissions: permissions,
   dict: lang,
-  lang: 'en'
+  lang: 'en',
+  accept_mimes: file.accept_mimes,
+  accept_extensions: file.accept_extensions
 }
 let Vue;
 class Manager {
@@ -43,7 +46,9 @@ class Manager {
         axios: opts.axios ? opts.axios : optionsDefaults.axios,
         lang: opts.lang ? opts.lang : optionsDefaults.lang,
         permissions: {...optionsDefaults.permissions, ...opts.permissions},
-        dict: optionsDefaults.dict
+        dict: optionsDefaults.dict,
+        accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
+        accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions}
       }
 
     if (opts.dict) {
@@ -59,6 +64,8 @@ class Manager {
     store.$axios = options.axios
     store.$endpoints = options.endpoints
     Vue.prototype.$fileStore = store;
+    Vue.prototype.$accept_mimes = options.accept_mimes;
+    Vue.prototype.$accept_extensions = options.accept_extensions;
     Vue.prototype.$permissions = options.permissions;
     Vue.prototype.$dict = options.dict
     Vue.prototype.$lang = options.lang

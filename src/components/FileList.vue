@@ -6,15 +6,20 @@
       <v-row>
         <v-col v-for="(item, index) in files" :key="index" cols="6" md="2" sm="3">
           <v-hover v-slot:default="{ hover }">
-            <v-card class="pa-2 file-card" :class="{'active': checkFileSelected(item)}" ref="files"
-                    @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
-                    @dblclick.stop.prevent="download()"
-                    @contextmenu.prevent.stop="showContextMenu(item, $event)">
-              <v-card-text>
-                <v-img :src="fileThumbnail(item)" alt=""></v-img>
-                <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
-              </v-card-text>
-            </v-card>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-card class="pa-2 file-card" :class="{'active': checkFileSelected(item)}" ref="files"
+                        @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
+                        @dblclick.stop.prevent="download()" v-on="on"
+                        @contextmenu.prevent.stop="showContextMenu(item, $event)">
+                  <v-card-text>
+                    <v-img :src="fileThumbnail(item)" alt=""></v-img>
+                    <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
+                  </v-card-text>
+                </v-card>
+              </template>
+              <span>{{ item.name }}</span>
+            </v-tooltip>
           </v-hover>
         </v-col>
       </v-row>

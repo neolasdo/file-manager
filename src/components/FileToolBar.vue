@@ -43,8 +43,8 @@
                           </v-row>
                         </slot>
                       <v-card-actions class="justify-center">
-                        <v-btn color="secondary" tile @click="menu = false">{{ this.$trans('reset') }}</v-btn>
-                        <v-btn color="primary" tile @click="menu = false">{{ this.$trans('search') }}</v-btn>
+                        <v-btn color="secondary" tile @click="reset">{{ this.$trans('reset') }}</v-btn>
+                        <v-btn color="primary" tile @click="closeFilter">{{ this.$trans('close') }}</v-btn>
                       </v-card-actions>
                     </v-container>
                   </v-card>
@@ -78,10 +78,10 @@
                     </v-btn>
                 </template>
                 <v-list tile dense>
-                    <v-list-item v-if="$permissions.request_sign" @click="download">
+                    <v-list-item v-if="$permissions.request_sign" @click="null">
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-if="$permissions.approval_request" @click="download">
+                    <v-list-item v-if="$permissions.approval_request" @click="null">
                         <v-list-item-title>{{ $trans('approval_request') }}</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-if="$permissions.download" @click="download">
@@ -97,8 +97,6 @@
 </template>
 
 <script>
-  import {allFileTypes} from "../helpers/file";
-
   export default {
     name: 'FileToolBar',
     data() {
@@ -150,10 +148,23 @@
       search(payload) {
         this.$fileStore.dispatch('search', payload)
       },
+      reset() {
+        this.filter = {
+          status: '',
+          fileType: '',
+          createdDate: '',
+        }
+      },
+      closeFilter() {
+        this.menu = false
+      },
       getAllType() {
         let allTypes = [];
         allTypes.push({text: this.$trans('all'), value: ''})
-        return allTypes.concat(allFileTypes())
+        for (const [key, value] of Object.entries(this.$accept_extensions)) {
+          allTypes.push({text: value.toUpperCase(), value: key})
+        }
+        return allTypes
       },
       download() {
         let endpoint = this.$fileStore.$endpoints.download

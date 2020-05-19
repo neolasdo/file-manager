@@ -7,6 +7,7 @@ import endpoints from "./configs/endpoints";
 import permissions from "./configs/permissions";
 import axios from 'axios'
 import lang from './lang'
+import file from "./configs/file";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -24,6 +25,9 @@ fileStore.$axios = optionsDefaults.axios
 
 Vue.prototype.$dict = lang
 Vue.prototype.$lang = 'en'
+
+Vue.prototype.$accept_mimes = file.accept_mimes;
+Vue.prototype.$accept_extensions = file.accept_extensions;
 
 Vue.prototype.$trans = function(key) {
   let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]

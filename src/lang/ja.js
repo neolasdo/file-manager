@@ -48,5 +48,7 @@ export default {
   open: '開いた',
   move_to_this: 'このフォルダにファイルを移動します',
   no_item_selected: '詳細を表示するにはファイルまたはフォルダを選択してください',
-  file_selected: '選択されたファイル'
+  file_selected: '選択されたファイル',
+  reset: 'リセット',
+  search: '検索'
 }

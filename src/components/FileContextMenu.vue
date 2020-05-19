@@ -49,7 +49,7 @@
 </template>
 
 <script>
-  import {canPreview} from "../helpers/file";
+  import {canPreview} from "@/helpers/file";
   import FilePreviewModal from './FilePreviewModal'
 
   export default {
@@ -104,7 +104,7 @@
         this.showMenu = false;
       },
       canPreview() {
-        return this.selectedItems.length === 1 && canPreview(this.selectedItems[0].path)
+        return this.selectedItems.length === 1 && canPreview(this.selectedItems[0])
       },
       deleteAll() {
         this.deleteSelected()

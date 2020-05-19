@@ -86,8 +86,10 @@ export default {
   SEARCH(state, payload) {
     state.keyword = payload.keyword
     state.filter = payload.filter
+    state.isSearching = true
   },
   RESET_SEARCH(state) {
+    state.isSearching = false
     state.keyword = ''
     state.filter = {}
   }

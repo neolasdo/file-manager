@@ -34,7 +34,7 @@
                         <span>{{ $trans('clipboard') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tabs-items v-model="tab">
+                <v-tabs-items v-model="tab" class="tab-content">
                     <v-tab-item :key="'detail'">
                         <v-card-text>
                             <v-row>
@@ -161,8 +161,8 @@
   }
 </script>
 <style>
-    .detail-card {
-        height: 500px;
+    .tab-content {
+        height: 388px;
         overflow-y: auto;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -170,19 +170,19 @@
         user-select: none;
     }
 
-    .detail-card::-webkit-scrollbar {
+    .tab-content::-webkit-scrollbar {
         width: 10px;
     }
 
-    .detail-card::-webkit-scrollbar-track {
+    .tab-content::-webkit-scrollbar-track {
         background: #f1f1f1;
     }
 
-    .detail-card::-webkit-scrollbar-thumb {
+    .tab-content::-webkit-scrollbar-thumb {
         background: #888;
     }
 
-    .detail-card::-webkit-scrollbar-thumb:hover {
+    .tab-content::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
 </style>

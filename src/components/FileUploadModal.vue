@@ -80,7 +80,7 @@
         reload: false,
         files: [],
         size: 1024 * 1024 * 10,
-        accept: 'image/png,image/gif,image/jpeg,image/webp',
+        accept: this.$accept_mimes,
         extensions: 'gif,jpg,jpeg,png,webp',
         postAction: '/upload/post',
         putAction: '/upload/put',

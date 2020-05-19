@@ -1,5 +1,3 @@
-import fileType from "../consts/fileType";
-
 export function formatSize(num, MAX) {
   let suffix, d = num;
   if ((d / 1073741824) >= 1) {
@@ -21,46 +19,49 @@ export function formatSize(num, MAX) {
   return d + suffix;
 }
 
-export function getFileExtension(filePath) {
-  let filenameExtension = filePath.replace(/^.*[\\/]/, '');
-  filenameExtension = filenameExtension.split(/#|\?/g)[0];
-  return (typeof filenameExtension !== undefined && filenameExtension.indexOf('.') !== -1) ? filenameExtension.split('.').pop().toLowerCase() : false;
+export function isDocumentFile(file) {
+  return [
+    'application/pdf',
+    'application/msword',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/vnd.ms-powerpoint',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ].includes(file.mime)
 }
 
-export function isDocumentFile(filePath) {
-  return getFileExtension(filePath) && fileType.offices.includes(getFileExtension(filePath))
+export function isImageFile(file) {
+  return [
+    'image/jpg',
+    'image/jpeg',
+    'image/png',
+  ].includes(file.mime)
 }
 
-export function isImageFile(filePath) {
-  return getFileExtension(filePath) && fileType.images.includes(getFileExtension(filePath))
-}
-
-export function canPreview(filePath) {
-  return isDocumentFile(filePath) || isImageFile(filePath)
-}
-
-export function allFileTypes() {
-  let types = fileType.offices.concat(fileType.images);
-  let allTypes = [];
-  types.forEach((item) => {
-    allTypes.push({
-      text: item.toUpperCase(),
-      value: item
-    })
-  })
-  return allTypes;
+export function canPreview(file) {
+  return isDocumentFile(file) || isImageFile(file)
 }
 
 export function getFileThumbnail(item) {
-  let fileExtension = getFileExtension(item.path)
-  switch (fileExtension) {
-    case 'doc': case 'docx': {
+  switch (item.mime) {
+    case 'application/msword':
+    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document': {
       return require('@/assets/doc.png')
     }
-    case 'pdf': return require('@/assets/pdf.png')
-    case 'ppt': case 'pptx': return require('@/assets/ppt.png')
-    case 'xls': case 'xlsx': return require('@/assets/excel.png')
-    case 'png': case 'jpg': case 'jpeg': return require('@/assets/image.png')
-    default: return require('@/assets/default.png')
+    case 'application/pdf':
+      return require('@/assets/pdf.png')
+    case 'application/vnd.ms-powerpoint':
+    case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+      return require('@/assets/ppt.png')
+    case 'application/vnd.ms-excel':
+    case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      return require('@/assets/excel.png')
+    case  'image/jpg':
+    case 'image/jpeg':
+    case 'image/png' :
+      return require('@/assets/image.png')
+    default:
+      return require('@/assets/default.png')
   }
 }

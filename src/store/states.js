@@ -1,5 +1,6 @@
 export default {
   files: [],
+  isSearching: false,
   keyword: '',
   sortKey: 'name',
   sortType: 'ASC',

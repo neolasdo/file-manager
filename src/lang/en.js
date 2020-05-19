@@ -48,5 +48,7 @@ export default {
   open: 'Open',
   move_to_this: 'Move files to this folder',
   no_item_selected: 'Please select a file or folder to view detail',
-  file_selected: 'files selected'
+  file_selected: 'files selected',
+  reset: 'Reset',
+  search: 'Search'
 }
