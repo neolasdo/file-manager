@@ -13,15 +13,19 @@ import FormModal from "@/components/FormModal";
 import MainContextMenu from "@/components/MainContextMenu";
 import endpoints from "@/configs/endpoints";
 import permissions from "@/configs/permissions";
+import lang from "@/lang";
 
 let optionsDefaults = {
   endpoints: endpoints,
   axios: require('axios'),
-  permissions: permissions
+  permissions: permissions,
+  dict: lang,
+  lang: 'en'
 }
 let Vue;
 class Manager {
   store
+  permissions
 
   constructor(opts = optionsDefaults) {
     if (!Vue && typeof window !== 'undefined' && window.Vue) {
@@ -30,23 +34,44 @@ class Manager {
     if (!Vue) {
       throw new Error(`[file-manager] must call Vue.use(FileManager) before creating a Manager instance.`);
     }
-
+    if (!this.validateOpts(opts)) {
+      throw new Error(`[file-manager] some config options is invalid!`);
+    }
     const options =
       {
         endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
         axios: opts.axios ? opts.axios : optionsDefaults.axios,
+        lang: opts.lang ? opts.lang : optionsDefaults.lang,
         permissions: {...optionsDefaults.permissions, ...opts.permissions},
+        dict: optionsDefaults.dict
       }
 
-    if (!this.validateOpts(options)) {
-      throw new Error(`[file-manager] some config option is invalid!`);
+    if (opts.dict) {
+      for (const [key, value] of Object.entries(opts.dict)) {
+        if (!options.dict[key]) {
+          options.dict[key] = value
+        } else {
+          options.dict[key] = {...options.dict[key], ...value}
+        }
+      }
     }
 
     store.$axios = options.axios
     store.$endpoints = options.endpoints
     Vue.prototype.$fileStore = store;
     Vue.prototype.$permissions = options.permissions;
+    Vue.prototype.$dict = options.dict
+    Vue.prototype.$lang = options.lang
+    Vue.prototype.$trans = function(key) {
+      let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
+      if (currentLang) {
+        return currentLang[key] ? currentLang[key] :key
+      }
+      return key
+    }
+
     this.store = store
+    this.permissions = options.permissions
   }
 
   getStore() {
@@ -54,9 +79,8 @@ class Manager {
   }
 
   updatePermission(config) {
-    let permissions = Vue.prototype.$permissions
-
-    Vue.prototype.$permissions = {...permissions, ...config}
+    Vue.prototype.$permissions = {...this.permissions, ...config}
+    this.permissions = Vue.prototype.$permissions
   }
 
   changeEndpoint(name, opts = {}) {
@@ -83,7 +107,7 @@ function install (_Vue) {
   if (Vue && _Vue === Vue) {
     {
       console.error(
-        '[file manager] already installed. Vue.use(Vuex) should be called only once.'
+        '[file manager] already installed. Vue.use(FileManager) should be called only once.'
       );
     }
     return

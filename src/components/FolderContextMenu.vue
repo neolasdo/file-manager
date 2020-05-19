@@ -7,7 +7,7 @@
             <v-icon>mdi-folder-open</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Open</v-list-item-title>
+            <v-list-item-title>{{ $trans('open') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="openFormModal()" v-if="$permissions.edit">
@@ -15,7 +15,7 @@
             <v-icon>mdi-pencil</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Rename</v-list-item-title>
+            <v-list-item-title>{{ $trans('rename') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="deleteFolder(item)" v-if="$permissions.delete">
@@ -23,7 +23,7 @@
             <v-icon>mdi-delete</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Delete</v-list-item-title>
+            <v-list-item-title>{{ $trans('delete') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>

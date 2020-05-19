@@ -17,6 +17,7 @@ export default {
       id: ''
     }
   ],
+  clipboard: [],
   showUploadModal: false,
   showFormModal: false,
   formCreate: false,

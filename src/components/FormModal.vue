@@ -12,8 +12,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="hideFormModal(reload)">Close</v-btn>
-        <v-btn color="blue darken-1" :disabled="oldName === name" text @click="submitForm()">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="hideFormModal(reload)">{{ $trans('close') }}</v-btn>
+        <v-btn color="blue darken-1" :disabled="oldName === name" text @click="submitForm()">{{ $trans('save') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

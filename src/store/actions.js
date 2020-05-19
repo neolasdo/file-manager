@@ -1,27 +1,33 @@
-import getByFolder from "../data/files";
-
 export default {
   async getByFolder({ commit }, item) {
     let getEndpoint = this.$endpoints.get
     commit('LOADING')
     commit('UPDATE_BREADCRUMB', item);
     commit('UPDATE_CURRENT', item);
-    await this.$axios({
-      method: getEndpoint.method,
-      url: getEndpoint.url,
-      params: {
-        folder_id: item && item.id
-      }
-    }).then(res => {
-      commit('UPDATE_LIST', res)
-      commit('UPDATE_CURRENT', res)
+    let response;
+    let data = {}
+    if (item && item.id) {
+      data.folder_id = item.id
+    }
+    if (getEndpoint.method.toUpperCase() === 'GET') {
+      response =  this.$axios.get(getEndpoint.url, {
+        params: data
+      })
+    } else {
+      response = this.$axios({
+        method: getEndpoint.method,
+        url: getEndpoint.url,
+        data: data
+      })
+    }
+    await response.then(res => {
+      commit('UPDATE_LIST', res.data)
+      commit('UPDATE_CURRENT', res.data)
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     }).catch(error => {
       console.log(error)
-      commit('UPDATE_LIST', getByFolder(item && item.id))
-      commit('UPDATE_CURRENT', getByFolder(item && item.id)  )
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
@@ -42,6 +48,45 @@ export default {
   addFileSelected({ commit }, payload) {
     commit('ADD_FILE_SELECTED', payload);
     commit('RESET_SELECTED_FOLDER');
+  },
+  addToClipboard({ commit }) {
+    commit('ADD_FILES_TO_CLIPBOARD');
+  },
+  removeFileInClipboard({ commit }, payload) {
+    commit('REMOVE_FILE_IN_CLIPBOARD', payload);
+  },
+  async moveFiles({ state, dispatch, commit }) {
+    let currentFolder = state.current
+    let clipboard = state.clipboard
+    let endpoint = this.$endpoints.move
+    commit('LOADING')
+
+    let response;
+    let data = {
+      files: clipboard.map(item => {
+        return item.id
+      }),
+      dest: currentFolder.id ? currentFolder.id : null
+    }
+
+    if (endpoint.method.toUpperCase() === 'GET') {
+      response =  this.$axios.get(endpoint.url, {
+        params: data
+      })
+    } else {
+      response =  this.$axios({
+        method: endpoint.method,
+        url: endpoint.url,
+        data: data
+      })
+    }
+    await response.then(res => {
+      console.log(res)
+      dispatch('reload')
+    }).catch(error => {
+      console.log(error)
+    })
+    commit('RESET_CLIPBOARD');
   },
   async createFolder({ dispatch, commit}, payload) {
     commit('LOADING')

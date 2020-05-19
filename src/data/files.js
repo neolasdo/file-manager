@@ -299,28 +299,30 @@ let emptyFolder = {
   files: []
 }
 
-function findById(folder, id) {
-  let res = false;
-  for (let item of folder.children) {
-    if (item.id === id) {
-      return item;
-    } else {
-      if (item.children.length) {
-        res = findById(item, id);
-        if (res) {
-          return res;
+module.exports = {
+  all: all,
+  findById: function (folder, id) {
+    let res = false;
+    for (let item of folder.children) {
+      if (item.id === id) {
+        return item;
+      } else {
+        if (item.children.length) {
+          res = this.findById(item, id);
+          if (res) {
+            return res;
+          }
         }
       }
     }
-  }
-  return false;
-}
-
-export default function getByFolder(id) {
-  if (!id) {
-    return all;
-  } else {
-    let result = findById(all, id);
-    return result ? result : emptyFolder ;
+    return false;
+  },
+  getByFolder: function(id) {
+    if (!id) {
+      return this.all;
+    } else {
+      let result = this.findById(this.all, id);
+      return result ? result : emptyFolder ;
+    }
   }
 }

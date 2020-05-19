@@ -6,7 +6,7 @@
                   <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
                   <template v-slot:activator="{ on }">
                     <v-btn tile small v-on="on" text>
-                      検索
+                      {{ $trans('filter') }}
                       <v-icon>mdi-menu</v-icon>
                     </v-btn>
                   </template>
@@ -15,23 +15,25 @@
                         <slot name="searchFilter" v-bind:filter="filter">
                           <v-row align="center">
                             <v-col cols="4">
-                              <v-subheader>タイプ</v-subheader>
+                              <v-subheader>{{ $trans('type') }}</v-subheader>
                             </v-col>
                             <v-col cols="8">
-                              <v-select v-model="filter.fileType" :items="getAllType()" item-text="text" item-value="value"
+                              <v-select v-model="filter.fileType" :items="getAllType()" item-text="text"
+                                        item-value="value"
                                         menu-props="auto" label="タイプ" hide-details single-line>
                               </v-select>
                             </v-col>
                             <v-col cols="4">
-                              <v-subheader>作成日</v-subheader>
+                              <v-subheader>{{ $trans('created_date') }}</v-subheader>
                             </v-col>
                             <v-col cols="8">
-                              <v-select v-model="filter.createdDate" :items="timeRanges" item-text="text" item-value="value"
+                              <v-select v-model="filter.createdDate" :items="timeRanges" item-text="text"
+                                        item-value="value"
                                         menu-props="auto" label="作成日" hide-details single-line>
                               </v-select>
                             </v-col>
                             <v-col cols="4">
-                              <v-subheader>ステータス</v-subheader>
+                              <v-subheader>{{ $trans('status') }}</v-subheader>
                             </v-col>
                             <v-col cols="8">
                               <v-select v-model="filter.status" :items="statusList" item-text="text" item-value="value"
@@ -41,8 +43,8 @@
                           </v-row>
                         </slot>
                       <v-card-actions class="justify-center">
-                        <v-btn color="secondary" tile @click="menu = false">リセット</v-btn>
-                        <v-btn color="primary" tile @click="menu = false">検索</v-btn>
+                        <v-btn color="secondary" tile @click="menu = false">{{ this.$trans('reset') }}</v-btn>
+                        <v-btn color="primary" tile @click="menu = false">{{ this.$trans('search') }}</v-btn>
                       </v-card-actions>
                     </v-container>
                   </v-card>
@@ -57,15 +59,15 @@
                 <template v-slot:activator="{ on }">
                     <v-btn tile v-on="on" dark outlined>
                         <v-icon>mdi-plus</v-icon>
-                        New
+                        {{ $trans('new') }}
                     </v-btn>
                 </template>
                 <v-list tile dense>
                     <v-list-item v-if="$permissions.upload" @click="openUploadModal">
-                        <v-list-item-title>Upload</v-list-item-title>
+                        <v-list-item-title>{{ $trans('upload') }}</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-if="$permissions.create" @click="openFormModal(true)">
-                        <v-list-item-title>Add Folder</v-list-item-title>
+                        <v-list-item-title>{{ $trans('add_folder') }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -76,14 +78,17 @@
                     </v-btn>
                 </template>
                 <v-list tile dense>
-                    <slot name="additionMenuItem" v-bind:selectedFiles="selectedFiles">
-
-                    </slot>
+                    <v-list-item v-if="$permissions.request_sign" @click="download">
+                        <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
+                    </v-list-item>
+                    <v-list-item v-if="$permissions.approval_request" @click="download">
+                        <v-list-item-title>{{ $trans('approval_request') }}</v-list-item-title>
+                    </v-list-item>
                     <v-list-item v-if="$permissions.download" @click="download">
-                        <v-list-item-title>Download</v-list-item-title>
+                        <v-list-item-title>{{ $trans('download') }}</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-if="$permissions.delete" @click="deleteSelected">
-                        <v-list-item-title>Delete</v-list-item-title>
+                        <v-list-item-title>{{ $trans('delete') }}</v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -106,18 +111,18 @@
           createdDate: '',
         },
         timeRanges: [
-          {text: 'すべて', value: ''},
-          {text: '過去12ヶ月', value: '12m'},
-          {text: '過去6ヶ月', value: '6m'},
-          {text: '過去30日', value: '30d'},
-          {text: '過去７日', value: '7d'},
+          {text: this.$trans('all'), value: ''},
+          {text: this.$trans('twelfth_month_ago'), value: '12m'},
+          {text: this.$trans('six_month_ago'), value: '6m'},
+          {text: this.$trans('thirty_day_ago'), value: '30d'},
+          {text: this.$trans('seven_day_ago'), value: '7d'},
         ],
         statusList: [
-          {text: 'すべて', value: ''},
-          {text: '署名不要', value: 'no_signature_required'},
-          {text: '署名済み', value: 'signed'},
-          {text: '署名待ち', value: 'waiting_signature'},
-          {text: '却下', value: 'reject'},
+          {text: this.$trans('all'), value: ''},
+          {text: this.$trans('dont_sign'), value: 'no_signature_required'},
+          {text: this.$trans('signed'), value: 'signed'},
+          {text: this.$trans('waiting_signature'), value: 'waiting_signature'},
+          {text: this.$trans('reject'), value: 'reject'},
         ]
       }
     },
@@ -147,7 +152,7 @@
       },
       getAllType() {
         let allTypes = [];
-        allTypes.push({text: 'すべて', value: ''})
+        allTypes.push({text: this.$trans('all'), value: ''})
         return allTypes.concat(allFileTypes())
       },
       download() {

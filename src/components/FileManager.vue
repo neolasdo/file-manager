@@ -23,27 +23,27 @@
                   <v-icon>mdi-information-outline</v-icon>
                 </v-btn>
               </template>
-              <span v-if="showDetail">Click to hide detail</span>
-              <span v-if="!showDetail">Click to show detail</span>
+              <span v-if="showDetail">{{ $trans('click_hide_detail') }}</span>
+              <span v-if="!showDetail">{{ $trans('click_show_detail') }}</span>
             </v-tooltip>
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn text small v-on="on" light class="ml-2" tile>
-                  アクション <v-icon>mdi-sort</v-icon>
+                  {{ $trans('sort') }} <v-icon>mdi-sort</v-icon>
                 </v-btn>
               </template>
               <v-list tile dense>
                 <v-list-item>
-                  <v-list-item-title>Name: ASC</v-list-item-title>
+                  <v-list-item-title>{{ $trans('sort_name_asc') }}</v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title>Name: DESC</v-list-item-title>
+                  <v-list-item-title>{{ $trans('sort_name_desc') }}</v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title>Create date: ASC</v-list-item-title>
+                  <v-list-item-title>{{ $trans('sort_date_asc') }}</v-list-item-title>
                 </v-list-item>
                 <v-list-item>
-                  <v-list-item-title>Create date: DESC</v-list-item-title>
+                  <v-list-item-title>{{ $trans('sort_date_desc') }}</v-list-item-title>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -53,8 +53,8 @@
 
       <v-container fluid style="background-color: #e0e0e0">
         <v-row>
-          <v-col cols="6" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
-            <v-container class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
+          <v-col cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
+            <v-container fluid class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
               <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
               <file-list ref="fileList" @show-context-menu="showFileContextMenu()"/>
             </v-container>
@@ -68,7 +68,7 @@
       <v-divider></v-divider>
       <file-upload-modal ref="uploadModal"></file-upload-modal>
       <form-modal ref="formModal"></form-modal>
-      <span class="pa-2 font-italic caption">Use CTRL + left mouse button click to select multiple file & folder</span>
+      <span class="pa-2 font-italic caption">{{ $trans('select_multi_helper') }}</span>
     </v-card>
   </v-app>
 </template>
@@ -98,7 +98,7 @@
     data() {
       return {
         showMenu: false,
-        showDetail: false,
+        showDetail: true,
         x: 0,
         y: 0,
       }

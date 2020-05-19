@@ -7,7 +7,7 @@
         </v-breadcrumbs-item>
       </template>
     </v-breadcrumbs>
-    <h3 v-if="keyword !== ''" style="line-height: 45px">Search result</h3>
+    <h3 v-if="keyword !== ''" style="line-height: 45px">{{ $trans('search_result') }}</h3>
   </div>
 </template>
 

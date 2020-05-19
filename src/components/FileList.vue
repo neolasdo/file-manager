@@ -2,7 +2,7 @@
   <div>
     <file-context-menu ref="fileContextMenu"/>
     <div class="file-section text-left" v-if="files && files.length">
-      <h4>Files</h4>
+      <h4>{{ $trans('files') }}</h4>
       <v-row>
         <v-col v-for="(item, index) in files" :key="index" cols="6" md="2" sm="3">
           <v-hover v-slot:default="{ hover }">

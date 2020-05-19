@@ -10,7 +10,7 @@ export default {
         }
       }
       else if (state.sortKey === 'created_at') {
-        let dateA = new Date(a.retiredate), dateB = new Date(b.retiredate)
+        let dateA = new Date(a.created_at), dateB = new Date(b.created_at)
         if (state.sortType === 'ASC') {
           return dateA - dateB
         } else {

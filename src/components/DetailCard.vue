@@ -1,5 +1,5 @@
 <template>
-    <v-card class="mx-auto pa-2" min-height="500px" tile>
+    <v-card class="mx-auto detail-card" tile>
         <v-container fluid class="pa-0">
             <v-toolbar flat>
                 <v-toolbar-title v-text="title"></v-toolbar-title>
@@ -9,59 +9,102 @@
                 </v-btn>
             </v-toolbar>
 
-            <v-tabs>
-                <v-tab>
-                    <v-icon left>mdi-information-outline</v-icon>
+            <v-tabs v-model="tab">
+                <v-tab :key="'detail'">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-icon v-on="on" left>mdi-information-outline</v-icon>
+                        </template>
+                        <span>{{ $trans('clipboard') }}</span>
+                    </v-tooltip>
                 </v-tab>
-                <v-tab v-if="selectedFiles.length === 1">
-                    <v-icon left>mdi-comment-multiple-outline</v-icon>
+                <v-tab :key="'comments'" v-if="selectedFiles.length === 1">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-icon v-on="on" left>mdi-comment-multiple-outline</v-icon>
+                        </template>
+                        <span>{{ $trans('comments') }}</span>
+                    </v-tooltip>
                 </v-tab>
-                <v-tab-item>
-                    <v-card-text>
-                        <v-row>
-                            <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
-                                <b>Please select a file or folder to view detail</b>
-                            </v-col>
-                            <v-col cols="12" v-if="selectedFolder.hasOwnProperty('id')">
-                                Folder id: {{ selectedFolder.id }}<br>
-                                Folder name: {{ selectedFolder.name }}<br>
-                            </v-col>
-                            <v-col cols="12" v-if="selectedFiles.length > 1">
-                                <v-list dense>
-                                    <v-subheader>Files</v-subheader>
-                                    <v-list-item-group>
-                                        <v-list-item v-for="(item, i) in selectedFiles" :key="i">
-                                            <v-list-item-content>
-                                                <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
-                                            </v-list-item-content>
-                                            <v-list-item-action>
-                                                <v-btn icon small>
-                                                    <v-icon @click="removeFileSelected(i)" color="grey lighten-1">mdi-close</v-icon>
-                                                </v-btn>
-                                            </v-list-item-action>
-                                        </v-list-item>
-                                    </v-list-item-group>
-                                </v-list>
-                            </v-col>
-                            <v-col cols="12" v-if="selectedFiles.length === 1">
-                                File id: {{ selectedFiles[0].id }}<br>
-                                File name: {{ selectedFiles[0].name }}<br>
-                                File type: {{ selectedFiles[0].mime }}<br>
-                                File size: {{ formatSize(selectedFiles[0].size) }}<br>
-                                Created: {{ selectedFiles[0].created_at }}<br>
-                            </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-tab-item>
-                <v-tab-item v-if="selectedFiles.length === 1">
-                    <v-card-text>
-                        <v-row>
-                          <v-col cols="12">
-                            COMMENTS
-                          </v-col>
-                        </v-row>
-                    </v-card-text>
-                </v-tab-item>
+                <v-tab :key="'clipboard'" v-if="clipboard.length">
+                    <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                            <v-icon v-on="on" left>mdi-clipboard-outline</v-icon>
+                        </template>
+                        <span>{{ $trans('clipboard') }}</span>
+                    </v-tooltip>
+                </v-tab>
+                <v-tabs-items v-model="tab">
+                    <v-tab-item :key="'detail'">
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
+                                    <b v-if="!current.id">{{ $trans('no_item_selected') }}</b>
+                                    <span v-else>Folder name: {{ current.name ? current.name : 'HOME' }}<br></span>
+                                </v-col>
+                                <v-col cols="12" v-if="selectedFolder.hasOwnProperty('id')">
+                                    Folder id: {{ selectedFolder.id }}<br>
+                                    Folder name: {{ selectedFolder.name }}<br>
+                                </v-col>
+                                <v-col cols="12" v-if="selectedFiles.length > 1">
+                                    <v-list dense>
+                                        <v-subheader>Files</v-subheader>
+                                        <v-list-item-group>
+                                            <v-list-item v-for="(item, i) in selectedFiles" :key="i">
+                                                <v-list-item-content>
+                                                    <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
+                                                </v-list-item-content>
+                                                <v-list-item-action>
+                                                    <v-btn icon small>
+                                                        <v-icon @click="removeFileSelected(i)" color="grey lighten-1">mdi-close</v-icon>
+                                                    </v-btn>
+                                                </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list-item-group>
+                                    </v-list>
+                                </v-col>
+                                <v-col cols="12" v-if="selectedFiles.length === 1">
+                                    File id: {{ selectedFiles[0].id }}<br>
+                                    File name: {{ selectedFiles[0].name }}<br>
+                                    File type: {{ selectedFiles[0].mime }}<br>
+                                    File size: {{ formatSize(selectedFiles[0].size) }}<br>
+                                    Created: {{ selectedFiles[0].created_at }}<br>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-tab-item>
+                    <v-tab-item :key="'comments'" v-if="selectedFiles.length === 1">
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="12">
+                                    COMMENTS
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-tab-item>
+                    <v-tab-item :key="'clipboard'" v-if="clipboard.length">
+                        <v-card-text>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-list dense>
+                                        <v-list-item-group>
+                                            <v-list-item v-for="(item, i) in clipboard" :key="i">
+                                                <v-list-item-content>
+                                                    <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
+                                                </v-list-item-content>
+                                                <v-list-item-action>
+                                                    <v-btn icon small>
+                                                        <v-icon @click="removeFileInClipboard(i)" color="grey lighten-1">mdi-close</v-icon>
+                                                    </v-btn>
+                                                </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list-item-group>
+                                    </v-list>
+                                </v-col>
+                            </v-row>
+                        </v-card-text>
+                    </v-tab-item>
+                </v-tabs-items>
             </v-tabs>
         </v-container>
     </v-card>
@@ -78,6 +121,9 @@
       }
     },
     computed: {
+      clipboard() {
+        return this.$fileStore.state.clipboard
+      },
       selectedFiles() {
         return this.$fileStore.state.selectedFiles
       },
@@ -93,9 +139,9 @@
         } else if (this.selectedFolder.name) {
           return this.selectedFolder.name
         } else if (this.selectedFiles.length > 1) {
-          return this.selectedFiles.length + ' files selected'
+          return this.selectedFiles.length + ' ' + this.$trans('file_selected')
         }
-        return ''
+        return this.current.name ? this.current.name : 'HOME'
       }
     },
     methods: {
@@ -108,6 +154,35 @@
       removeFileSelected(payload) {
         this.$fileStore.dispatch('removeFileSelected', payload)
       },
+      removeFileInClipboard(payload) {
+        this.$fileStore.dispatch('removeFileInClipboard', payload)
+      },
     }
   }
 </script>
+<style>
+    .detail-card {
+        height: 500px;
+        overflow-y: auto;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .detail-card::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .detail-card::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .detail-card::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    .detail-card::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>

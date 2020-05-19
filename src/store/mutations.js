@@ -31,6 +31,15 @@ export default {
   ADD_FILE_SELECTED(state, payload) {
     state.selectedFiles.push(payload)
   },
+  ADD_FILES_TO_CLIPBOARD(state) {
+    state.clipboard = Array.from(new Set([...state.clipboard, ...state.selectedFiles]))
+  },
+  REMOVE_FILE_IN_CLIPBOARD(state, payload) {
+    state.clipboard.splice(payload, 1);
+  },
+  RESET_CLIPBOARD(state) {
+    state.clipboard = [];
+  },
   LOADING(state) {
     state.isLoading = true;
   },

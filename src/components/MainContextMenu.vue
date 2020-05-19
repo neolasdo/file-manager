@@ -7,7 +7,7 @@
             <v-icon>mdi-plus</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>New folder</v-list-item-title>
+            <v-list-item-title>{{ $trans('add_folder') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="openUploadModal" v-if="$permissions.upload">
@@ -15,7 +15,15 @@
             <v-icon>mdi-file-upload</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Upload</v-list-item-title>
+            <v-list-item-title>{{ $trans('upload') }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="moveFiles" v-if="$permissions.move && clipboard.length">
+          <v-list-item-icon>
+            <v-icon>mdi-file-move</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ $trans('move_to_this') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -32,6 +40,9 @@
       },
       current() {
         return this.$fileStore.state.current
+      },
+      clipboard() {
+        return this.$fileStore.state.clipboard
       },
     },
     data() {
@@ -59,6 +70,9 @@
       },
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
+      },
+      moveFiles() {
+        this.$fileStore.dispatch('moveFiles')
       },
       showContextMenu(e) {
         this.showMenu = false;

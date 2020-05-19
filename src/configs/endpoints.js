@@ -34,5 +34,9 @@ export default {
   deleteFolder: {
     url: 'folder/delete',
     method: 'delete'
+  },
+  move: {
+    url: 'move',
+    method: 'post'
   }
 }

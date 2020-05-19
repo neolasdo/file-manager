@@ -7,7 +7,7 @@
             <v-icon>mdi-eye</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Preview</v-list-item-title>
+            <v-list-item-title>{{ $trans('preview') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-if="selectedItems.length === 1 && $permissions.edit" @click="openFormModal()">
@@ -15,7 +15,7 @@
             <v-icon>mdi-pencil</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Rename</v-list-item-title>
+            <v-list-item-title>{{ $trans('rename') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="download" v-if="$permissions.download">
@@ -23,7 +23,15 @@
             <v-icon>mdi-download</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Download</v-list-item-title>
+            <v-list-item-title>{{ $trans('download') }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="addClipboard" v-if="$permissions.move">
+          <v-list-item-icon>
+            <v-icon>mdi-clipboard-plus-outline</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ $trans('add_to_clipboard') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="deleteAll()" v-if="$permissions.delete">
@@ -31,7 +39,7 @@
             <v-icon>mdi-delete</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>Delete</v-list-item-title>
+            <v-list-item-title>{{ $trans('delete') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -67,6 +75,9 @@
       },
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
+      },
+      addClipboard() {
+        this.$fileStore.dispatch('addToClipboard')
       },
       showContextMenu(e) {
         this.showMenu = false;

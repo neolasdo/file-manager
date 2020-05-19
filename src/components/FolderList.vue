@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="folder-section text-left" v-if="folders && folders.length">
-      <h4>Folders</h4>
+      <h4>{{ $trans('folders') }}</h4>
       <v-row>
         <v-col v-for="(item, index) in folders" :key="index" cols="6" md="2" sm="3">
           <v-hover v-slot:default="{ hover }">

@@ -7,7 +7,7 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn text @click="closeModal">Close</v-btn>
+        <v-btn text @click="closeModal">{{ $trans('close') }}</v-btn>
       </v-toolbar>
       <v-card-text class="justify-content-center preview-area">
         <iframe v-if="isDocType" :src="itemViewPath" width='100%' :height="frameHeight + 'px'" frameborder='0'></iframe>

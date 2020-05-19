@@ -3,7 +3,7 @@
     <v-dialog v-model="showDialog" persistent max-width="900px">
       <v-card>
         <v-card-title class="primary lighten-1" tile dark>
-          <span class="headline">Upload {{ current.id !== ''? 'to '+ current.name: '' }} </span>
+          <span class="headline">{{$trans('upload')}} {{ current.id !== ''? 'to '+ current.name: '' }} </span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -13,7 +13,8 @@
               :thread="3" :drop="false" :drop-directory="false"
               :add-index="false" v-model="files" ref="upload">
               <v-btn color="primary" dark tile>
-                <v-icon>mdi-plus</v-icon>Select
+                <v-icon>mdi-plus</v-icon>
+                {{$trans('select')}}
               </v-btn>
             </file-upload>
             <v-simple-table>
@@ -21,11 +22,11 @@
                 <thead>
                 <tr>
                   <th>#</th>
-                  <th class="text-left">Name</th>
-                  <th class="text-left">Size</th>
-                  <th class="text-left">Speed</th>
-                  <th class="text-left">Status</th>
-                  <th class="text-left">Action</th>
+                  <th class="text-left">{{$trans('name')}}</th>
+                  <th class="text-left">{{$trans('size')}}</th>
+                  <th class="text-left">{{$trans('speed')}}</th>
+                  <th class="text-left">{{$trans('status')}}</th>
+                  <th class="text-left">{{$trans('action')}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -56,9 +57,9 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-content-center">
-          <v-btn color="primary" dark tile v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">Start Upload</v-btn>
-          <v-btn color="danger" dark tile v-else @click.prevent="$refs.upload.active = false">Stop Upload</v-btn>
-          <v-btn color="default" dark tile @click="closeModal()">Close</v-btn>
+          <v-btn color="primary" dark tile v-if="!$refs.upload || !$refs.upload.active" @click.prevent="$refs.upload.active = true">{{ $trans('start_upload') }}</v-btn>
+          <v-btn color="danger" dark tile v-else @click.prevent="$refs.upload.active = false">{{ $trans('stop_upload') }}</v-btn>
+          <v-btn color="default" dark tile @click="closeModal()">{{ $trans('close') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

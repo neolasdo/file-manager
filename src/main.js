@@ -6,7 +6,7 @@ import vuetify from "./plugins/vuetify";
 import endpoints from "./configs/endpoints";
 import permissions from "./configs/permissions";
 import axios from 'axios'
-
+import lang from './lang'
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -21,6 +21,17 @@ Vue.config.productionTip = false
 
 fileStore.$endpoints = optionsDefaults.endpoints
 fileStore.$axios = optionsDefaults.axios
+
+Vue.prototype.$dict = lang
+Vue.prototype.$lang = 'en'
+
+Vue.prototype.$trans = function(key) {
+  let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
+  if (currentLang) {
+    return currentLang[key] ? currentLang[key] :key
+  }
+  return key
+}
 
 Vue.prototype.$fileStore = fileStore
 Vue.prototype.$permissions = optionsDefaults.permissions;
