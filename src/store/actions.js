@@ -11,8 +11,8 @@ export default {
     let response = executeAxios(this.$axios, getEndpoint, data)
 
     await response.then(res => {
-      commit('UPDATE_LIST', res.data)
-      commit('UPDATE_CURRENT', res.data)
+      commit('UPDATE_LIST', res.data.data)
+      commit('UPDATE_CURRENT', res.data.data)
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
