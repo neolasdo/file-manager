@@ -140,7 +140,13 @@
         this.$fileStore.dispatch('openUploadModal')
       },
       deleteSelected() {
-        this.$fileStore.dispatch('deleteSelected')
+        this.$confirm(this.$trans('confirm_delete_files'), {
+          buttonTrueColor: 'error'
+        }).then(res => {
+          if (res) {
+            this.$fileStore.dispatch('deleteSelected')
+          }
+        })
       },
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)

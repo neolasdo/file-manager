@@ -15,6 +15,8 @@ import endpoints from "@/configs/endpoints";
 import permissions from "@/configs/permissions";
 import lang from "@/lang";
 import file from "./configs/file";
+import ConfirmDialog from "./components/ConfirmDialog";
+import vuetify from "./plugins/vuetify";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -26,6 +28,7 @@ let optionsDefaults = {
   accept_extensions: file.accept_extensions
 }
 let Vue;
+
 class Manager {
   store
   permissions
@@ -60,7 +63,26 @@ class Manager {
         }
       }
     }
+    if (!Vue.prototype.$vuetify) {
+      Vue.prototype.$vuetify = vuetify
+    }
+    let vuetifyPlugin = Vue.prototype.$vuetify
+    const confirmDialog = Vue.extend(Object.assign({ vuetifyPlugin }, ConfirmDialog))
 
+    Vue.prototype.$confirm = function (message, options = {}) {
+      options.message = message
+      const container = document.querySelector('[data-app=true]') || document.body
+      return new Promise(resolve => {
+        const cmp = new confirmDialog(Object.assign({}, {
+          propsData: Object.assign({}, options),
+          destroyed: () => {
+            container.removeChild(cmp.$el)
+            resolve(cmp.value)
+          }
+        }))
+        container.appendChild(cmp.$mount().$el)
+      })
+    }
     store.$axios = options.axios
     store.$endpoints = options.endpoints
     Vue.prototype.$fileStore = store;
@@ -69,10 +91,10 @@ class Manager {
     Vue.prototype.$permissions = options.permissions;
     Vue.prototype.$dict = options.dict
     Vue.prototype.$lang = options.lang
-    Vue.prototype.$trans = function(key) {
+    Vue.prototype.$trans = function (key) {
       let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
       if (currentLang) {
-        return currentLang[key] ? currentLang[key] :key
+        return currentLang[key] ? currentLang[key] : key
       }
       return key
     }
@@ -93,7 +115,7 @@ class Manager {
   changeEndpoint(name, opts = {}) {
     let endpoints = Vue.prototype.$fileStore.$endpoints;
     if (!endpoints[name]) {
-      throw new Error(`[file-manager] please init File Manager with endpoint `+ name)
+      throw new Error(`[file-manager] please init File Manager with endpoint ` + name)
     }
     endpoints[name] = opts;
     Vue.prototype.$fileStore.$endpoints = endpoints
@@ -110,7 +132,7 @@ class Manager {
 }
 
 
-function install (_Vue) {
+function install(_Vue) {
   if (Vue && _Vue === Vue) {
     {
       console.error(

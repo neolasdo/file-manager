@@ -12,6 +12,7 @@
                         @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
                         @dblclick.stop.prevent="download()" v-on="on"
                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
+                  <v-chip x-small label class="status-label" v-if="item.size >= 1000000" color="red" text-color="white">Too large</v-chip>
                   <v-card-text>
                     <v-img :src="fileThumbnail(item)" alt=""></v-img>
                     <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
@@ -49,11 +50,9 @@
       resetSelectedFiles() {
         this.$fileStore.dispatch('resetSelectedFiles')
       },
-
       removeFileSelected(payload) {
         this.$fileStore.dispatch('removeFileSelected', payload)
       },
-
       addFileSelected(payload) {
         this.$fileStore.dispatch('addFileSelected', payload)
       },
@@ -126,5 +125,11 @@
   h4.file-name {
     font-size: 1em !important;
     font-weight: bold;
+  }
+
+  .status-label {
+    position: absolute !important;
+    top: -16px !important;
+    right: 0 !important;
   }
 </style>

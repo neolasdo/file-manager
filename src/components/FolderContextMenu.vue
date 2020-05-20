@@ -60,7 +60,13 @@
         this.$fileStore.dispatch('getByFolder', payload)
       },
       deleteFolder(payload) {
-        this.$fileStore.dispatch('deleteFolder', payload)
+        this.$confirm(this.$trans('confirm_delete_folder'), {
+          buttonTrueColor: 'error'
+        }).then(res => {
+          if (res) {
+            this.$fileStore.dispatch('deleteFolder', payload)
+          }
+        })
       },
       editFolderName(payload) {
         this.$fileStore.dispatch('editFolderName', payload)

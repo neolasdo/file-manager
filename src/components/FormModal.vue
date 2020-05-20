@@ -64,10 +64,22 @@
         this.$fileStore.dispatch('createFolder', payload)
       },
       editFolderName(payload) {
-        this.$fileStore.dispatch('editFolderName', payload)
+        this.$confirm(this.$trans('confirm_edit_folder'), {
+          buttonTrueColor: 'deep-orange'
+        }).then(res => {
+          if (res) {
+            this.$fileStore.dispatch('editFolderName', payload)
+          }
+        })
       },
       editFile(payload) {
-        this.$fileStore.dispatch('editFile', payload)
+        this.$confirm(this.$trans('confirm_edit_file'), {
+          buttonTrueColor: 'deep-orange'
+        }).then(res => {
+          if (res) {
+            this.$fileStore.dispatch('editFile', payload)
+          }
+        })
       },
       submitForm() {
         if (this.formType === formTypes.createFolder) {

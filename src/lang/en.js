@@ -50,5 +50,12 @@ export default {
   no_item_selected: 'Please select a file or folder to view detail',
   file_selected: 'files selected',
   reset: 'Reset',
-  search: 'Search'
+  search: 'Search',
+  confirm_delete_files: 'Are you sure to delete all selected files?',
+  confirm_delete_folder: 'Are you sure to delete selected folder?',
+  confirm_edit_file: 'Are you sure to update this file?',
+  confirm_edit_folder: 'Are you sure to update this folder?',
+  confirm_move_files: 'Are you sure to move files to this folder?',
+  yes: 'YES',
+  no: 'NO'
 }

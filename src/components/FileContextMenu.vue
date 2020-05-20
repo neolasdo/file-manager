@@ -107,7 +107,13 @@
         return this.selectedItems.length === 1 && canPreview(this.selectedItems[0])
       },
       deleteAll() {
-        this.deleteSelected()
+        this.$confirm(this.$trans('confirm_delete_files'), {
+          buttonTrueColor: 'error'
+        }).then(res => {
+          if (res) {
+            this.deleteSelected()
+          }
+        })
       },
       preview() {
         if (this.selectedItems.length === 1) {

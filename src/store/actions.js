@@ -95,7 +95,7 @@ export default {
   },
   async deleteSelected({dispatch, commit}, payload) {
     commit('LOADING')
-    let endpoint = this.$endpoints.download
+    let endpoint = this.$endpoints.delete
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {

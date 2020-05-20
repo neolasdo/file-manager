@@ -50,5 +50,12 @@ export default {
   no_item_selected: '詳細を表示するにはファイルまたはフォルダを選択してください',
   file_selected: '選択されたファイル',
   reset: 'リセット',
-  search: '検索'
+  search: '検索',
+  confirm_delete_files: '選択したファイルをすべて削除してもよろしいですか？',
+  confirm_delete_folder: '選択したフォルダを削除してもよろしいですか？',
+  confirm_edit_file: 'このファイルを更新してもよろしいですか？',
+  confirm_edit_folder: 'このフォルダを更新してもよろしいですか？',
+  confirm_move_files: 'このフォルダにファイルを移動してもよろしいですか？',
+  yes: '保存',
+  no: 'キャンセル'
 }

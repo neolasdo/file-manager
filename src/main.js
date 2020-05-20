@@ -8,6 +8,7 @@ import permissions from "./configs/permissions";
 import axios from 'axios'
 import lang from './lang'
 import file from "./configs/file";
+import ConfirmDialog from "./components/ConfirmDialog";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -35,6 +36,28 @@ Vue.prototype.$trans = function(key) {
     return currentLang[key] ? currentLang[key] :key
   }
   return key
+}
+
+const confirmDialog = Vue.extend(Object.assign({ vuetify }, ConfirmDialog))
+function createDialogConfirm(options) {
+  const container = document.querySelector('[data-app=true]') || document.body
+  return new Promise(resolve => {
+    const cmp = new confirmDialog(Object.assign({}, {
+      propsData: Object.assign({}, Vue.prototype.options, options),
+      destroyed: () => {
+        container.removeChild(cmp.$el)
+        resolve(cmp.value)
+      }
+    }))
+    container.appendChild(cmp.$mount().$el)
+  })
+}
+
+Vue.prototype.$confirm = function (message, options = {}) {
+  options.message = message
+  options.buttonTrueText = options.buttonTrueText ? options.buttonTrueText : Vue.prototype.$trans('yes')
+  options.buttonFalseText = options.buttonFalseText ? options.buttonFalseText : Vue.prototype.$trans('no')
+  return createDialogConfirm(options)
 }
 
 Vue.prototype.$fileStore = fileStore

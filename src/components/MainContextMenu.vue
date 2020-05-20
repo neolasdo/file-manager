@@ -72,7 +72,13 @@
         this.$fileStore.dispatch('openFormModal', payload)
       },
       moveFiles() {
-        this.$fileStore.dispatch('moveFiles')
+        this.$confirm(this.$trans('confirm_move_files'), {
+          buttonTrueColor: 'warning'
+        }).then(res => {
+          if (res) {
+            this.$fileStore.dispatch('moveFiles')
+          }
+        })
       },
       showContextMenu(e) {
         this.showMenu = false;
