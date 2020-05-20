@@ -69,6 +69,7 @@
         }).then(res => {
           if (res) {
             this.$fileStore.dispatch('editFolderName', payload)
+            this.hideFormModal(false)
           }
         })
       },

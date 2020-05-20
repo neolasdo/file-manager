@@ -1,42 +1,46 @@
 export default {
   get: {
-    url: 'index',
+    route: 'index',
     method: 'get'
   },
   search: {
-    url: 'search',
+    route: 'search',
     method: 'get'
   },
   download: {
-    url: 'download',
+    route: 'download',
     method: 'post'
   },
   createFolder: {
-    url: 'folder/create',
+    route: 'folder/create',
     method: 'post'
   },
   upload: {
-    url: 'upload',
+    route: 'upload',
     method: 'post'
   },
   delete: {
-    url: 'delete',
+    route: 'delete',
     method: 'delete'
   },
   editFolder: {
-    url: 'folder/edit',
+    route: 'folder/:id/edit',
     method: 'put'
   },
   editFile: {
-    url: 'file/edit',
+    route: 'file/:id/edit',
     method: 'put'
   },
   deleteFolder: {
-    url: 'folder/delete',
+    route: 'folder/:id/delete',
     method: 'delete'
   },
   move: {
-    url: 'move',
+    route: 'move',
     method: 'post'
+  },
+  comments: {
+    route: 'file/:id/comments',
+    method: 'get'
   }
 }

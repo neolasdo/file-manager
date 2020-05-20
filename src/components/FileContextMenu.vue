@@ -70,8 +70,8 @@
       },
     },
     methods: {
-      deleteSelected(payload) {
-        this.$fileStore.dispatch('deleteSelected', payload)
+      deleteSelected() {
+        this.$fileStore.dispatch('deleteSelected')
       },
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
@@ -88,7 +88,7 @@
         });
       },
       download() {
-        let endpoint = this.$store.$endpoints.download
+        let endpoint = this.$store.$getEndpoint('download')
 
         this.$fileStore.$axios({
           method: endpoint.method,

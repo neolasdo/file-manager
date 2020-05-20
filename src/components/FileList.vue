@@ -60,7 +60,7 @@
         return getFileThumbnail(item)
       },
       download() {
-        let endpoint = this.$fileStore.$endpoints.download
+        let endpoint = this.$fileStore.$getEndpoint('download')
 
         this.$fileStore.$axios({
           method: endpoint.method,

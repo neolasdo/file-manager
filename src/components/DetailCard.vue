@@ -10,7 +10,7 @@
             </v-toolbar>
 
             <v-tabs v-model="tab">
-                <v-tab :key="'detail'">
+                <v-tab :key="'detail'" @click="showComments = false">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-information-outline</v-icon>
@@ -18,7 +18,7 @@
                         <span>{{ $trans('clipboard') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :key="'comments'" v-if="selectedFiles.length === 1">
+                <v-tab :key="'comments'" v-if="selectedFiles.length === 1" @click="showComments = true">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-comment-multiple-outline</v-icon>
@@ -26,7 +26,7 @@
                         <span>{{ $trans('comments') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :key="'clipboard'" v-if="clipboard.length">
+                <v-tab :key="'clipboard'" v-if="clipboard.length" @click="showComments = false">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-clipboard-outline</v-icon>
@@ -77,7 +77,7 @@
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12">
-                                    COMMENTS
+                                    {{comments}}
                                 </v-col>
                             </v-row>
                         </v-card-text>
@@ -118,6 +118,7 @@
     data() {
       return {
         tab: null,
+        showComments: false,
       }
     },
     computed: {
@@ -141,7 +142,14 @@
         } else if (this.selectedFiles.length > 1) {
           return this.selectedFiles.length + ' ' + this.$trans('file_selected')
         }
-        return this.current.name ? this.current.name : 'HOME'
+        return this.current.name ? this.current.name : ''
+      },
+      comments() {
+        if (this.selectedFiles.length === 1 && this.showComments) {
+          this.$fileStore.dispatch('getComments')
+          return this.selectedFiles[0].comments
+        }
+        return []
       }
     },
     methods: {

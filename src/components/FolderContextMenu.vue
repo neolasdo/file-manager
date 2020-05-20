@@ -18,7 +18,7 @@
             <v-list-item-title>{{ $trans('rename') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="deleteFolder(item)" v-if="$permissions.delete">
+        <v-list-item @click="deleteFolder(item.id)" v-if="$permissions.delete">
           <v-list-item-icon>
             <v-icon>mdi-delete</v-icon>
           </v-list-item-icon>

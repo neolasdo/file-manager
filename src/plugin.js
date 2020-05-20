@@ -17,6 +17,7 @@ import lang from "@/lang";
 import file from "./configs/file";
 import ConfirmDialog from "./components/ConfirmDialog";
 import vuetify from "./plugins/vuetify";
+import SnackBar from "./components/SnackBar";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -43,30 +44,16 @@ class Manager {
     if (!this.validateOpts(opts)) {
       throw new Error(`[file-manager] some config options is invalid!`);
     }
-    const options =
-      {
-        endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
-        axios: opts.axios ? opts.axios : optionsDefaults.axios,
-        lang: opts.lang ? opts.lang : optionsDefaults.lang,
-        permissions: {...optionsDefaults.permissions, ...opts.permissions},
-        dict: optionsDefaults.dict,
-        accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
-        accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions}
-      }
-
-    if (opts.dict) {
-      for (const [key, value] of Object.entries(opts.dict)) {
-        if (!options.dict[key]) {
-          options.dict[key] = value
-        } else {
-          options.dict[key] = {...options.dict[key], ...value}
-        }
-      }
-    }
     if (!Vue.prototype.$vuetify) {
       Vue.prototype.$vuetify = vuetify
     }
+    const options = this.mergeOptions(opts)
     let vuetifyPlugin = Vue.prototype.$vuetify
+
+    /**
+     * Register confirm dialog
+     * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
+     */
     const confirmDialog = Vue.extend(Object.assign({ vuetifyPlugin }, ConfirmDialog))
 
     Vue.prototype.$confirm = function (message, options = {}) {
@@ -83,8 +70,49 @@ class Manager {
         container.appendChild(cmp.$mount().$el)
       })
     }
+
+    /**
+     * Register Snackbar
+     * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
+     */
+    const snackbar = Vue.extend(Object.assign({ vuetifyPlugin }, SnackBar))
+
+    Vue.prototype.$snackbar = function (message, options = {}) {
+      options.message = message
+      const container = document.querySelector('[data-app=true]') || document.body
+      return new Promise(resolve => {
+        const cmp = new snackbar(Object.assign({}, {
+          propsData: Object.assign({}, options),
+          destroyed: () => {
+            container.removeChild(cmp.$el)
+            resolve(true)
+          }
+        }))
+        container.appendChild(cmp.$mount().$el)
+      })
+    }
+    Vue.prototype.$endpoints = options.endpoints
+
     store.$axios = options.axios
-    store.$endpoints = options.endpoints
+    store.$snackbar = Vue.prototype.$snackbar
+    store.$getEndpoint = function(name, meta = {}) {
+      let endpoint = Object.assign({}, optionsDefaults.endpoints[name])
+
+      if (!endpoint) return {
+        route: '',
+        method: 'GET'
+      }
+      let varNames = endpoint.route.match(/:[^\s/]+/g)
+      if (varNames && varNames.length) {
+        varNames.forEach((item, index) => {
+          if (meta[index]) {
+            endpoint.route = endpoint.route.replace(item, meta[index])
+          }
+        })
+      }
+      return endpoint
+    }
+
     Vue.prototype.$fileStore = store;
     Vue.prototype.$accept_mimes = options.accept_mimes;
     Vue.prototype.$accept_extensions = options.accept_extensions;
@@ -103,6 +131,29 @@ class Manager {
     this.permissions = options.permissions
   }
 
+  mergeOptions(opts) {
+    let options = {
+      endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
+      axios: opts.axios ? opts.axios : optionsDefaults.axios,
+        lang: opts.lang ? opts.lang : optionsDefaults.lang,
+      permissions: {...optionsDefaults.permissions, ...opts.permissions},
+      dict: optionsDefaults.dict,
+        accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
+      accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions}
+    }
+    if (opts.dict) {
+      for (const [key, value] of Object.entries(opts.dict)) {
+        if (!options.dict[key]) {
+          options.dict[key] = value
+        } else {
+          options.dict[key] = {...options.dict[key], ...value}
+        }
+      }
+    }
+
+    return options
+  }
+
   getStore() {
     return this.store
   }
@@ -113,16 +164,12 @@ class Manager {
   }
 
   changeEndpoint(name, opts = {}) {
-    let endpoints = Vue.prototype.$fileStore.$endpoints;
+    let endpoints = Vue.prototype.$endpoints;
     if (!endpoints[name]) {
       throw new Error(`[file-manager] please init File Manager with endpoint ` + name)
     }
     endpoints[name] = opts;
-    Vue.prototype.$fileStore.$endpoints = endpoints
-  }
-
-  getEndpoints() {
-    return Vue.prototype.$fileStore.$endpoints
+    Vue.prototype.$endpoints = endpoints
   }
 
   validateOpts(opts) {

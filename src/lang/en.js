@@ -57,5 +57,6 @@ export default {
   confirm_edit_folder: 'Are you sure to update this folder?',
   confirm_move_files: 'Are you sure to move files to this folder?',
   yes: 'YES',
-  no: 'NO'
+  no: 'NO',
+  server_error: 'System Error'
 }

@@ -103,7 +103,7 @@
       async uploadAll(file) {
         let formData = new FormData();
         formData.append('file', file);
-        let uploadEndpoint = this.$fileStore.$endpoints.upload
+        let uploadEndpoint = this.$fileStore.$getEndpoint('upload')
         return await this.$fileStore.$axios({
           method: uploadEndpoint.method,
           url: uploadEndpoint.url,

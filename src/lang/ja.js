@@ -23,9 +23,9 @@ export default {
   click_show_detail: 'クリックして詳細を表示',
   sort: 'アクション',
   sort_name_asc: '名前－昇順',
-  sort_name_desc: '名前-降順',
+  sort_name_desc: '名前－降順',
   sort_date_asc: '作成日－昇順',
-  sort_date_desc: '作成日-降順',
+  sort_date_desc: '作成日－降順',
   select_multi_helper: 'CTRL +マウスの左ボタンをクリックして、複数のファイルとフォルダーを選択します',
   search_result: '検索結果',
   select: '選択する',
@@ -57,5 +57,6 @@ export default {
   confirm_edit_folder: 'このフォルダを更新してもよろしいですか？',
   confirm_move_files: 'このフォルダにファイルを移動してもよろしいですか？',
   yes: '保存',
-  no: 'キャンセル'
+  no: 'キャンセル',
+  server_error: 'サーバーエラーが発生しました'
 }

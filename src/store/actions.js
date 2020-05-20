@@ -1,6 +1,6 @@
 export default {
   async getByFolder({commit}, item) {
-    let getEndpoint = this.$endpoints.get
+    let getEndpoint = this.$getEndpoint('get')
     commit('LOADING')
     commit('UPDATE_BREADCRUMB', item);
     commit('UPDATE_CURRENT', item);
@@ -17,7 +17,13 @@ export default {
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     }).catch(error => {
-      console.log(error)
+      let errMess = this.$trans('server_error')
+      if (error.response && error.response.data && error.response.data.message) {
+        errMess = error.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
@@ -48,7 +54,7 @@ export default {
   async moveFiles({state, dispatch, commit}) {
     let currentFolder = state.current
     let clipboard = state.clipboard
-    let endpoint = this.$endpoints.move
+    let endpoint = this.$getEndpoint('move')
     commit('LOADING')
     let data = {
       files: clipboard.map(item => {
@@ -60,75 +66,139 @@ export default {
     let response = executeAxios(this.$axios, endpoint, data)
 
     await response.then(res => {
-      console.log(res)
+      if (res.data && res.data.message) {
+        this.$snackbar(res.data.message, {
+          color: 'success'
+        })
+      }
       dispatch('reload')
     }).catch(error => {
-      console.log(error)
+      let errMess = this.$trans('server_error')
+      if (error.response && error.response.data && error.response.data.message) {
+        errMess = error.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
     })
     commit('RESET_CLIPBOARD');
   },
   async createFolder({dispatch, commit}, payload) {
     commit('LOADING')
-    let endpoint = this.$endpoints.createFolder
+    let endpoint = this.$getEndpoint('createFolder')
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {
-      console.log(res)
+      if (res.data && res.data.message) {
+        this.$snackbar(res.data.message, {
+          color: 'success'
+        })
+      }
       dispatch('reload')
     }).catch(error => {
-      console.log(error)
+      let errMess = this.$trans('server_error')
+      if (error.response && error.response.data && error.response.data.message) {
+        errMess = error.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
     })
     commit('UNLOADING');
   },
   async deleteFolder({dispatch, commit}, payload) {
     commit('LOADING')
-    let endpoint = this.$endpoints.deleteFolder
+    let endpoint = this.$getEndpoint('deleteFolder', [payload])
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {
-      console.log(res)
+      if (res.data && res.data.message) {
+        this.$snackbar(res.data.message, {
+          color: 'success'
+        })
+      }
       dispatch('reload')
     }).catch(e => {
-      console.log(e)
+      let errMess = this.$trans('server_error')
+      if (e.response && e.response.data && e.response.data.message) {
+        errMess = e.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
     });
     commit('UNLOADING');
   },
-  async deleteSelected({dispatch, commit}, payload) {
+  async deleteSelected({dispatch, state, commit}) {
     commit('LOADING')
-    let endpoint = this.$endpoints.delete
-    let response = executeAxios(this.$axios, endpoint, payload)
+    let endpoint =  this.$getEndpoint('delete')
+    let response = executeAxios(this.$axios, endpoint, {
+      files: state.selectedFiles.map(item => {
+        return item.id
+      })
+    })
 
     await response.then(res => {
-      console.log(res)
+      if (res.data && res.data.message) {
+        this.$snackbar(res.data.message, {
+          color: 'success'
+        })
+      }
       dispatch('reload')
     }).catch(e => {
-      console.log(e)
+      let errMess = this.$trans('server_error')
+      if (e.response && e.response.data && e.response.data.message) {
+        errMess = e.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
     });
     commit('UNLOADING');
   },
   async editFolderName({dispatch, commit}, payload) {
     commit('LOADING')
-    let endpoint = this.$endpoints.editFolder
+    let endpoint = this.$getEndpoint('editFolder', [payload.id])
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {
-      console.log(res)
+      if (res.data && res.data.message) {
+        this.$snackbar(res.data.message, {
+          color: 'success'
+        })
+      }
       dispatch('reload')
     }).catch(e => {
-      console.log(e)
+      let errMess = this.$trans('server_error')
+      if (e.response && e.response.data && e.response.data.message) {
+        errMess = e.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
     });
     commit('UNLOADING');
   },
   async editFile({commit, dispatch}, payload) {
     commit('LOADING')
-    let endpoint = this.$endpoints.editFile
+    let endpoint = this.$getEndpoint('editFile', [payload.id])
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {
-      console.log(res)
+      if (res.data && res.data.message) {
+        this.$snackbar(res.data.message, {
+          color: 'success'
+        })
+      }
       dispatch('reload')
     }).catch(e => {
-      console.log(e)
+      let errMess = this.$trans('server_error')
+      if (e.response && e.response.data && e.response.data.message) {
+        errMess = e.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
     });
     commit('UNLOADING');
   },
@@ -150,7 +220,7 @@ export default {
   async search({commit}, payload) {
     commit('LOADING')
     commit('SEARCH', payload)
-    let endpoint = this.$endpoints.search
+    let endpoint = this.$getEndpoint('search')
     let data = {
       ...{keyword: payload.keyword},
       ...payload.filter
@@ -162,11 +232,39 @@ export default {
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     }).catch(error => {
-      console.log(error)
+      let errMess = this.$trans('server_error')
+      if (error.response && error.response.data && error.response.data.message) {
+        errMess = error.response.data.message
+      }
+      this.$snackbar(errMess, {
+        color: 'error'
+      })
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     })
     commit('UNLOADING');
+  },
+  async getComments({state, commit}) {
+    let fileSelected = state.selectedFiles[0]
+    if (fileSelected && !fileSelected.commentsLoaded) {
+      let endpoint = this.$getEndpoint('comments', [fileSelected.id])
+      let response = executeAxios(this.$axios, endpoint)
+      await response.then(res => {
+        let payload = {
+          comments: res.data,
+          id: fileSelected.id
+        }
+        commit('LOAD_COMMENT', payload)
+      }).catch(error => {
+        let errMess = this.$trans('server_error')
+        if (error.response && error.response.data && error.response.data.message) {
+          errMess = error.response.data.message
+        }
+        this.$snackbar(errMess, {
+          color: 'error'
+        })
+      })
+    }
   },
   reload({state, dispatch}) {
     if (state.keyword !== '') {
@@ -180,13 +278,13 @@ export default {
 function executeAxios(axios, endpoint, data) {
   let response
   if (endpoint.method.toUpperCase() === 'GET') {
-    response = axios.get(endpoint.url, {
+    response = axios.get(endpoint.route, {
       params: data
     })
   } else {
     response = axios({
       method: endpoint.method,
-      url: endpoint.url,
+      url: endpoint.route,
       data: data
     })
   }

@@ -9,6 +9,7 @@ import axios from 'axios'
 import lang from './lang'
 import file from "./configs/file";
 import ConfirmDialog from "./components/ConfirmDialog";
+import SnackBar from "./components/SnackBar";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -18,11 +19,7 @@ let optionsDefaults = {
   permissions: permissions
 }
 
-Vue.use(Vuex)
 Vue.config.productionTip = false
-
-fileStore.$endpoints = optionsDefaults.endpoints
-fileStore.$axios = optionsDefaults.axios
 
 Vue.prototype.$dict = lang
 Vue.prototype.$lang = 'en'
@@ -30,20 +27,21 @@ Vue.prototype.$lang = 'en'
 Vue.prototype.$accept_mimes = file.accept_mimes;
 Vue.prototype.$accept_extensions = file.accept_extensions;
 
-Vue.prototype.$trans = function(key) {
+Vue.prototype.$trans = function (key) {
   let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
   if (currentLang) {
-    return currentLang[key] ? currentLang[key] :key
+    return currentLang[key] ? currentLang[key] : key
   }
   return key
 }
 
-const confirmDialog = Vue.extend(Object.assign({ vuetify }, ConfirmDialog))
+const confirmDialog = Vue.extend(Object.assign({vuetify}, ConfirmDialog))
+
 function createDialogConfirm(options) {
   const container = document.querySelector('[data-app=true]') || document.body
   return new Promise(resolve => {
     const cmp = new confirmDialog(Object.assign({}, {
-      propsData: Object.assign({}, Vue.prototype.options, options),
+      propsData: Object.assign({}, options),
       destroyed: () => {
         container.removeChild(cmp.$el)
         resolve(cmp.value)
@@ -60,6 +58,44 @@ Vue.prototype.$confirm = function (message, options = {}) {
   return createDialogConfirm(options)
 }
 
+const snackbar = Vue.extend(Object.assign({vuetify}, SnackBar))
+
+Vue.prototype.$snackbar = function (message, options = {}) {
+  options.message = message
+  const container = document.querySelector('[data-app=true]') || document.body
+  return new Promise(resolve => {
+    const cmp = new snackbar(Object.assign({}, {
+      propsData: Object.assign({}, options),
+      destroyed: () => {
+        container.removeChild(cmp.$el)
+        resolve(true)
+      }
+    }))
+    container.appendChild(cmp.$mount().$el)
+  })
+}
+Vue.use(Vuex)
+fileStore.$trans = Vue.prototype.$trans
+fileStore.$getEndpoint = function (name, meta = []) {
+  let endpoint = Object.assign({}, optionsDefaults.endpoints[name])
+
+  if (!endpoint) return {
+    route: '',
+    method: 'GET'
+  }
+  let varNames = endpoint.route.match(/:[^\s/]+/g)
+  if (varNames && varNames.length) {
+    varNames.forEach((item, index) => {
+      if (meta[index]) {
+        endpoint.route = endpoint.route.replace(item, meta[index])
+      }
+    })
+  }
+  return endpoint
+}
+
+fileStore.$axios = optionsDefaults.axios
+fileStore.$snackbar = Vue.prototype.$snackbar
 Vue.prototype.$fileStore = fileStore
 Vue.prototype.$permissions = optionsDefaults.permissions;
 
