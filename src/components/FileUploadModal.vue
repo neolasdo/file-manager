@@ -104,7 +104,6 @@
         let formData = new FormData();
         formData.append('file', file);
         let uploadEndpoint = this.$fileStore.$getEndpoint('upload')
-        console.log(uploadEndpoint)
         return await this.$fileStore.$axios({
           method: uploadEndpoint.method,
           url: uploadEndpoint.route,

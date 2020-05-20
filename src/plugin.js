@@ -96,7 +96,7 @@ class Manager {
     store.$axios = options.axios
     store.$snackbar = Vue.prototype.$snackbar
     store.$getEndpoint = function(name, meta = {}) {
-      let endpoint = Object.assign({}, optionsDefaults.endpoints[name])
+      let endpoint = Object.assign({}, Vue.prototype.$endpoints[name])
 
       if (!endpoint) return {
         route: '',
@@ -164,12 +164,12 @@ class Manager {
   }
 
   changeEndpoint(name, opts = {}) {
-    let endpoints = Vue.prototype.$endpoints;
-    if (!endpoints[name]) {
-      throw new Error(`[file-manager] please init File Manager with endpoint ` + name)
-    }
-    endpoints[name] = opts;
-    Vue.prototype.$endpoints = endpoints
+    if (
+    !Vue.prototype.$endpoints[name]) {
+    throw new Error(`[file-manager] please init File Manager with endpoint ` + name)
+  }
+    let options = Vue.prototype.$endpoints[name]
+    Vue.prototype.$endpoints[name] = {...options, ...opts};
   }
 
   validateOpts(opts) {

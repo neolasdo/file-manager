@@ -76,8 +76,10 @@ Vue.prototype.$snackbar = function (message, options = {}) {
 }
 Vue.use(Vuex)
 fileStore.$trans = Vue.prototype.$trans
+Vue.prototype.$endpoints = optionsDefaults.endpoints
+
 fileStore.$getEndpoint = function (name, meta = []) {
-  let endpoint = Object.assign({}, optionsDefaults.endpoints[name])
+  let endpoint = Object.assign({}, Vue.prototype.$endpoints[name])
 
   if (!endpoint) return {
     route: '',
