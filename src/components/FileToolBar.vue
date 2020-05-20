@@ -177,7 +177,7 @@
 
         this.$fileStore.$axios({
           method: endpoint.method,
-          url: endpoint.url,
+          url: endpoint.route,
           data: this.selectedFiles
         }).then(res => {
           console.log(res)

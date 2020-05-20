@@ -80,7 +80,7 @@
         reload: false,
         files: [],
         size: 1024 * 1024 * 10,
-        accept: this.$accept_mimes,
+        accept: this.$accept_mimes.join(),
         extensions: 'gif,jpg,jpeg,png,webp',
         postAction: '/upload/post',
         putAction: '/upload/put',
@@ -104,9 +104,10 @@
         let formData = new FormData();
         formData.append('file', file);
         let uploadEndpoint = this.$fileStore.$getEndpoint('upload')
+        console.log(uploadEndpoint)
         return await this.$fileStore.$axios({
           method: uploadEndpoint.method,
-          url: uploadEndpoint.url,
+          url: uploadEndpoint.route,
           data: formData,
           headers: {
             'Content-Type': 'multipart/form-data'

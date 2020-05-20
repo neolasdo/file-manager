@@ -64,7 +64,7 @@
 
         this.$fileStore.$axios({
           method: endpoint.method,
-          url: endpoint.url,
+          url: endpoint.route,
           data: this.selectedItems
         }).then(res => {
           console.log(res)
