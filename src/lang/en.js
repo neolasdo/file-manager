@@ -58,5 +58,8 @@ export default {
   confirm_move_files: 'Are you sure to move files to this folder?',
   yes: 'YES',
   no: 'NO',
-  server_error: 'System Error'
+  server_error: 'System Error',
+  empty_folder: 'THIS FOLDER IS EMPTY',
+  required_rule: 'This item is required.',
+  name_length_rule: 'Please enter within 50 characters',
 }

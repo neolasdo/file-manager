@@ -5,7 +5,10 @@ module.exports = function(app) {
     .get(function (req, res) {
       let folderId = req.query.folder_id
       let folder = data.getByFolder(folderId? parseInt(folderId) : false);
-      res.json(folder)
+      res.json({
+        data: folder,
+        message: 'search success'
+      })
     })
 
   app.route('/move')

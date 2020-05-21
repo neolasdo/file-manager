@@ -58,5 +58,8 @@ export default {
   confirm_move_files: 'このフォルダにファイルを移動してもよろしいですか？',
   yes: '保存',
   no: 'キャンセル',
-  server_error: 'サーバーエラーが発生しました'
+  server_error: 'サーバーエラーが発生しました',
+  empty_folder: 'このフォルダーは空です',
+  required_rule: 'これは必須項目です。',
+  length_rule: '50文字以内で入力してください。',
 }

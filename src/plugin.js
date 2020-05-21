@@ -114,6 +114,7 @@ class Manager {
     }
 
     Vue.prototype.$fileStore = store;
+    Vue.prototype.$getEndpoint = store.$getEndpoint;
     Vue.prototype.$accept_mimes = options.accept_mimes;
     Vue.prototype.$accept_extensions = options.accept_extensions;
     Vue.prototype.$permissions = options.permissions;

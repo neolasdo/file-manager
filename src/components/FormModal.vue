@@ -1,22 +1,27 @@
 <template>
-  <v-dialog v-model="showFormModal" persistent max-width="600px">
-    <v-card>
-      <v-card-text>
-        <v-container>
-          <v-row>
-            <v-col cols="12">
-              <v-text-field label="Name" v-model="name" required></v-text-field>
-            </v-col>
-          </v-row>
-        </v-container>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click="hideFormModal(reload)">{{ $trans('close') }}</v-btn>
-        <v-btn color="blue darken-1" :disabled="oldName === name" text @click="submitForm()">{{ $trans('save') }}</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+    <v-dialog v-model="showFormModal" persistent max-width="600px">
+        <v-card>
+            <v-card-text>
+                <v-container>
+                    <v-form ref="form" v-model="valid" lazy-validation>
+                        <v-row>
+                            <v-col cols="12">
+                                <v-text-field id="name" v-model="name" :rules="rules" :counter="50"
+                                              :error-messages="messages.name" label="Name"></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-form>
+                </v-container>
+            </v-card-text>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="hideFormModal(reload)">{{ $trans('close') }}</v-btn>
+                <v-btn color="blue darken-1" :disabled="oldName === name" text @click="submitForm()">{{ $trans('save')
+                    }}
+                </v-btn>
+            </v-card-actions>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -31,6 +36,14 @@
     data() {
       return {
         reload: false,
+        rules: [
+          v => !!v || this.$trans('required_rule'),
+          v => (v && v.length <= 50) || this.$trans('name_length_rule'),
+        ],
+        valid: true,
+        messages: {
+          name: ''
+        },
         name: '',
         oldName: '',
         formType: formTypes.createFolder
@@ -54,14 +67,55 @@
       },
     },
     methods: {
-      openUploadModal() {
-        this.$fileStore.dispatch('openUploadModal')
-      },
       hideFormModal(payload) {
         this.$fileStore.dispatch('hideFormModal', payload)
       },
-      createFolder(payload) {
-        this.$fileStore.dispatch('createFolder', payload)
+      async createFolder() {
+        this.$refs.form.resetValidation()
+        let endpoint = this.$getEndpoint('createFolder')
+        let request
+        let data = {
+          name: this.name,
+        }
+        if (this.current.id) {
+          data.parent_id = this.current.id
+        }
+        if (endpoint.method.toUpperCase() === 'GET') {
+          request = this.$fileStore.$axios.get(endpoint.route, {
+            params: data
+          })
+        } else {
+          request = this.$fileStore.$axios({
+            method: endpoint.method,
+            url: endpoint.route,
+            data: data
+          })
+        }
+        this.handleResult(request)
+      },
+      async handleResult(request) {
+        await request.then(res => {
+          if (res.data && res.data.message) {
+            this.$snackbar(res.data.message, {
+              color: 'success'
+            })
+          }
+
+          this.$fileStore.dispatch('hideFormModal', true)
+        }).catch(errors => {
+          let status = errors.response.status;
+          if (status && status === 400) {
+            let err = errors.response.data.data;
+            for (let field in err) {
+              this.messages[field] = err[field]
+            }
+          }
+          if (errors.response && errors.response.data && errors.response.data.message && (status === 403 || status === 500 || status === 404)) {
+            this.$snackbar(errors.response.data.message, {
+              color: 'error'
+            })
+          }
+        })
       },
       editFolderName(payload) {
         this.$confirm(this.$trans('confirm_edit_folder'), {
@@ -84,9 +138,7 @@
       },
       submitForm() {
         if (this.formType === formTypes.createFolder) {
-          this.createFolder({
-            name: this.name
-          })
+          this.createFolder()
         } else if (this.formType === formTypes.editFolder) {
           this.editFolderName({
             id: this.selectedFolder.id,
@@ -104,6 +156,7 @@
     watch: {
       showFormModal(val) {
         if (val) {
+          this.$refs.form.reset()
           if (this.formCreate) {
             this.name = ''
             this.formType = formTypes.createFolder

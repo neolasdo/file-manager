@@ -11,19 +11,16 @@ export default {
     let response = executeAxios(this.$axios, getEndpoint, data)
 
     await response.then(res => {
+      getMessage(res,this.$snackbar)
+
       commit('UPDATE_LIST', res.data.data)
       commit('UPDATE_CURRENT', res.data.data)
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     }).catch(error => {
-      let errMess = this.$trans('server_error')
-      if (error.response && error.response.data && error.response.data.message) {
-        errMess = error.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
+      getErrorMessage(error,this.$snackbar, this.$trans)
+
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
@@ -66,45 +63,13 @@ export default {
     let response = executeAxios(this.$axios, endpoint, data)
 
     await response.then(res => {
-      if (res.data && res.data.message) {
-        this.$snackbar(res.data.message, {
-          color: 'success'
-        })
-      }
+      getMessage(res,this.$snackbar)
+
       dispatch('reload')
     }).catch(error => {
-      let errMess = this.$trans('server_error')
-      if (error.response && error.response.data && error.response.data.message) {
-        errMess = error.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
+      getErrorMessage(error,this.$snackbar, this.$trans)
     })
     commit('RESET_CLIPBOARD');
-  },
-  async createFolder({dispatch, commit}, payload) {
-    commit('LOADING')
-    let endpoint = this.$getEndpoint('createFolder')
-    let response = executeAxios(this.$axios, endpoint, payload)
-
-    await response.then(res => {
-      if (res.data && res.data.message) {
-        this.$snackbar(res.data.message, {
-          color: 'success'
-        })
-      }
-      dispatch('reload')
-    }).catch(error => {
-      let errMess = this.$trans('server_error')
-      if (error.response && error.response.data && error.response.data.message) {
-        errMess = error.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
-    })
-    commit('UNLOADING');
   },
   async deleteFolder({dispatch, commit}, payload) {
     commit('LOADING')
@@ -112,20 +77,11 @@ export default {
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {
-      if (res.data && res.data.message) {
-        this.$snackbar(res.data.message, {
-          color: 'success'
-        })
-      }
+      getMessage(res,this.$snackbar)
+
       dispatch('reload')
-    }).catch(e => {
-      let errMess = this.$trans('server_error')
-      if (e.response && e.response.data && e.response.data.message) {
-        errMess = e.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
+    }).catch(error => {
+      getErrorMessage(error,this.$snackbar, this.$trans)
     });
     commit('UNLOADING');
   },
@@ -139,20 +95,11 @@ export default {
     })
 
     await response.then(res => {
-      if (res.data && res.data.message) {
-        this.$snackbar(res.data.message, {
-          color: 'success'
-        })
-      }
+      getMessage(res,this.$snackbar)
+
       dispatch('reload')
-    }).catch(e => {
-      let errMess = this.$trans('server_error')
-      if (e.response && e.response.data && e.response.data.message) {
-        errMess = e.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
+    }).catch(error => {
+      getErrorMessage(error,this.$snackbar, this.$trans)
     });
     commit('UNLOADING');
   },
@@ -162,20 +109,11 @@ export default {
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {
-      if (res.data && res.data.message) {
-        this.$snackbar(res.data.message, {
-          color: 'success'
-        })
-      }
+      getMessage(res,this.$snackbar)
+
       dispatch('reload')
-    }).catch(e => {
-      let errMess = this.$trans('server_error')
-      if (e.response && e.response.data && e.response.data.message) {
-        errMess = e.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
+    }).catch(error => {
+      getErrorMessage(error,this.$snackbar, this.$trans)
     });
     commit('UNLOADING');
   },
@@ -185,20 +123,11 @@ export default {
     let response = executeAxios(this.$axios, endpoint, payload)
 
     await response.then(res => {
-      if (res.data && res.data.message) {
-        this.$snackbar(res.data.message, {
-          color: 'success'
-        })
-      }
+      getMessage(res,this.$snackbar)
+
       dispatch('reload')
-    }).catch(e => {
-      let errMess = this.$trans('server_error')
-      if (e.response && e.response.data && e.response.data.message) {
-        errMess = e.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
+    }).catch(error => {
+      getErrorMessage(error,this.$snackbar, this.$trans)
     });
     commit('UNLOADING');
   },
@@ -228,17 +157,13 @@ export default {
     let response = executeAxios(this.$axios, endpoint, data)
 
     await response.then(res => {
+      getMessage(res,this.$snackbar)
       commit('UPDATE_LIST', res.data)
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     }).catch(error => {
-      let errMess = this.$trans('server_error')
-      if (error.response && error.response.data && error.response.data.message) {
-        errMess = error.response.data.message
-      }
-      this.$snackbar(errMess, {
-        color: 'error'
-      })
+      getErrorMessage(error,this.$snackbar, this.$trans)
+
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     })
@@ -250,19 +175,14 @@ export default {
       let endpoint = this.$getEndpoint('comments', [fileSelected.id])
       let response = executeAxios(this.$axios, endpoint)
       await response.then(res => {
+        getMessage(res,this.$snackbar)
         let payload = {
           comments: res.data,
           id: fileSelected.id
         }
         commit('LOAD_COMMENT', payload)
       }).catch(error => {
-        let errMess = this.$trans('server_error')
-        if (error.response && error.response.data && error.response.data.message) {
-          errMess = error.response.data.message
-        }
-        this.$snackbar(errMess, {
-          color: 'error'
-        })
+        getErrorMessage(error,this.$snackbar, this.$trans)
       })
     }
   },
@@ -289,4 +209,25 @@ function executeAxios(axios, endpoint, data) {
     })
   }
   return response
+}
+
+function getErrorMessage(error, snackbar, trans) {
+  let errMess = trans('server_error')
+  if (error.response && error.response.data && error.response.data.message) {
+    errMess = error.response.data.message
+  }
+  if (error.data && error.data.message) {
+    errMess = error.data.message
+  }
+  snackbar(errMess, {
+    color: 'error'
+  })
+}
+
+function getMessage(res, snackbar) {
+  if (res.data && res.data.message) {
+    snackbar(res.data.message, {
+      color: 'success'
+    })
+  }
 }

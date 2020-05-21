@@ -55,6 +55,9 @@
         <v-row>
           <v-col cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
             <v-container fluid class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
+              <v-alert v-if="files.length === 0 && folders.length === 0" text color="info">
+                <h3>{{ $trans('empty_folder') }}</h3>
+              </v-alert>
               <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
               <file-list ref="fileList" @show-context-menu="showFileContextMenu()"/>
             </v-container>
@@ -109,6 +112,12 @@
           item.disabled = item.id === this.current.id;
           return item;
         })
+      },
+      files() {
+        return this.$fileStore.state.files
+      },
+      folders() {
+        return this.$fileStore.state.folders
       },
       selectedItems() {
         return this.$fileStore.state.selectedFiles

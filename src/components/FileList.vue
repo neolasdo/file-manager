@@ -12,7 +12,7 @@
                         @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
                         @dblclick.stop.prevent="download()" v-on="on"
                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
-                  <v-chip x-small label class="status-label" v-if="item.size >= 1000000" color="red" text-color="white">Too large</v-chip>
+                  <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024" color="red" text-color="white">Too large</v-chip>
                   <v-card-text>
                     <v-img :src="fileThumbnail(item)" alt=""></v-img>
                     <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
