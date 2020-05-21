@@ -16,8 +16,7 @@
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" text @click="hideFormModal(reload)">{{ $trans('close') }}</v-btn>
-                <v-btn color="blue darken-1" :disabled="oldName === name" text @click="submitForm()">{{ $trans('save')
-                    }}
+                <v-btn color="blue darken-1" :disabled="oldName === name" text @click="submitForm()">{{ $trans('save')}}
                 </v-btn>
             </v-card-actions>
         </v-card>
@@ -156,7 +155,6 @@
     watch: {
       showFormModal(val) {
         if (val) {
-          this.$refs.form.reset()
           if (this.formCreate) {
             this.name = ''
             this.formType = formTypes.createFolder
@@ -166,6 +164,10 @@
           } else if (this.selectedFiles.length === 1) {
             this.name = this.selectedFiles[0].name
             this.formType = formTypes.editFile
+          }
+          this.valid = true;
+          this.messages = {
+            name: ''
           }
           this.oldName = this.name
         }
