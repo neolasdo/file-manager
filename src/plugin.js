@@ -112,12 +112,6 @@ class Manager {
       }
       return endpoint
     }
-
-    Vue.prototype.$fileStore = store;
-    Vue.prototype.$getEndpoint = store.$getEndpoint;
-    Vue.prototype.$accept_mimes = options.accept_mimes;
-    Vue.prototype.$accept_extensions = options.accept_extensions;
-    Vue.prototype.$permissions = options.permissions;
     Vue.prototype.$dict = options.dict
     Vue.prototype.$lang = options.lang
     Vue.prototype.$trans = function (key) {
@@ -127,6 +121,13 @@ class Manager {
       }
       return key
     }
+    store.$trans = Vue.prototype.$trans
+    Vue.prototype.$fileStore = store;
+    Vue.prototype.$getEndpoint = store.$getEndpoint;
+    Vue.prototype.$accept_mimes = options.accept_mimes;
+    Vue.prototype.$accept_extensions = options.accept_extensions;
+    Vue.prototype.$permissions = options.permissions;
+
 
     this.store = store
     this.permissions = options.permissions
