@@ -62,7 +62,7 @@ export default {
     }
   },
   UPDATE_BREADCRUMB(state, payload) {
-    if (payload.breadcrumb) {
+    if (payload && payload.breadcrumb) {
       state.breadcrumb = payload.breadcrumb
     } else if (payload && payload.id) {
       let index = state.breadcrumb.findIndex(item => {
