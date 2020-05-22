@@ -113,6 +113,7 @@
               });
           }
         })
+        this.reload = true
       },
       upload(fileInfo, onUploadProgress) {
         let file = fileInfo.file

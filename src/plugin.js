@@ -174,8 +174,10 @@ class Manager {
   }
 
   validateOpts(opts) {
-    console.log(opts)
-    return true
+    if (opts) {
+      return true
+    }
+    return false
   }
 }
 

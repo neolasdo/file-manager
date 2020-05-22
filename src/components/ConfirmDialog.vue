@@ -1,29 +1,22 @@
 <template>
-    <v-dialog eager @input="change" value="true" :max-width="width" :persistent="persistent" @keydown.esc="choose(false)">
+    <v-dialog @input="change" value="true" :max-width="width" :persistent="persistent">
         <v-card tile>
-            <v-toolbar v-if="Boolean(title)" dark :color="color" dense flat>
-                <v-toolbar-title class="white--text" v-text="title"/>
-            </v-toolbar>
-            <v-card-text class="body-1 py-3" v-html="message"/>
-            <v-card-actions>
-                <v-spacer/>
-                <v-btn
-                        v-if="Boolean(buttonFalseText)"
-                        :color="buttonFalseColor"
-                        text
-                        @click="choose(false)"
-                >
-                    {{ buttonFalseText }}
-                </v-btn>
-                <v-btn
-                        v-if="Boolean(buttonTrueText)"
-                        :color="buttonTrueColor"
-                        text
-                        @click="choose(true)"
-                >
-                    {{ buttonTrueText }}
-                </v-btn>
-            </v-card-actions>
+            <v-container>
+                <v-toolbar v-if="Boolean(title)" :color="color" dense flat>
+                    <v-toolbar-title class="white--text" v-text="title"/>
+                </v-toolbar>
+                <v-card-text>{{message}}</v-card-text>
+                <v-card-actions>
+                    <v-spacer/>
+                    <v-btn v-if="Boolean(buttonFalseText)" :color="buttonFalseColor" small text @click="choose(false)">
+                        {{ buttonFalseText }}
+                    </v-btn>
+                    <v-btn v-if="Boolean(buttonTrueText)" :color="buttonTrueColor" small text @click="choose(true)">
+                        {{ buttonTrueText }}
+                    </v-btn>
+                </v-card-actions>
+            </v-container>
+
         </v-card>
     </v-dialog>
 </template>

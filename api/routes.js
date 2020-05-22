@@ -13,7 +13,6 @@ module.exports = function(app) {
 
   app.route('/move')
     .post(function (req, res) {
-      console.log(req)
       let folderId = req.body.dest
       let folder = data.getByFolder(folderId? parseInt(folderId) : false);
       res.json(folder)

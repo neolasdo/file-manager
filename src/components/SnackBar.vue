@@ -3,9 +3,6 @@
                 :multi-line="mode === 'multi-line'" :right="x === 'right'" :timeout="timeout" :top="y === 'top'"
                 :vertical="mode === 'vertical'">
         {{ message }}
-        <v-btn dark icon @click="$destroy">
-            <v-icon>mdi-close</v-icon>
-        </v-btn>
     </v-snackbar>
 </template>
 
