@@ -62,4 +62,5 @@ export default {
   empty_folder: 'THIS FOLDER IS EMPTY',
   required_rule: 'This item is required.',
   name_length_rule: 'Please enter within 50 characters',
+  re_upload: 'Re-upload failed files'
 }

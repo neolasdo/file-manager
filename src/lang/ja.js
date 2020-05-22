@@ -62,4 +62,5 @@ export default {
   empty_folder: 'このフォルダーは空です',
   required_rule: 'これは必須項目です。',
   length_rule: '50文字以内で入力してください。',
+  re_upload: '失敗したファイルを再アップロード'
 }
