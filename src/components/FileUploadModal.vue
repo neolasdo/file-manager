@@ -119,6 +119,9 @@
         let formData = new FormData();
 
         formData.append("file", file);
+        if (this.current.id) {
+          formData.append("folder_id", this.current.id);
+        }
 
         return this.$fileStore.$axios.post(this.$fileStore.$getEndpoint('upload').route, formData, {
           headers: {
