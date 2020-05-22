@@ -51,7 +51,7 @@
         </v-row>
       </v-container>
 
-      <v-container fluid style="background-color: #e0e0e0">
+      <v-container fluid style="background-color: #e5e5e5">
         <v-row>
           <v-col cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
             <v-container fluid class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">

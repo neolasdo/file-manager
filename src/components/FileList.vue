@@ -10,7 +10,7 @@
               <template v-slot:activator="{ on }">
                 <v-card class="pa-2 file-card ma-2" :class="{'active': checkFileSelected(item)}" ref="files"
                         @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
-                        @dblclick.stop.prevent="download()" v-on="on" width="200"
+                        @dblclick.stop.prevent="download()" v-on="on" width="180"
                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
                   <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024" color="red" text-color="white">Too large</v-chip>
                   <v-card-text>
@@ -67,9 +67,21 @@
           url: endpoint.route,
           data: this.selectedItems
         }).then(res => {
-          console.log(res)
-        }).catch(error => {
-          console.log(error)
+          if (res.data && res.data.data && res.data.data.link) {
+            const link = document.createElement('a')
+            link.href = res.data.data.link
+            link.setAttribute('target', '_blank') //or any other extension
+            link.style.display = "none";
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          }
+        }).catch(errors => {
+          if (errors.response && errors.response.data && errors.response.data.message) {
+            this.$snackbar(errors.response.data.message, {
+              color: 'error'
+            })
+          }
         })
       },
       checkFileSelected(item) {

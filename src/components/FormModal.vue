@@ -102,13 +102,13 @@
           this.$fileStore.dispatch('hideFormModal', true)
         }).catch(errors => {
           let status = errors.response.status;
-          if (status && status === 400) {
+          if (status && errors.response && errors.response.data && errors.response.data.data) {
             let err = errors.response.data.data;
             for (let field in err) {
               this.messages[field] = err[field]
             }
           }
-          if (errors.response && errors.response.data && errors.response.data.message && (status === 403 || status === 500 || status === 404)) {
+          if (errors.response && errors.response.data && errors.response.data.message) {
             this.$snackbar(errors.response.data.message, {
               color: 'error'
             })

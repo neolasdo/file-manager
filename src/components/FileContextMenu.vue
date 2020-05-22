@@ -88,16 +88,28 @@
         });
       },
       download() {
-        let endpoint = this.$store.$getEndpoint('download')
+        let endpoint = this.$fileStore.$getEndpoint('download')
 
         this.$fileStore.$axios({
           method: endpoint.method,
           url: endpoint.route,
           data: this.selectedItems
         }).then(res => {
-          console.log(res)
-        }).catch(error => {
-          console.log(error)
+          if (res.data && res.data.data && res.data.data.link) {
+            const link = document.createElement('a')
+            link.href = res.data.data.link
+            link.setAttribute('target', '_blank') //or any other extension
+            link.style.display = "none";
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+          }
+        }).catch(errors => {
+          if (errors.response && errors.response.data && errors.response.data.message) {
+            this.$snackbar(errors.response.data.message, {
+              color: 'error'
+            })
+          }
         })
       },
       hideContextMenu() {

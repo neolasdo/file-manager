@@ -8,13 +8,13 @@
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-card class="pa-2 dir-card ma-2" :class="{'active': checkFolderSelected(item)}"
-                        :elevation="hover ? 8 : 4" ref="folders" tile v-on="on" width="200"
+                        :elevation="hover ? 8 : 4" ref="folders" tile v-on="on" width="180"
                         @contextmenu.prevent.stop="showContextMenu(item, $event)"
                         @click.prevent.stop="selectFolder(item)"
                         @dblclick.stop.prevent="openFolder(item)">
-                  <v-list-item dense>
+                  <v-list-item dense class="pa-1">
                     <v-list-item-icon class="mr-3">
-                      <v-icon x-large>mdi-folder</v-icon>
+                      <v-icon>mdi-folder</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>{{ item.name }}</v-list-item-title>
