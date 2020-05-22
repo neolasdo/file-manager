@@ -93,7 +93,9 @@
         this.$fileStore.$axios({
           method: endpoint.method,
           url: endpoint.route,
-          data: this.selectedItems
+          data:  this.selectedItems.map(item => {
+            return item.id
+          })
         }).then(res => {
           if (res.data && res.data.data && res.data.data.link) {
             const link = document.createElement('a')
