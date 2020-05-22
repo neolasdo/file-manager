@@ -7,7 +7,7 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-file-input v-model="files" chips multiple label="Files" @change="addFiles">
+                        <v-file-input v-model="files" :accept="accept" chips multiple label="Files" @change="addFiles">
                             <template v-slot:selection="{ index }">
                                 <div v-if="index < 1">
                                     <v-chip v-for="(file, key) in files" small close :key="key"
@@ -61,7 +61,7 @@
                     <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0" @click="uploadAll">{{
                         $trans('re_upload') }}
                     </v-btn>
-                    <v-btn color="default" dark tile @click="clear()">{{ $trans('clear') }}</v-btn>
+                    <v-btn color="default" dark tile v-if="files.length !== 0" @click="clear()">{{ $trans('clear') }}</v-btn>
                     <v-btn color="default" dark tile @click="closeModal()">{{ $trans('close') }}</v-btn>
                 </v-card-actions>
             </v-card>

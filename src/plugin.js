@@ -16,7 +16,7 @@ import permissions from "@/configs/permissions";
 import lang from "@/lang";
 import file from "./configs/file";
 import ConfirmDialog from "./components/ConfirmDialog";
-import vuetify from "./plugins/vuetify";
+import vuetifyPlugin from "./plugins/vuetify";
 import SnackBar from "./components/SnackBar";
 
 let optionsDefaults = {
@@ -45,16 +45,16 @@ class Manager {
       throw new Error(`[file-manager] some config options is invalid!`);
     }
     if (!Vue.prototype.$vuetify) {
-      Vue.prototype.$vuetify = vuetify
+      Vue.prototype.$vuetify = vuetifyPlugin
     }
     const options = this.mergeOptions(opts)
-    let vuetifyPlugin = Vue.prototype.$vuetify
+    let vuetify = Vue.prototype.$vuetify
 
     /**
      * Register confirm dialog
      * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
      */
-    const confirmDialog = Vue.extend(Object.assign({ vuetifyPlugin }, ConfirmDialog))
+    const confirmDialog = Vue.extend(Object.assign({ vuetify }, ConfirmDialog))
 
     Vue.prototype.$confirm = function (message, options = {}) {
       options.message = message
@@ -75,7 +75,7 @@ class Manager {
      * Register Snackbar
      * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
      */
-    const snackbar = Vue.extend(Object.assign({ vuetifyPlugin }, SnackBar))
+    const snackbar = Vue.extend(Object.assign({ vuetify }, SnackBar))
 
     Vue.prototype.$snackbar = function (message, options = {}) {
       options.message = message
