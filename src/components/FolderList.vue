@@ -2,19 +2,19 @@
   <div>
     <div class="folder-section text-left" v-if="folders && folders.length">
       <h4>{{ $trans('folders') }}</h4>
-      <v-row>
-        <v-col v-for="(item, index) in folders" :key="index" cols="6" md="3">
-          <v-hover v-slot:default="{ hover }">
+      <v-col cols="12">
+        <v-row align="start" justify="start">
+          <v-hover v-slot:default="{ hover }" v-for="(item, index) in folders" :key="index">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-card class="pa-2 dir-card" :class="{'active': checkFolderSelected(item)}"
-                        :elevation="hover ? 8 : 4" ref="folders" tile v-on="on"
+                <v-card class="pa-2 dir-card ma-2" :class="{'active': checkFolderSelected(item)}"
+                        :elevation="hover ? 8 : 4" ref="folders" tile v-on="on" width="200"
                         @contextmenu.prevent.stop="showContextMenu(item, $event)"
                         @click.prevent.stop="selectFolder(item)"
                         @dblclick.stop.prevent="openFolder(item)">
                   <v-list-item dense>
-                    <v-list-item-icon>
-                      <v-icon>mdi-folder</v-icon>
+                    <v-list-item-icon class="mr-3">
+                      <v-icon x-large>mdi-folder</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                       <v-list-item-title>{{ item.name }}</v-list-item-title>
@@ -25,8 +25,8 @@
               <span>{{ item.name }}</span>
             </v-tooltip>
           </v-hover>
-        </v-col>
-      </v-row>
+        </v-row>
+      </v-col>
     </div>
     <folder-context-menu ref="folderContextMenu" :item="selectedFolder"/>
   </div>

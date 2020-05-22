@@ -3,14 +3,14 @@
     <file-context-menu ref="fileContextMenu"/>
     <div class="file-section text-left" v-if="files && files.length">
       <h4>{{ $trans('files') }}</h4>
-      <v-row>
-        <v-col v-for="(item, index) in files" :key="index" cols="6" md="2" sm="3">
-          <v-hover v-slot:default="{ hover }">
+      <v-col cols="12">
+        <v-row align="start" justify="start">
+          <v-hover v-slot:default="{ hover }" v-for="(item, index) in files" :key="index">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
-                <v-card class="pa-2 file-card" :class="{'active': checkFileSelected(item)}" ref="files"
+                <v-card class="pa-2 file-card ma-2" :class="{'active': checkFileSelected(item)}" ref="files"
                         @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
-                        @dblclick.stop.prevent="download()" v-on="on"
+                        @dblclick.stop.prevent="download()" v-on="on" width="200"
                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
                   <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024" color="red" text-color="white">Too large</v-chip>
                   <v-card-text>
@@ -22,8 +22,8 @@
               <span>{{ item.name }}</span>
             </v-tooltip>
           </v-hover>
-        </v-col>
-      </v-row>
+        </v-row>
+      </v-col>
     </div>
   </div>
 </template>
