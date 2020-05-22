@@ -68,9 +68,6 @@
           }
         })
       },
-      editFolderName(payload) {
-        this.$fileStore.dispatch('editFolderName', payload)
-      },
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
       },

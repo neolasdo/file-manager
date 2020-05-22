@@ -3,7 +3,7 @@
         <v-card>
             <v-card-text>
                 <v-container>
-                    <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-form ref="form" v-model="valid">
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field id="name" v-model="name" :rules="rules" :counter="50"
@@ -70,7 +70,6 @@
         this.$fileStore.dispatch('hideFormModal', payload)
       },
       async createFolder() {
-        this.$refs.form.resetValidation()
         let endpoint = this.$getEndpoint('createFolder')
         let request
         let data = {
@@ -90,7 +89,7 @@
             data: data
           })
         }
-        this.handleResult(request)
+        await this.handleResult(request)
       },
       async handleResult(request) {
         await request.then(res => {
@@ -121,8 +120,23 @@
           buttonTrueColor: 'deep-orange'
         }).then(res => {
           if (res) {
-            this.$fileStore.dispatch('editFolderName', payload)
-            this.hideFormModal(false)
+            let endpoint = this.$getEndpoint('editFolder', [payload.id])
+            let request
+            let data = {
+              name: this.name,
+            }
+            if (endpoint.method.toUpperCase() === 'GET') {
+              request = this.$fileStore.$axios.get(endpoint.route, {
+                params: data
+              })
+            } else {
+              request = this.$fileStore.$axios({
+                method: endpoint.method,
+                url: endpoint.route,
+                data: data
+              })
+            }
+            this.handleResult(request)
           }
         })
       },
@@ -131,7 +145,23 @@
           buttonTrueColor: 'deep-orange'
         }).then(res => {
           if (res) {
-            this.$fileStore.dispatch('editFile', payload)
+            let endpoint = this.$getEndpoint('editFile', [payload.id])
+            let request
+            let data = {
+              name: this.name,
+            }
+            if (endpoint.method.toUpperCase() === 'GET') {
+              request = this.$fileStore.$axios.get(endpoint.route, {
+                params: data
+              })
+            } else {
+              request = this.$fileStore.$axios({
+                method: endpoint.method,
+                url: endpoint.route,
+                data: data
+              })
+            }
+            this.handleResult(request)
           }
         })
       },
@@ -155,6 +185,9 @@
     watch: {
       showFormModal(val) {
         if (val) {
+          if (this.$refs.form) {
+            this.$refs.form.reset()
+          }
           if (this.formCreate) {
             this.name = ''
             this.formType = formTypes.createFolder

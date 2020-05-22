@@ -56,12 +56,6 @@
       createFolder(payload) {
         this.$fileStore.dispatch('createFolder', payload)
       },
-      editFolder(payload) {
-        this.$fileStore.dispatch('editFolder', payload)
-      },
-      editFile(payload) {
-        this.$fileStore.dispatch('editFile', payload)
-      },
       resetSelectedFiles() {
         this.$fileStore.dispatch('resetSelectedFiles')
       },

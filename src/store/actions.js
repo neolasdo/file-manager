@@ -103,34 +103,6 @@ export default {
     });
     commit('UNLOADING');
   },
-  async editFolderName({dispatch, commit}, payload) {
-    commit('LOADING')
-    let endpoint = this.$getEndpoint('editFolder', [payload.id])
-    let response = executeAxios(this.$axios, endpoint, payload)
-
-    await response.then(res => {
-      getMessage(res,this.$snackbar)
-
-      dispatch('reload')
-    }).catch(error => {
-      getErrorMessage(error,this.$snackbar, this.$trans)
-    });
-    commit('UNLOADING');
-  },
-  async editFile({commit, dispatch}, payload) {
-    commit('LOADING')
-    let endpoint = this.$getEndpoint('editFile', [payload.id])
-    let response = executeAxios(this.$axios, endpoint, payload)
-
-    await response.then(res => {
-      getMessage(res,this.$snackbar)
-
-      dispatch('reload')
-    }).catch(error => {
-      getErrorMessage(error,this.$snackbar, this.$trans)
-    });
-    commit('UNLOADING');
-  },
   openUploadModal({commit}) {
     commit('OPEN_UPLOAD_MODAL')
   },

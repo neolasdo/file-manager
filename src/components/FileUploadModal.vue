@@ -61,7 +61,6 @@
                     <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0" @click="uploadAll">{{
                         $trans('re_upload') }}
                     </v-btn>
-                    <v-btn color="default" dark tile v-if="files.length !== 0" @click="clear()">{{ $trans('clear') }}</v-btn>
                     <v-btn color="default" dark tile @click="closeModal()">{{ $trans('close') }}</v-btn>
                 </v-card-actions>
             </v-card>
@@ -141,10 +140,6 @@
       deleteFile(index) {
         this.filesInfo.splice(index, 1)
         this.files.splice(index, 1)
-      },
-      clear() {
-        this.filesInfo = []
-        this.files = []
       },
       createFileInfo(file) {
         return {
