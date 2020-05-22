@@ -2,7 +2,6 @@ export default {
   async getByFolder({commit}, item) {
     let getEndpoint = this.$getEndpoint('get')
     commit('LOADING')
-    commit('UPDATE_BREADCRUMB', item);
     commit('UPDATE_CURRENT', item);
     let data = {}
     if (item && item.id) {
@@ -12,14 +11,15 @@ export default {
 
     await response.then(res => {
       getMessage(res,this.$snackbar)
-
       commit('UPDATE_LIST', res.data.data)
       commit('UPDATE_CURRENT', res.data.data)
+      commit('UPDATE_BREADCRUMB', res.data.data.breadcrumb ? res.data.data: item);
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
+      commit('UPDATE_BREADCRUMB', item);
 
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
