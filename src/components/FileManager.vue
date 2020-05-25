@@ -53,7 +53,7 @@
 
       <v-container fluid style="background-color: #e5e5e5">
         <v-row>
-          <v-col cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
+          <v-col :cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
             <v-container fluid class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
               <v-alert v-if="files.length === 0 && folders.length === 0" text color="info">
                 <h3>{{ $trans('empty_folder') }}</h3>

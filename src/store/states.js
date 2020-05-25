@@ -18,7 +18,10 @@ export default {
       id: ''
     }
   ],
-  clipboard: [],
+  clipboard: {
+    files: [],
+    folders: []
+  },
   showUploadModal: false,
   showFormModal: false,
   formCreate: false,

@@ -18,7 +18,7 @@
             <v-list-item-title>{{ $trans('upload') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="moveFiles" v-if="$permissions.move && clipboard.length">
+        <v-list-item @click="moveFiles" v-if="$permissions.move && clipboard.files.length + clipboard.folders.length">
           <v-list-item-icon>
             <v-icon>mdi-file-move</v-icon>
           </v-list-item-icon>

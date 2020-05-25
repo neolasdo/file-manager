@@ -42,11 +42,17 @@ export default {
     commit('ADD_FILE_SELECTED', payload);
     commit('RESET_SELECTED_FOLDER');
   },
-  addToClipboard({commit}) {
+  addFilesToClipboard({commit}) {
     commit('ADD_FILES_TO_CLIPBOARD');
+  },
+  addFolderToClipboard({commit}) {
+    commit('ADD_FOLDERS_TO_CLIPBOARD');
   },
   removeFileInClipboard({commit}, payload) {
     commit('REMOVE_FILE_IN_CLIPBOARD', payload);
+  },
+  removeFolderInClipboard({commit}, payload) {
+    commit('REMOVE_FOLDER_IN_CLIPBOARD', payload);
   },
   async moveFiles({state, dispatch, commit}) {
     let currentFolder = state.current
@@ -54,7 +60,10 @@ export default {
     let endpoint = this.$getEndpoint('move')
     commit('LOADING')
     let data = {
-      files: clipboard.map(item => {
+      files: clipboard.files.map(item => {
+        return item.id
+      }),
+      folders: clipboard.folders.map(item => {
         return item.id
       }),
       dest: currentFolder.id ? currentFolder.id : null

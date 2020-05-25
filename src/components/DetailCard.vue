@@ -26,7 +26,7 @@
                         <span>{{ $trans('comments') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :key="'clipboard'" v-if="clipboard.length" @click="showComments = false">
+                <v-tab :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length" @click="showComments = false">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-clipboard-outline</v-icon>
@@ -82,19 +82,37 @@
                             </v-row>
                         </v-card-text>
                     </v-tab-item>
-                    <v-tab-item :key="'clipboard'" v-if="clipboard.length">
+                    <v-tab-item :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length">
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12">
+                                    <v-subheader>{{ $trans('files') }}</v-subheader>
                                     <v-list dense>
                                         <v-list-item-group>
-                                            <v-list-item v-for="(item, i) in clipboard" :key="i">
+                                            <v-list-item v-for="(item, i) in clipboard.files" :key="i">
                                                 <v-list-item-content>
                                                     <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-list-item-action>
                                                     <v-btn icon small>
                                                         <v-icon @click="removeFileInClipboard(i)" color="grey lighten-1">mdi-close</v-icon>
+                                                    </v-btn>
+                                                </v-list-item-action>
+                                            </v-list-item>
+                                        </v-list-item-group>
+                                    </v-list>
+                                </v-col>
+                                <v-col cols="12">
+                                    <v-subheader>{{ $trans('folders') }}</v-subheader>
+                                    <v-list dense>
+                                        <v-list-item-group>
+                                            <v-list-item v-for="(item, i) in clipboard.folders" :key="i">
+                                                <v-list-item-content>
+                                                    <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
+                                                </v-list-item-content>
+                                                <v-list-item-action>
+                                                    <v-btn icon small>
+                                                        <v-icon @click="removeFolderInClipboard(i)" color="grey lighten-1">mdi-close</v-icon>
                                                     </v-btn>
                                                 </v-list-item-action>
                                             </v-list-item>
@@ -164,6 +182,9 @@
       },
       removeFileInClipboard(payload) {
         this.$fileStore.dispatch('removeFileInClipboard', payload)
+      },
+      removeFolderInClipboard(payload) {
+        this.$fileStore.dispatch('removeFolderInClipboard', payload)
       },
     }
   }

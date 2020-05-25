@@ -55,7 +55,7 @@ export default {
   confirm_delete_folder: '選択したフォルダを削除してもよろしいですか？',
   confirm_edit_file: 'このファイルを更新してもよろしいですか？',
   confirm_edit_folder: 'このフォルダを更新してもよろしいですか？',
-  confirm_move_files: 'このフォルダにファイルを移動してもよろしいですか？',
+  confirm_move_files: 'クリップボード内のファイルとフォルダをこのフォルダに移動しますか？',
   yes: '保存',
   no: 'キャンセル',
   server_error: 'サーバーエラーが発生しました',

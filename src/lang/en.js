@@ -55,7 +55,7 @@ export default {
   confirm_delete_folder: 'Are you sure to delete selected folder?',
   confirm_edit_file: 'Are you sure to update this file?',
   confirm_edit_folder: 'Are you sure to update this folder?',
-  confirm_move_files: 'Are you sure to move files to this folder?',
+  confirm_move_files: 'Are you sure to move files and folders in clipboard to this folder?',
   yes: 'YES',
   no: 'NO',
   server_error: 'System Error',

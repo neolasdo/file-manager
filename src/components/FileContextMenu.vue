@@ -77,7 +77,7 @@
         this.$fileStore.dispatch('openFormModal', payload)
       },
       addClipboard() {
-        this.$fileStore.dispatch('addToClipboard')
+        this.$fileStore.dispatch('addFilesToClipboard')
       },
       showContextMenu(e) {
         this.showMenu = false;

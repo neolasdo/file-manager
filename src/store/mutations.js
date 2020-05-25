@@ -32,13 +32,30 @@ export default {
     state.selectedFiles.push(payload)
   },
   ADD_FILES_TO_CLIPBOARD(state) {
-    state.clipboard = Array.from(new Set([...state.clipboard, ...state.selectedFiles]))
+    state.clipboard.files = Array.from(new Set([...state.clipboard.files, ...state.selectedFiles]))
+  },
+  ADD_FOLDERS_TO_CLIPBOARD(state) {
+    if (state.selectedFolder.id) {
+      let index = state.clipboard.folders.findIndex(item => {
+        return item.id === state.selectedFolder.id
+      })
+      if (index === -1) {
+        state.clipboard.folders.push(state.selectedFolder)
+        state.selectedFolder = {}
+      }
+    }
   },
   REMOVE_FILE_IN_CLIPBOARD(state, payload) {
-    state.clipboard.splice(payload, 1);
+    state.clipboard.files.splice(payload, 1);
+  },
+  REMOVE_FOLDER_IN_CLIPBOARD(state, payload) {
+    state.clipboard.folders.splice(payload, 1);
   },
   RESET_CLIPBOARD(state) {
-    state.clipboard = [];
+    state.clipboard =  {
+      files: [],
+      folders: []
+    };
   },
   LOADING(state) {
     state.isLoading = true;
