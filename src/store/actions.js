@@ -10,7 +10,7 @@ export default {
     let response = executeAxios(this.$axios, getEndpoint, data)
 
     await response.then(res => {
-      getMessage(res,this.$snackbar)
+      // getMessage(res,this.$snackbar)
       commit('UPDATE_LIST', res.data.data)
       commit('UPDATE_CURRENT', res.data.data)
       commit('UPDATE_BREADCRUMB', res.data.data.breadcrumb ? res.data.data: item);
@@ -130,12 +130,11 @@ export default {
 
     await response.then(res => {
       getMessage(res,this.$snackbar)
-      commit('UPDATE_LIST', res.data)
+      commit('UPDATE_LIST', res.data.data)
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
-
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
     })

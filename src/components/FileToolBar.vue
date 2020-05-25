@@ -18,7 +18,7 @@
                               <v-subheader>{{ $trans('type') }}</v-subheader>
                             </v-col>
                             <v-col cols="8">
-                              <v-select v-model="filter.fileType" :items="getAllType()" item-text="text"
+                              <v-select v-model="filter.mime" :items="getAllType()" item-text="text"
                                         item-value="value"
                                         menu-props="auto" label="タイプ" hide-details single-line>
                               </v-select>
@@ -27,7 +27,7 @@
                               <v-subheader>{{ $trans('created_date') }}</v-subheader>
                             </v-col>
                             <v-col cols="8">
-                              <v-select v-model="filter.createdDate" :items="timeRanges" item-text="text"
+                              <v-select v-model="filter.created_date" :items="timeRanges" item-text="text"
                                         item-value="value"
                                         menu-props="auto" label="作成日" hide-details single-line>
                               </v-select>
@@ -44,7 +44,7 @@
                         </slot>
                       <v-card-actions class="justify-center">
                         <v-btn color="secondary" tile @click="reset">{{ this.$trans('reset') }}</v-btn>
-                        <v-btn color="primary" tile @click="closeFilter">{{ this.$trans('close') }}</v-btn>
+                        <v-btn color="primary" tile @click="executeSearch">{{ this.$trans('search') }}</v-btn>
                       </v-card-actions>
                     </v-container>
                   </v-card>
@@ -105,15 +105,15 @@
         menu: false,
         filter: {
           status: '',
-          fileType: '',
-          createdDate: '',
+          mime: '',
+          created_date: '',
         },
         timeRanges: [
           {text: this.$trans('all'), value: ''},
-          {text: this.$trans('twelfth_month_ago'), value: '12m'},
-          {text: this.$trans('six_month_ago'), value: '6m'},
-          {text: this.$trans('thirty_day_ago'), value: '30d'},
-          {text: this.$trans('seven_day_ago'), value: '7d'},
+          {text: this.$trans('twelfth_month_ago'), value: '12 month'},
+          {text: this.$trans('six_month_ago'), value: '6 month'},
+          {text: this.$trans('thirty_day_ago'), value: '30 day'},
+          {text: this.$trans('seven_day_ago'), value: '7 day'},
         ],
         statusList: [
           {text: this.$trans('all'), value: ''},
@@ -161,8 +161,9 @@
           createdDate: '',
         }
       },
-      closeFilter() {
+      executeSearch() {
         this.menu = false
+        this.search({keyword: this.keyword, filter: this.filter })
       },
       getAllType() {
         let allTypes = [];

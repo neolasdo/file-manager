@@ -3,7 +3,7 @@
         <v-card>
             <v-card-text>
                 <v-container>
-                    <v-form ref="form" v-model="valid">
+                    <v-form ref="form" v-model="valid" @submit.prevent="submitForm">
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field id="name" v-model="name" :rules="rules" :counter="50"
