@@ -185,10 +185,10 @@
             })
           }
         }).then(res => {
-          if (res.data && res.data.data && res.data.data.link) {
+          if (res.data && res.data.data) {
             const link = document.createElement('a')
             link.href = res.data.data.link
-            link.setAttribute('target', '_blank') //or any other extension
+            link.setAttribute('download', res.data.data.name)
             link.style.display = "none";
             document.body.appendChild(link)
             link.click()
