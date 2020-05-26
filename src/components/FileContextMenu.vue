@@ -99,15 +99,19 @@
             })
           }
         }).then(res => {
-          if (res.data && res.data.data && res.data.data.name && res.data.data.link) {
-            const link = document.createElement('a')
-            link.href = res.data.data.link
-            link.setAttribute('target', '_blank')
-            link.setAttribute('download', res.data.data.name)
-            link.style.display = "none";
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
+          if (res.data && res.data.data) {
+            this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
+              .then(response => {
+                const blob = new Blob([response.data])
+                const link = document.createElement('a')
+                link.href = URL.createObjectURL(blob)
+                link.setAttribute('download', res.data.data.name)
+                link.style.display = "none";
+                document.body.appendChild(link)
+                link.click()
+                URL.revokeObjectURL(link.href)
+                document.body.removeChild(link)
+              }).catch(console.error)
           }
         }).catch(errors => {
           if (errors.response && errors.response.data && errors.response.data.message) {
