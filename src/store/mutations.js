@@ -64,8 +64,31 @@ export default {
     state.isLoading = false;
   },
   UPDATE_LIST(state, payload) {
-    state.files = payload.files ? payload.files: []
-    state.folders = payload.children ? payload.children: []
+    state.files = payload.files ? payload.files: state.files
+    state.folders = payload.children ? payload.children: state.folders
+    function sort(a, b) {
+      if (a[state.sortKey] && b[state.sortKey]) {
+        let keyA = a[state.sortKey].toLowerCase()
+        let keyB = b[state.sortKey].toLowerCase()
+        if (state.sortType.toUpperCase() === 'ASC') {
+          if (keyA < keyB) return -1;
+          if (keyA > keyB) return 1;
+          return 0;
+        } else {
+          if (keyA < keyB) return 1;
+          if (keyA > keyB) return -1;
+          return 0;
+        }
+      }
+    }
+    if (state.sortType && state.sortKey) {
+      state.files = state.files.sort((a,b) => sort(a, b))
+      state.folders = state.folders.sort((a,b) => sort(a, b))
+    }
+  },
+  UPDATE_SORT(state, payload) {
+    state.sortKey = payload.sortKey
+    state.sortType = payload.sortType ? payload.sortType.toUpperCase() :'ASC'
   },
   UPDATE_CURRENT(state, payload) {
     if (payload && payload.id) {

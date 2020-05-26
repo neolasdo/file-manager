@@ -172,6 +172,10 @@ export default {
     } else {
       dispatch('getByFolder', state.current)
     }
+  },
+  changeSort({commit}, payload) {
+    commit('UPDATE_SORT', payload)
+    commit('UPDATE_LIST', payload)
   }
 }
 

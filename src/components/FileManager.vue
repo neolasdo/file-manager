@@ -29,21 +29,19 @@
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn text small v-on="on" light class="ml-2" tile>
-                  {{ $trans('sort') }} <v-icon>mdi-sort</v-icon>
+                  {{ sortLabel }} <v-icon>{{ sortType === '' ? 'mdi-sort' : (sortType.toUpperCase() === 'ASC' ? 'mdi-sort-ascending' : 'mdi-sort-descending') }}</v-icon>
                 </v-btn>
               </template>
               <v-list tile dense>
-                <v-list-item>
-                  <v-list-item-title>{{ $trans('sort_name_asc') }}</v-list-item-title>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-title>{{ $trans('sort_name_desc') }}</v-list-item-title>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-title>{{ $trans('sort_date_asc') }}</v-list-item-title>
-                </v-list-item>
-                <v-list-item>
-                  <v-list-item-title>{{ $trans('sort_date_desc') }}</v-list-item-title>
+                <v-list-item v-for="item in $sortConfig.fields" :key="item.key" @click="changeSort(item.key)">
+                  <v-list-item-content>
+                    <v-list-item-title>{{ item.label }}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action v-if="sortKey === item.key && sortType">
+                    <v-btn icon>
+                      <v-icon color="grey lighten-1">{{ sortType.toUpperCase() === 'ASC' ? 'mdi-sort-descending' : 'mdi-sort-ascending' }}</v-icon>
+                    </v-btn>
+                  </v-list-item-action>
                 </v-list-item>
               </v-list>
             </v-menu>
@@ -119,6 +117,22 @@
       folders() {
         return this.$fileStore.state.folders
       },
+      sortKey() {
+        return this.$fileStore.state.sortKey
+      },
+      sortType() {
+        return this.$fileStore.state.sortType
+      },
+      sortLabel() {
+        let key = this.$fileStore.state.sortKey
+        let index = this.$sortConfig.fields.findIndex(item => {
+          return item.key === key
+        })
+        if (index !== -1) {
+          return this.$sortConfig.fields[index].label
+        }
+        return this.$trans('sort')
+      },
       selectedItems() {
         return this.$fileStore.state.selectedFiles
       },
@@ -141,6 +155,13 @@
       },
       resetSelectedFiles() {
         this.$fileStore.dispatch('resetSelectedFiles')
+      },
+      changeSort(key) {
+        let type = 'ASC'
+        if (this.sortKey === key) {
+          type = this.sortType.toUpperCase() === 'ASC' ? 'DESC' : 'ASC'
+        }
+        this.$fileStore.dispatch('changeSort', { sortKey: key, sortType: type })
       },
       showMainContextMenu(e) {
         if (this.keywordState === '') {

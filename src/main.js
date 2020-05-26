@@ -16,7 +16,23 @@ let optionsDefaults = {
   axios: axios.create({
     baseURL: 'http://localhost:8001'
   }),
-  permissions: permissions
+  permissions: permissions,
+  sort: {
+    fields: [
+      {
+        key: 'name',
+        label: 'Name'
+      },
+      {
+        key: 'created_at',
+        label: 'Created'
+      },
+    ],
+    default: {
+      key: 'name',
+      type: 'ASC'
+    }
+  }
 }
 
 Vue.config.productionTip = false
@@ -101,8 +117,8 @@ fileStore.$snackbar = Vue.prototype.$snackbar
 Vue.prototype.$fileStore = fileStore
 Vue.prototype.$getEndpoint = fileStore.$getEndpoint
 Vue.prototype.$axios = fileStore.$axios;
-
 Vue.prototype.$permissions = optionsDefaults.permissions;
+Vue.prototype.$sortConfig = optionsDefaults.sort;
 
 new Vue({
   vuetify,

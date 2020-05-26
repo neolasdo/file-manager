@@ -26,7 +26,19 @@ let optionsDefaults = {
   dict: lang,
   lang: 'en',
   accept_mimes: file.accept_mimes,
-  accept_extensions: file.accept_extensions
+  accept_extensions: file.accept_extensions,
+  sort: {
+    fields: [
+      {
+        key: 'name',
+        label: 'Name'
+      },
+      {
+        key: 'created_at',
+        label: 'Created'
+      },
+    ]
+  }
 }
 let Vue;
 
@@ -54,7 +66,7 @@ class Manager {
      * Register confirm dialog
      * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
      */
-    const confirmDialog = Vue.extend(Object.assign({ vuetify }, ConfirmDialog))
+    const confirmDialog = Vue.extend(Object.assign({vuetify}, ConfirmDialog))
 
     Vue.prototype.$confirm = function (message, options = {}) {
       options.message = message
@@ -75,7 +87,7 @@ class Manager {
      * Register Snackbar
      * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
      */
-    const snackbar = Vue.extend(Object.assign({ vuetify }, SnackBar))
+    const snackbar = Vue.extend(Object.assign({vuetify}, SnackBar))
 
     Vue.prototype.$snackbar = function (message, options = {}) {
       options.message = message
@@ -95,7 +107,7 @@ class Manager {
 
     store.$axios = options.axios
     store.$snackbar = Vue.prototype.$snackbar
-    store.$getEndpoint = function(name, meta = {}) {
+    store.$getEndpoint = function (name, meta = {}) {
       let endpoint = Object.assign({}, Vue.prototype.$endpoints[name])
 
       if (!endpoint) return {
@@ -127,7 +139,7 @@ class Manager {
     Vue.prototype.$accept_mimes = options.accept_mimes;
     Vue.prototype.$accept_extensions = options.accept_extensions;
     Vue.prototype.$permissions = options.permissions;
-
+    Vue.prototype.$sortConfig = options.sort;
 
     this.store = store
     this.permissions = options.permissions
@@ -137,11 +149,12 @@ class Manager {
     let options = {
       endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
       axios: opts.axios ? opts.axios : optionsDefaults.axios,
-        lang: opts.lang ? opts.lang : optionsDefaults.lang,
+      lang: opts.lang ? opts.lang : optionsDefaults.lang,
       permissions: {...optionsDefaults.permissions, ...opts.permissions},
       dict: optionsDefaults.dict,
-        accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
-      accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions}
+      accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
+      accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions},
+      sort: {...optionsDefaults.sort, ...opts.sort}
     }
     if (opts.dict) {
       for (const [key, value] of Object.entries(opts.dict)) {
@@ -167,9 +180,9 @@ class Manager {
 
   changeEndpoint(name, opts = {}) {
     if (
-    !Vue.prototype.$endpoints[name]) {
-    throw new Error(`[file-manager] please init File Manager with endpoint ` + name)
-  }
+      !Vue.prototype.$endpoints[name]) {
+      throw new Error(`[file-manager] please init File Manager with endpoint ` + name)
+    }
     let options = Vue.prototype.$endpoints[name]
     Vue.prototype.$endpoints[name] = {...options, ...opts};
   }
