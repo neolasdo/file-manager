@@ -1,51 +1,51 @@
 <template>
-  <div>
-    <v-menu v-model="showMenu" :position-x="x" :position-y="y" absolute offset-y>
-      <v-list dense tile>
-        <v-list-item @click="preview" v-if="canPreview()">
-          <v-list-item-icon v-if="$permissions.view">
-            <v-icon>mdi-eye</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $trans('preview') }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item v-if="selectedItems.length === 1 && $permissions.edit" @click="openFormModal()">
-          <v-list-item-icon>
-            <v-icon>mdi-pencil</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $trans('rename') }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="download" v-if="$permissions.download">
-          <v-list-item-icon>
-            <v-icon>mdi-download</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $trans('download') }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="addClipboard" v-if="$permissions.move">
-          <v-list-item-icon>
-            <v-icon>mdi-clipboard-plus-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $trans('add_to_clipboard') }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item @click="deleteAll()" v-if="$permissions.delete">
-          <v-list-item-icon>
-            <v-icon>mdi-delete</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $trans('delete') }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-menu>
-    <file-preview-modal ref="filePreviewModal"/>
-  </div>
+    <div>
+        <v-menu v-model="showMenu" :position-x="x" :position-y="y" absolute offset-y>
+            <v-list dense tile>
+                <v-list-item @click="preview" v-if="canPreview()">
+                    <v-list-item-icon v-if="$permissions.view">
+                        <v-icon>mdi-eye</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ $trans('preview') }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item v-if="selectedItems.length === 1 && $permissions.edit" @click="openFormModal()">
+                    <v-list-item-icon>
+                        <v-icon>mdi-pencil</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ $trans('rename') }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item @click="download" v-if="$permissions.download">
+                    <v-list-item-icon>
+                        <v-icon>mdi-download</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ $trans('download') }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item @click="addClipboard" v-if="$permissions.move">
+                    <v-list-item-icon>
+                        <v-icon>mdi-clipboard-plus-outline</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ $trans('add_to_clipboard') }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item @click="deleteAll()" v-if="$permissions.delete">
+                    <v-list-item-icon>
+                        <v-icon>mdi-delete</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ $trans('delete') }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list>
+        </v-menu>
+        <file-preview-modal ref="filePreviewModal"/>
+    </div>
 </template>
 
 <script>
@@ -100,13 +100,18 @@
           }
         }).then(res => {
           if (res.data && res.data.data) {
-            const link = document.createElement('a')
-            link.href = res.data.data.link
-            link.setAttribute('download', res.data.data.name)
-            link.style.display = "none";
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
+            this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
+              .then(response => {
+                const blob = new Blob([response.data])
+                const link = document.createElement('a')
+                link.href = URL.createObjectURL(blob)
+                link.setAttribute('download', res.data.data.name)
+                link.style.display = "none";
+                document.body.appendChild(link)
+                link.click()
+                URL.revokeObjectURL(link.href)
+                document.body.removeChild(link)
+              }).catch(console.error)
           }
         }).catch(errors => {
           if (errors.response && errors.response.data && errors.response.data.message) {

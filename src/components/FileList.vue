@@ -1,37 +1,40 @@
 <template>
-  <div>
-    <file-context-menu ref="fileContextMenu"/>
-    <div class="file-section text-left" v-if="files && files.length">
-      <h4>{{ $trans('files') }}</h4>
-      <v-col cols="12">
-        <v-row align="start" justify="start">
-          <v-hover v-slot:default="{ hover }" v-for="(item, index) in files" :key="index">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-card class="pa-2 file-card ma-2" :class="{'active': checkFileSelected(item)}" ref="files"
-                        @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
-                        @dblclick.stop.prevent="download()" v-on="on" width="180"
-                        @contextmenu.prevent.stop="showContextMenu(item, $event)">
-                  <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024" color="red" text-color="white">Too large</v-chip>
-                  <v-card-text>
-                    <v-img :src="fileThumbnail(item)" alt=""></v-img>
-                    <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
-                  </v-card-text>
-                </v-card>
-              </template>
-              <span>{{ item.name }}</span>
-            </v-tooltip>
-          </v-hover>
-        </v-row>
-      </v-col>
+    <div>
+        <file-context-menu ref="fileContextMenu"/>
+        <div class="file-section text-left" v-if="files && files.length">
+            <h4>{{ $trans('files') }}</h4>
+            <v-col cols="12">
+                <v-row align="start" justify="start">
+                    <v-hover v-slot:default="{ hover }" v-for="(item, index) in files" :key="index">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{ on }">
+                                <v-card class="pa-2 file-card ma-2" :class="{'active': checkFileSelected(item)}"
+                                        ref="files"
+                                        @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
+                                        @dblclick.stop.prevent="download()" v-on="on" width="180"
+                                        @contextmenu.prevent.stop="showContextMenu(item, $event)">
+                                    <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024"
+                                            color="red" text-color="white">Too large
+                                    </v-chip>
+                                    <v-card-text>
+                                        <v-img :src="fileThumbnail(item)" alt=""></v-img>
+                                        <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
+                                    </v-card-text>
+                                </v-card>
+                            </template>
+                            <span>{{ item.name }}</span>
+                        </v-tooltip>
+                    </v-hover>
+                </v-row>
+            </v-col>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
   import {formatSize} from '@/helpers/file'
   import FileContextMenu from './FileContextMenu'
-  import { getFileThumbnail} from "../helpers/file";
+  import {getFileThumbnail} from "../helpers/file";
 
 
   export default {
@@ -72,13 +75,18 @@
           }
         }).then(res => {
           if (res.data && res.data.data) {
-            const link = document.createElement('a')
-            link.href = res.data.data.link
-            link.setAttribute('download', res.data.data.name)
-            link.style.display = "none";
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link)
+            this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
+              .then(response => {
+                const blob = new Blob([response.data])
+                const link = document.createElement('a')
+                link.href = URL.createObjectURL(blob)
+                link.setAttribute('download', res.data.data.name)
+                link.style.display = "none";
+                document.body.appendChild(link)
+                link.click()
+                URL.revokeObjectURL(link.href)
+                document.body.removeChild(link)
+              }).catch((error) => console.log(error))
           }
         }).catch(errors => {
           if (errors.response && errors.response.data && errors.response.data.message) {
@@ -126,26 +134,26 @@
 </script>
 
 <style>
-  .file-card.active {
-    color: #4385f4 !important;
-    background-color: #e5e5e5 !important;
-    border: 1px solid #4385f4 !important
-  }
+    .file-card.active {
+        color: #4385f4 !important;
+        background-color: #e5e5e5 !important;
+        border: 1px solid #4385f4 !important
+    }
 
-  .file-card:not(.active) {
-    color: #000 !important;
-    background-color: #fff !important;
-    border: 1px solid #fff !important
-  }
+    .file-card:not(.active) {
+        color: #000 !important;
+        background-color: #fff !important;
+        border: 1px solid #fff !important
+    }
 
-  h4.file-name {
-    font-size: 1em !important;
-    font-weight: bold;
-  }
+    h4.file-name {
+        font-size: 1em !important;
+        font-weight: bold;
+    }
 
-  .status-label {
-    position: absolute !important;
-    top: -16px !important;
-    right: 0 !important;
-  }
+    .status-label {
+        position: absolute !important;
+        top: -16px !important;
+        right: 0 !important;
+    }
 </style>
