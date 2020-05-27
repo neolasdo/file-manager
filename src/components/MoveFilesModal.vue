@@ -3,15 +3,18 @@
         <v-card>
             <v-card-title>
                 <v-btn icon @click="getFolders(current.parent_id)" v-if="current.parent_id">
-                    <v-icon color="grey lighten-1">mdi-information</v-icon>
+                    <v-icon color="grey lighten-1">mdi-chevron-left</v-icon>
                 </v-btn>
                 {{ current.name }}
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text style="height: 300px;" class="pa-0">
                 <v-list>
+                    <v-overlay :value="loading" absolute>
+                        <v-progress-circular indeterminate size="64"></v-progress-circular>
+                    </v-overlay>
                     <v-list-item-group v-model="dest" color="primary">
-                        <v-list-item v-for="item in folders" :key="item.id" :disabled="item.id === currentFolder.id">
+                        <v-list-item v-for="item in folders" :key="item.id">
                             <v-list-item-icon>
                                 <v-icon>mdi-folder</v-icon>
                             </v-list-item-icon>
@@ -30,7 +33,9 @@
             <v-divider></v-divider>
             <v-card-actions>
                 <v-btn color="blue darken-1" text @click="closeModal">{{ $trans('close') }}</v-btn>
-                <v-btn color="blue darken-1" text :disabled="!folders[dest] && current.id === currentFolder.id" @click="moveFiles">{{ $trans('move') }}</v-btn>
+                <v-btn color="blue darken-1" text
+                       :disabled="(!folders[dest] && current.id === currentFolder.id) || (folders[dest] && folders[dest].id === currentFolder.id)"
+                       @click="moveFiles">{{ $trans('move') }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-dialog>
