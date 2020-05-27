@@ -2,7 +2,7 @@
     <v-dialog v-model="dialog" scrollable max-width="300px">
         <v-card>
             <v-card-title>
-                <v-btn icon @click="getFolders(current.parent_id)" v-if="current.parent_id">
+                <v-btn icon @click="getFolders(current.parent_id)" v-if="current.id">
                     <v-icon color="grey lighten-1">mdi-chevron-left</v-icon>
                 </v-btn>
                 {{ current.name }}
