@@ -180,7 +180,7 @@
           method: endpoint.method,
           url: endpoint.route,
           data: {
-            files: this.selectedItems.map(item => {
+            files: this.selectedFiles.map(item => {
               return item.id
             })
           }
