@@ -47,6 +47,8 @@ export default {
   stop_upload: 'アップロードを停止',
   open: '開いた',
   move_to_this: 'このフォルダにファイルを移動します',
+  move_to: 'へ引っ越す',
+  move: '動く',
   no_item_selected: '詳細を表示するにはファイルまたはフォルダを選択してください',
   file_selected: '選択されたファイル',
   reset: 'リセット',

@@ -47,6 +47,8 @@ export default {
   stop_upload: 'Stop Upload',
   open: 'Open',
   move_to_this: 'Move files to this folder',
+  move_to: 'Move to',
+  move: 'Move',
   no_item_selected: 'Please select a file or folder to view detail',
   file_selected: 'files selected',
   reset: 'Reset',

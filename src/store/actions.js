@@ -54,19 +54,28 @@ export default {
   removeFolderInClipboard({commit}, payload) {
     commit('REMOVE_FOLDER_IN_CLIPBOARD', payload);
   },
-  async moveFiles({state, dispatch, commit}) {
-    let currentFolder = state.current
+  async moveFiles({state, dispatch, commit}, payload) {
+    let dest = state.current.id
     let clipboard = state.clipboard
+    let files = clipboard.files
+    let folders = clipboard.folders
+    let resetClipBoard = true
+    if (payload) {
+      resetClipBoard = false
+      dest = payload.id
+      files = payload.files
+      folders = payload.folder ? [payload.folder] : []
+    }
     let endpoint = this.$getEndpoint('move')
     commit('LOADING')
     let data = {
-      files: clipboard.files.map(item => {
+      files: files.map(item => {
         return item.id
       }),
-      folders: clipboard.folders.map(item => {
+      folders: folders.map(item => {
         return item.id
       }),
-      dest: currentFolder.id ? currentFolder.id : null
+      dest: dest ? dest : null
     }
 
     let response = executeAxios(this.$axios, endpoint, data)
@@ -78,7 +87,9 @@ export default {
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
     })
-    commit('RESET_CLIPBOARD');
+    if (resetClipBoard) {
+      commit('RESET_CLIPBOARD');
+    }
   },
   async deleteFolder({dispatch, commit}, payload) {
     commit('LOADING')

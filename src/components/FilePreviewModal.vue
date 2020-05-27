@@ -40,7 +40,7 @@
     },
     computed: {
       itemViewPath() {
-        return "https://docs.google.com/viewerng/viewer?url=" + this.item.path + "&embedded=true"
+        return "https://docs.google.com/viewerng/viewer?url=" + encodeURIComponent(this.item.path) + "&embedded=true"
       },
       isDocType() {
         return isDocumentFile(this.item)

@@ -6,5 +6,6 @@ export default {
   create: true,
   comment: true,
   download: true,
-  move: true
+  moveFolder: true,
+  moveFile: true,
 }

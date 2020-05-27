@@ -1,6 +1,6 @@
 <template>
     <v-card class="mx-auto detail-card" tile>
-        <v-container fluid class="pa-0">
+        <v-container fluid class="pa-0" style="height: 100%">
             <v-toolbar flat>
                 <v-toolbar-title v-text="title"></v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -9,7 +9,7 @@
                 </v-btn>
             </v-toolbar>
 
-            <v-tabs v-model="tab">
+            <v-tabs v-model="tab" style="height: calc(100% - 64px);">
                 <v-tab :key="'detail'" @click="showComments = false">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
@@ -190,8 +190,12 @@
   }
 </script>
 <style>
+    .detail-card {
+        height: 100%;
+    }
+
     .tab-content {
-        height: 388px;
+        height: calc(100% - 48px);
         overflow-y: auto;
         -webkit-user-select: none;
         -moz-user-select: none;

@@ -18,12 +18,20 @@
             <v-list-item-title>{{ $trans('rename') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="addClipboard" v-if="$permissions.move">
+        <v-list-item @click="addClipboard" v-if="$permissions.moveFolder">
           <v-list-item-icon>
             <v-icon>mdi-clipboard-plus-outline</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{ $trans('add_to_clipboard') }}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="move" v-if="$permissions.moveFolder">
+          <v-list-item-icon>
+            <v-icon>mdi-folder-move</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ $trans('move_to') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item @click="deleteFolder(item.id)" v-if="$permissions.delete">
@@ -36,11 +44,17 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <move-files-modal ref="moveModal"/>
   </div>
 </template>
 
 <script>
+  import MoveFilesModal from "./MoveFilesModal";
+
   export default {
+    components: {
+      'move-files-modal': MoveFilesModal
+    },
     props: {
       item: {
         type: Object,
@@ -89,6 +103,9 @@
       },
       addClipboard() {
         this.$fileStore.dispatch('addFolderToClipboard')
+      },
+      move() {
+        this.$refs.moveModal.showDialog()
       },
       hideContextMenu() {
         this.showMenu = false;

@@ -26,12 +26,20 @@
                         <v-list-item-title>{{ $trans('download') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item @click="addClipboard" v-if="$permissions.move">
+                <v-list-item @click="addClipboard" v-if="$permissions.moveFile">
                     <v-list-item-icon>
                         <v-icon>mdi-clipboard-plus-outline</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title>{{ $trans('add_to_clipboard') }}</v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+                <v-list-item @click="move" v-if="$permissions.moveFile">
+                    <v-list-item-icon>
+                        <v-icon>mdi-file-move</v-icon>
+                    </v-list-item-icon>
+                    <v-list-item-content>
+                        <v-list-item-title>{{ $trans('move_to') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
                 <v-list-item @click="deleteAll()" v-if="$permissions.delete">
@@ -45,17 +53,20 @@
             </v-list>
         </v-menu>
         <file-preview-modal ref="filePreviewModal"/>
+        <move-files-modal ref="moveModal"/>
     </div>
 </template>
 
 <script>
   import {canPreview} from "@/helpers/file";
   import FilePreviewModal from './FilePreviewModal'
+  import MoveFilesModal from "./MoveFilesModal";
 
   export default {
     name: 'FileContextMenu',
     components: {
-      'file-preview-modal': FilePreviewModal
+      'file-preview-modal': FilePreviewModal,
+      'move-files-modal': MoveFilesModal
     },
     data() {
       return {
@@ -135,6 +146,9 @@
             this.deleteSelected()
           }
         })
+      },
+      move() {
+        this.$refs.moveModal.showDialog()
       },
       preview() {
         if (this.selectedItems.length === 1) {

@@ -52,7 +52,7 @@ export default {
     state.clipboard.folders.splice(payload, 1);
   },
   RESET_CLIPBOARD(state) {
-    state.clipboard =  {
+    state.clipboard = {
       files: [],
       folders: []
     };
@@ -88,7 +88,7 @@ export default {
   },
   UPDATE_SORT(state, payload) {
     state.sortKey = payload.sortKey
-    state.sortType = payload.sortType ? payload.sortType.toUpperCase() :'ASC'
+    state.sortType = payload.sortType ? payload.sortType.toUpperCase() : 'ASC'
   },
   UPDATE_CURRENT(state, payload) {
     if (payload && payload.id) {

@@ -1,6 +1,6 @@
 <template>
   <v-app class="file-manager-app">
-    <v-card class="mt-3">
+    <v-card class="mt-3 file-manage-card">
       <file-toolbar>
         <template v-slot:searchFilter="slotProps">
           <slot name="searchFilter" v-bind:filter="slotProps.filter">
@@ -49,9 +49,9 @@
         </v-row>
       </v-container>
 
-      <v-container fluid style="background-color: #e5e5e5">
-        <v-row>
-          <v-col :cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12">
+      <v-container fluid class="context-area">
+        <v-row class="section-r">
+          <v-col :cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12" style="height: 100%">
             <v-container fluid class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
               <v-alert v-if="files.length === 0 && folders.length === 0" text color="info">
                 <h3>{{ $trans('empty_folder') }}</h3>
@@ -61,7 +61,7 @@
             </v-container>
             <main-context-menu ref="contextMenu"/>
           </v-col>
-          <v-col v-if="showDetail" cols="6" md="3" sm="4">
+          <v-col v-if="showDetail" cols="6" md="3" sm="4" style="height: 100%">
             <detail-card @close="showDetail=false"/>
           </v-col>
         </v-row>
@@ -193,7 +193,7 @@
 </script>
 <style>
   .file-explorer {
-    height: 500px;
+    height: 100%;
     overflow-y: auto;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -215,5 +215,22 @@
 
   .file-explorer::-webkit-scrollbar-thumb:hover {
     background: #555;
+  }
+
+  .file-manage-card {
+    height: 100%;
+  }
+
+  .context-area {
+    background-color: #e5e5e5;
+    height: calc( 100% - 133px);
+    position: relative;
+  }
+
+  .section-r {
+    width: 100%;
+    position: absolute;
+    height: 100%;
+    top: 0;
   }
 </style>
