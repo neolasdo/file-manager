@@ -43,7 +43,7 @@
                                         <td>{{ formatSize(file.file.size) }}</td>
                                         <td>
                                             <v-chip :color="file.status" small v-if="file.status">
-                                                {{ file.status }}
+                                                {{ file.message ? file.message: file.status }}
                                             </v-chip>
                                             <p class="font-italic" v-text="file.message"></p>
                                         </td>
