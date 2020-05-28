@@ -14,7 +14,7 @@ export default {
   selectedFolder: {},
   breadcrumb: [
     {
-      text: 'Home',
+      text: '',
       id: ''
     }
   ],

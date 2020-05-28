@@ -3,7 +3,7 @@
         <v-dialog v-model="showDialog" persistent max-width="900px">
             <v-card>
                 <v-card-title class="primary lighten-1" tile dark>
-                    <span class="headline">{{$trans('upload_to', {'folder_name' : (current.id !== ''? current.name: 'Home')})}}</span>
+                    <span class="headline">{{$trans('upload_to', {'folder_name' : current.name ? current.name : $trans('home') })}}</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container>

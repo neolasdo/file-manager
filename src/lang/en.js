@@ -1,4 +1,5 @@
 export default {
+  home: 'Home',
   filter: '',
   type: 'Type',
   all: 'ALL',

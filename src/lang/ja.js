@@ -1,4 +1,5 @@
 export default {
+  home: 'ホーム',
   filter: '検索',
   type: 'タイプ',
   all: 'すべて',
