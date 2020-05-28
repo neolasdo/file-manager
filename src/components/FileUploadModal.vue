@@ -92,6 +92,7 @@
       },
       closeModal() {
         this.files = []
+        this.filesInfo = []
         this.hideUploadModal()
         if (this.reload) {
           this.reloadAction()
