@@ -118,10 +118,14 @@ class Manager {
     }
     Vue.prototype.$dict = options.dict
     Vue.prototype.$lang = options.lang
-    Vue.prototype.$trans = function (key) {
+    Vue.prototype.$trans = function (key, replace = {}) {
       let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
       if (currentLang) {
-        return currentLang[key] ? currentLang[key] : key
+        let tranRes = currentLang[key] ? currentLang[key] : key
+        for (const [key, value] of Object.entries(replace)) {
+          tranRes = tranRes.replace(":" + key, value)
+        }
+        return tranRes
       }
       return key
     }
