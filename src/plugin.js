@@ -149,10 +149,7 @@ class Manager {
       accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
       accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions},
       sort: {...optionsDefaults.sort, ...opts.sort},
-      detailConfig: {
-        fileDetail: [...optionsDefaults.detailConfig.fileDetail, ...opts.detailConfig.fileDetail],
-        folderDetail: [...optionsDefaults.detailConfig.folderDetail, ...opts.detailConfig.folderDetail],
-      },
+      detailConfig: {...optionsDefaults.detailConfig, ...opts.detailConfig},
     }
     if (opts.dict) {
       for (const [key, value] of Object.entries(opts.dict)) {
