@@ -1,5 +1,5 @@
 export default {
-  async getByFolder({commit}, item) {
+  async getByFolder({commit, state, dispatch}, item) {
     let getEndpoint = this.$getEndpoint('get')
     commit('LOADING')
     commit('UPDATE_CURRENT', item);
@@ -10,17 +10,30 @@ export default {
     let response = executeAxios(this.$axios, getEndpoint, data)
 
     await response.then(res => {
-      // getMessage(res,this.$snackbar)
+      let selectedFiles = state.selectedFiles
+      let selectedFolder = state.selectedFolder
       commit('UPDATE_LIST', res.data.data)
       commit('UPDATE_CURRENT', res.data.data)
       commit('UPDATE_BREADCRUMB', res.data.data.breadcrumb ? res.data.data: item);
       commit('RESET_SEARCH');
+
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
+
+      state.files.forEach(item => {
+        if (selectedFiles.findIndex(selected => {return selected.id === item.id}) !== -1) {
+          dispatch('addFileSelected', item)
+        }
+      })
+      state.folders.forEach(item => {
+        if (selectedFolder.id && item.id === selectedFolder.id) {
+          dispatch('selectFolder', item)
+        }
+      })
+
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
       commit('UPDATE_BREADCRUMB', item);
-
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
@@ -91,14 +104,18 @@ export default {
       commit('RESET_CLIPBOARD');
     }
   },
-  async deleteFolder({dispatch, commit}, payload) {
+  async deleteFolder({dispatch, state, commit}, payload) {
     commit('LOADING')
     let endpoint = this.$getEndpoint('deleteFolder', [payload])
     let response = executeAxios(this.$axios, endpoint, payload)
-
     await response.then(res => {
       getMessage(res,this.$snackbar)
-
+      let index = state.clipboard.folders.findIndex(folder => {
+        return folder.id === payload
+      })
+      if (index !== -1) {
+        dispatch('removeFolderInClipboard', index)
+      }
       dispatch('reload')
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
@@ -116,7 +133,14 @@ export default {
 
     await response.then(res => {
       getMessage(res,this.$snackbar)
-
+      state.selectedFiles.forEach(item => {
+        let index = state.clipboard.files.findIndex(file => {
+          return file.id === item.id
+        })
+        if (index !== -1) {
+          dispatch('removeFileInClipboard', index)
+        }
+      })
       dispatch('reload')
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)

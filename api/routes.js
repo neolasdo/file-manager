@@ -10,7 +10,7 @@ module.exports = function(app) {
           data: folder,
           message: 'search success'
         })
-      }, 2000)
+      }, 1000)
 
     })
 

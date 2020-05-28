@@ -40,11 +40,13 @@
                             <v-row>
                                 <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
                                     <b v-if="!current.id">{{ $trans('no_item_selected') }}</b>
-                                    <span v-else>Folder name: {{ current.name ? current.name : 'HOME' }}<br></span>
                                 </v-col>
                                 <v-col cols="12" v-if="selectedFolder.hasOwnProperty('id')">
-                                    Folder id: {{ selectedFolder.id }}<br>
-                                    Folder name: {{ selectedFolder.name }}<br>
+                                    <div v-for="item in $detailConfig.folderDetail" :key="item.key">
+                                        <span class="body-1 font-weight-medium" v-if="selectedFolder[item.key]">
+                                            {{ item.label + ': '+ selectedFolder[item.key] }}
+                                        </span>
+                                    </div>
                                 </v-col>
                                 <v-col cols="12" v-if="selectedFiles.length > 1">
                                     <v-list dense>
@@ -64,11 +66,11 @@
                                     </v-list>
                                 </v-col>
                                 <v-col cols="12" v-if="selectedFiles.length === 1">
-                                    File id: {{ selectedFiles[0].id }}<br>
-                                    File name: {{ selectedFiles[0].name }}<br>
-                                    File type: {{ selectedFiles[0].mime }}<br>
-                                    File size: {{ formatSize(selectedFiles[0].size) }}<br>
-                                    Created: {{ selectedFiles[0].created_at }}<br>
+                                    <div v-for="item in $detailConfig.fileDetail" :key="item.key">
+                                    <span class="body-1 font-weight-medium" v-if="selectedFiles[0][item.key]">
+                                            {{ item.label + ': '+ selectedFiles[0][item.key] }}
+                                        </span>
+                                    </div>
                                 </v-col>
                             </v-row>
                         </v-card-text>

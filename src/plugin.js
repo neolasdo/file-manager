@@ -18,6 +18,8 @@ import file from "./configs/file";
 import ConfirmDialog from "./components/ConfirmDialog";
 import vuetifyPlugin from "./plugins/vuetify";
 import SnackBar from "./components/SnackBar";
+import detail from "./configs/detail";
+import sort from "./configs/sort";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -27,18 +29,8 @@ let optionsDefaults = {
   lang: 'en',
   accept_mimes: file.accept_mimes,
   accept_extensions: file.accept_extensions,
-  sort: {
-    fields: [
-      {
-        key: 'name',
-        label: 'Name'
-      },
-      {
-        key: 'created_at',
-        label: 'Created'
-      },
-    ]
-  }
+  sort: sort,
+  detailConfig: detail
 }
 let Vue;
 
@@ -134,12 +126,14 @@ class Manager {
       return key
     }
     store.$trans = Vue.prototype.$trans
+    store.$sortConfig = options.sort
     Vue.prototype.$fileStore = store;
     Vue.prototype.$getEndpoint = store.$getEndpoint;
     Vue.prototype.$accept_mimes = options.accept_mimes;
     Vue.prototype.$accept_extensions = options.accept_extensions;
     Vue.prototype.$permissions = options.permissions;
     Vue.prototype.$sortConfig = options.sort;
+    Vue.prototype.$detailConfig = options.detailConfig;
 
     this.store = store
     this.permissions = options.permissions
@@ -154,7 +148,11 @@ class Manager {
       dict: optionsDefaults.dict,
       accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
       accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions},
-      sort: {...optionsDefaults.sort, ...opts.sort}
+      sort: {...optionsDefaults.sort, ...opts.sort},
+      detailConfig: {
+        fileDetail: [...optionsDefaults.detailConfig.fileDetail, ...opts.detailConfig.fileDetail],
+        folderDetail: [...optionsDefaults.detailConfig.folderDetail, ...opts.detailConfig.folderDetail],
+      },
     }
     if (opts.dict) {
       for (const [key, value] of Object.entries(opts.dict)) {

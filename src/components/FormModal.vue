@@ -7,7 +7,7 @@
                         <v-row>
                             <v-col cols="12">
                                 <v-text-field id="name" v-model="name" :rules="rules" :counter="50"
-                                              :error-messages="messages.name" label="Name"></v-text-field>
+                                              :error-messages="messages.name" :label="$trans('name_label')"></v-text-field>
                             </v-col>
                         </v-row>
                     </v-form>
@@ -186,7 +186,7 @@
       showFormModal(val) {
         if (val) {
           if (this.$refs.form) {
-            this.$refs.form.reset()
+            this.$refs.form.resetValidation()
           }
           if (this.formCreate) {
             this.name = ''

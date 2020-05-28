@@ -3,16 +3,20 @@
         <v-dialog v-model="showDialog" persistent max-width="900px">
             <v-card>
                 <v-card-title class="primary lighten-1" tile dark>
-                    <span class="headline">{{$trans('upload')}} {{ current.id !== ''? 'to '+ current.name: '' }} </span>
+                    <span class="headline">{{$trans('upload_to', {'folder_name' : (current.id !== ''? current.name: 'Home')})}}</span>
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-file-input v-model="files" :accept="accept" chips multiple label="Files" @change="addFiles">
+                        <v-file-input chips multiple
+                                      v-model="files" :accept="accept" :label="$trans('file_label')"
+                                      @change="addFiles" @click:clear="removeAllFile()">
                             <template v-slot:selection="{ index }">
                                 <div v-if="index < 1">
-                                    <v-chip v-for="(file, key) in files" small close :key="key"
-                                            @click:close="deleteFile(index)">
-                                        {{ file.name }} ({{ formatSize(file.size) }})
+                                    <v-chip v-for="(file, key) in filesInfo" text-color="white"
+                                            :color="getStatusColor(file.status)"
+                                            close :key="key"
+                                            @click:close="removeFile(key)">
+                                        {{ file.file.name }} ({{ formatSize(file.file.size) }})
                                     </v-chip>
                                 </div>
                             </template>
@@ -34,7 +38,6 @@
                                             <div class="progress" v-if="file.progress !== 0 || file.progress !== 100">
                                                 <v-progress-linear
                                                         color="light-blue"
-                                                        height="10"
                                                         :value="file.progress"
                                                         striped
                                                 ></v-progress-linear>
@@ -45,7 +48,6 @@
                                             <v-chip :color="file.status" small v-if="file.status">
                                                 {{ file.message ? file.message: file.status }}
                                             </v-chip>
-                                            <p class="font-italic" v-text="file.message"></p>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -97,18 +99,18 @@
       },
       async uploadAll() {
         this.filesInfo.forEach((item) => {
-          if (item.status !== 'success') {
+          if (item.status !== this.$trans('success_status')) {
             this.upload(item, function (onUploadProgress) {
               item.progress = parseInt(Math.round((onUploadProgress.loaded * 100) / onUploadProgress.total));
             })
               .then(() => {
-                item.status = 'success'
+                item.status = this.$trans('success_status')
               })
               .catch(errors => {
                 if (errors && errors.response && errors.response.data && errors.response.data.data && errors.response.data.data.file) {
                   item.message = errors.response.data.data.file[0]
                 }
-                item.status = 'error'
+                item.status = this.$trans('error_status')
               });
           }
         })
@@ -130,16 +132,43 @@
           onUploadProgress
         });
       },
+      getStatusColor(status) {
+        switch (status) {
+          case this.$trans('success_status'): {
+            return '#4caf50';
+          }
+          case this.$trans('error_status'): {
+            return '#ff5252'
+          }
+          default: {
+            return '#295671'
+          }
+        }
+      },
       addFiles() {
-        this.filesInfo = []
         this.files.forEach(item => {
-          let fileInfo = this.createFileInfo(item)
-          this.filesInfo.push(fileInfo)
+          let index = this.filesInfo.findIndex(info => {
+            return info.file.name === item.name
+              && info.file.size === item.size
+              && info.file.lastModified === item.lastModified
+              && info.file.type === item.type
+          })
+          if (index === -1) {
+            let fileInfo = this.createFileInfo(item)
+            this.filesInfo.push(fileInfo)
+          }
         })
       },
-      deleteFile(index) {
-        this.filesInfo.splice(index, 1)
-        this.files.splice(index, 1)
+      removeFile(key) {
+        let file = this.filesInfo[key]
+        if (this.files.indexOf(file) > -1) {
+          this.files.splice(this.files.indexOf(file))
+        }
+        this.filesInfo.splice(key, 1)
+      },
+      removeAllFile() {
+        this.filesInfo = []
+        this.files = []
       },
       createFileInfo(file) {
         return {

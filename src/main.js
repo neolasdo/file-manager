@@ -10,6 +10,8 @@ import lang from './lang'
 import file from "./configs/file";
 import ConfirmDialog from "./components/ConfirmDialog";
 import SnackBar from "./components/SnackBar";
+import detail from "./configs/detail";
+import sort from "./configs/sort";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -17,22 +19,8 @@ let optionsDefaults = {
     baseURL: 'http://localhost:8001'
   }),
   permissions: permissions,
-  sort: {
-    fields: [
-      {
-        key: 'name',
-        label: 'Name'
-      },
-      {
-        key: 'created_at',
-        label: 'Created'
-      },
-    ],
-    default: {
-      key: 'name',
-      type: 'ASC'
-    }
-  }
+  sort: sort,
+  detailConfig: detail
 }
 
 Vue.config.productionTip = false
@@ -43,10 +31,14 @@ Vue.prototype.$lang = 'en'
 Vue.prototype.$accept_mimes = file.accept_mimes;
 Vue.prototype.$accept_extensions = file.accept_extensions;
 
-Vue.prototype.$trans = function (key) {
+Vue.prototype.$trans = function (key, replace = {}) {
   let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
   if (currentLang) {
-    return currentLang[key] ? currentLang[key] : key
+    let tranRes = currentLang[key] ? currentLang[key] : key
+    for (const [key, value] of Object.entries(replace)) {
+      tranRes = tranRes.replace(":" + key, value)
+    }
+    return tranRes
   }
   return key
 }
@@ -119,6 +111,7 @@ Vue.prototype.$getEndpoint = fileStore.$getEndpoint
 Vue.prototype.$axios = fileStore.$axios;
 Vue.prototype.$permissions = optionsDefaults.permissions;
 Vue.prototype.$sortConfig = optionsDefaults.sort;
+Vue.prototype.$detailConfig = optionsDefaults.detailConfig;
 
 new Vue({
   vuetify,

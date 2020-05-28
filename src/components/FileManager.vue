@@ -29,7 +29,7 @@
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn text small v-on="on" light class="ml-2" tile>
-                  {{ sortLabel }} <v-icon>{{ sortType === '' ? 'mdi-sort' : (sortType.toUpperCase() === 'ASC' ? 'mdi-sort-ascending' : 'mdi-sort-descending') }}</v-icon>
+                  <v-icon>{{ sortType === '' ? 'mdi-sort' : (sortType.toUpperCase() === 'ASC' ? 'mdi-sort-ascending' : 'mdi-sort-descending') }}</v-icon>
                 </v-btn>
               </template>
               <v-list tile dense>
@@ -50,6 +50,9 @@
       </v-container>
 
       <v-container fluid class="context-area">
+        <v-overlay :value="loading" absolute>
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
         <v-row class="section-r">
           <v-col :cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12" style="height: 100%">
             <v-container fluid class="file-explorer" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
@@ -110,6 +113,9 @@
           item.disabled = item.id === this.current.id;
           return item;
         })
+      },
+      loading() {
+        return this.$fileStore.state.isLoading
       },
       files() {
         return this.$fileStore.state.files
