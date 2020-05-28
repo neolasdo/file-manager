@@ -29,7 +29,7 @@
             <v-menu offset-y>
               <template v-slot:activator="{ on }">
                 <v-btn text small v-on="on" light class="ml-2" tile>
-                  <v-icon>{{ sortType === '' ? 'mdi-sort' : (sortType.toUpperCase() === 'ASC' ? 'mdi-sort-ascending' : 'mdi-sort-descending') }}</v-icon>
+                  {{ sortLabel }} <v-icon>{{ sortType === '' ? 'mdi-sort' : (sortType.toUpperCase() === 'ASC' ? 'mdi-sort-ascending' : 'mdi-sort-descending') }}</v-icon>
                 </v-btn>
               </template>
               <v-list tile dense>
@@ -137,7 +137,7 @@
         if (index !== -1) {
           return this.$sortConfig.fields[index].label
         }
-        return this.$trans('sort')
+        return ''
       },
       selectedItems() {
         return this.$fileStore.state.selectedFiles
