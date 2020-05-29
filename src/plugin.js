@@ -55,27 +55,6 @@ class Manager {
     let vuetify = Vue.prototype.$vuetify
 
     /**
-     * Register confirm dialog
-     * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
-     */
-    const confirmDialog = Vue.extend(Object.assign({vuetify}, ConfirmDialog))
-
-    Vue.prototype.$confirm = function (message, options = {}) {
-      options.message = message
-      const container = document.querySelector('[data-app=true]') || document.body
-      return new Promise(resolve => {
-        const cmp = new confirmDialog(Object.assign({}, {
-          propsData: Object.assign({}, options),
-          destroyed: () => {
-            container.removeChild(cmp.$el)
-            resolve(cmp.value)
-          }
-        }))
-        container.appendChild(cmp.$mount().$el)
-      })
-    }
-
-    /**
      * Register Snackbar
      * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
      */
@@ -129,6 +108,29 @@ class Manager {
       }
       return key
     }
+    /**
+     * Register confirm dialog
+     * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
+     */
+    const confirmDialog = Vue.extend(Object.assign({vuetify}, ConfirmDialog))
+
+    Vue.prototype.$confirm = function (message, options = {}) {
+      options.message = message
+      options.buttonTrueText = options.buttonTrueText ? options.buttonTrueText : Vue.prototype.$trans('yes')
+      options.buttonFalseText = options.buttonFalseText ? options.buttonFalseText : Vue.prototype.$trans('no')
+      const container = document.querySelector('[data-app=true]') || document.body
+      return new Promise(resolve => {
+        const cmp = new confirmDialog(Object.assign({}, {
+          propsData: Object.assign({}, options),
+          destroyed: () => {
+            container.removeChild(cmp.$el)
+            resolve(cmp.value)
+          }
+        }))
+        container.appendChild(cmp.$mount().$el)
+      })
+    }
+
     store.$trans = Vue.prototype.$trans
     store.$sortConfig = options.sort
     Vue.prototype.$fileStore = store;

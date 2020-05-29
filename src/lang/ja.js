@@ -46,7 +46,7 @@ export default {
   close: '閉じる',
   name: '名前',
   size: 'サイズ',
-  save: 'セーブ',
+  save: '保存',
   speed: '速度',
   action: 'アクション',
   start_upload: 'アップロードを開始',
