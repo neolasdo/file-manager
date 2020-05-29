@@ -155,11 +155,9 @@
         this.$fileStore.dispatch('search', payload)
       },
       reset() {
-        this.filter = {
-          status: '',
-          fileType: '',
-          createdDate: '',
-        }
+        this.filter.status = ''
+        this.filter.mime = ''
+        this.filter.created_date = ''
       },
       executeSearch() {
         this.menu = false

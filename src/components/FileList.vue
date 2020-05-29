@@ -11,7 +11,7 @@
                                 <v-card class="pa-2 file-card ma-2" :class="{'active': checkFileSelected(item)}"
                                         ref="files"
                                         @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
-                                        @dblclick.stop.prevent="download()" v-on="on" width="180"
+                                        @dblclick.stop.prevent="preview" v-on="on" width="180"
                                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
                                     <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024"
                                             color="red" text-color="white">Too large
@@ -28,17 +28,21 @@
                 </v-row>
             </v-col>
         </div>
+        <file-preview-modal ref="filePreviewModal"/>
+
     </div>
 </template>
 
 <script>
   import {formatSize} from '@/helpers/file'
   import FileContextMenu from './FileContextMenu'
-  import {getFileThumbnail} from "../helpers/file";
+  import {canPreview, getFileThumbnail} from "../helpers/file";
+  import FilePreviewModal from "./FilePreviewModal";
 
 
   export default {
     components: {
+      'file-preview-modal': FilePreviewModal,
       'file-context-menu': FileContextMenu
     },
     computed: {
@@ -62,39 +66,10 @@
       fileThumbnail(item) {
         return getFileThumbnail(item)
       },
-      download() {
-        let endpoint = this.$fileStore.$getEndpoint('download')
-
-        this.$fileStore.$axios({
-          method: endpoint.method,
-          url: endpoint.route,
-          data: {
-            files: this.selectedItems.map(item => {
-              return item.id
-            })
-          }
-        }).then(res => {
-          if (res.data && res.data.data) {
-            this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
-              .then(response => {
-                const blob = new Blob([response.data])
-                const link = document.createElement('a')
-                link.href = URL.createObjectURL(blob)
-                link.setAttribute('download', res.data.data.name)
-                link.style.display = "none";
-                document.body.appendChild(link)
-                link.click()
-                URL.revokeObjectURL(link.href)
-                document.body.removeChild(link)
-              }).catch((error) => console.log(error))
-          }
-        }).catch(errors => {
-          if (errors.response && errors.response.data && errors.response.data.message) {
-            this.$snackbar(errors.response.data.message, {
-              color: 'error'
-            })
-          }
-        })
+      preview() {
+        if (this.selectedItems.length === 1 && canPreview(this.selectedItems[0])) {
+          this.$refs.filePreviewModal.showPreview(this.selectedItems[0])
+        }
       },
       checkFileSelected(item) {
         let index = this.selectedItems.findIndex(element => {
