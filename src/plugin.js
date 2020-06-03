@@ -30,7 +30,8 @@ let optionsDefaults = {
   accept_mimes: file.accept_mimes,
   accept_extensions: file.accept_extensions,
   sort: sort,
-  detailConfig: detail
+  detailConfig: detail,
+  file_max_size: 25000000
 }
 let Vue;
 
@@ -137,6 +138,7 @@ class Manager {
     Vue.prototype.$getEndpoint = store.$getEndpoint;
     Vue.prototype.$accept_mimes = options.accept_mimes;
     Vue.prototype.$accept_extensions = options.accept_extensions;
+    Vue.prototype.$file_max_size = options.file_max_size;
     Vue.prototype.$permissions = options.permissions;
     Vue.prototype.$sortConfig = options.sort;
     Vue.prototype.$detailConfig = options.detailConfig;
@@ -156,6 +158,7 @@ class Manager {
       accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions},
       sort: {...optionsDefaults.sort, ...opts.sort},
       detailConfig: {...optionsDefaults.detailConfig, ...opts.detailConfig},
+      file_max_size: opts.file_max_size ? opts.file_max_size : optionsDefaults.file_max_size,
     }
     if (opts.dict) {
       for (const [key, value] of Object.entries(opts.dict)) {

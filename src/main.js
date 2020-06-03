@@ -20,7 +20,7 @@ let optionsDefaults = {
   }),
   permissions: permissions,
   sort: sort,
-  detailConfig: detail
+  detailConfig: detail,
 }
 
 Vue.config.productionTip = false
@@ -30,6 +30,7 @@ Vue.prototype.$lang = 'en'
 
 Vue.prototype.$accept_mimes = file.accept_mimes;
 Vue.prototype.$accept_extensions = file.accept_extensions;
+Vue.prototype.$file_max_size = file.file_max_size;
 
 Vue.prototype.$trans = function (key, replace = {}) {
   let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]

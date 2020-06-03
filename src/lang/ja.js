@@ -70,5 +70,7 @@ export default {
   empty_folder: 'このフォルダーは空です',
   required_rule: 'これは必須項目です。',
   length_rule: '50文字以内で入力してください。',
-  re_upload: '失敗したファイルを再アップロード'
+  re_upload: '失敗したファイルを再アップロード',
+  error_file_size: '各ファイルの最大サイズは:size です',
+  error_file_mime: 'ファイル形式が正しくありません。',
 }

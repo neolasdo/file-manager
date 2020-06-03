@@ -1,3 +1,5 @@
+import {formatSize} from "../helpers/file";
+
 export default {
   fileDetail: [
     {
@@ -14,7 +16,10 @@ export default {
     },
     {
       key: 'size',
-      label: 'File size'
+      label: 'File size',
+      formatFunc: function (val) {
+        return formatSize(val)
+      }
     },
     {
       key: 'created_at',

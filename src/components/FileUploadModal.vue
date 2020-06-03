@@ -7,61 +7,68 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
-                        <v-file-input chips multiple
-                                      v-model="files" :accept="accept" :label="$trans('file_label')"
-                                      @change="addFiles" @click:clear="removeAllFile()">
-                            <template v-slot:selection="{ index }">
-                                <div v-if="index < 1">
-                                    <v-chip v-for="(file, key) in filesInfo" text-color="white"
-                                            :color="getStatusColor(file.status)"
-                                            close :key="key"
-                                            @click:close="removeFile(key)">
-                                        {{ file.file.name }} ({{ formatSize(file.file.size) }})
-                                    </v-chip>
-                                </div>
-                            </template>
-                        </v-file-input>
-                        <div v-if="files.length">
-                            <v-simple-table>
-                                <template v-slot:default>
-                                    <thead>
-                                    <tr>
-                                        <th class="text-left">{{$trans('name')}}</th>
-                                        <th class="text-left">{{$trans('size')}}</th>
-                                        <th class="text-left">{{$trans('status')}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(file, index) in filesInfo" :key="index">
-                                        <td>
-                                            <div class="filename">{{file.file.name}} ({{file.progress}} %)</div>
-                                            <div class="progress" v-if="file.progress !== 0 || file.progress !== 100">
-                                                <v-progress-linear
-                                                        color="light-blue"
-                                                        :value="file.progress"
-                                                        striped
-                                                ></v-progress-linear>
-                                            </div>
-                                        </td>
-                                        <td>{{ formatSize(file.file.size) }}</td>
-                                        <td>
-                                            <v-chip :color="file.status" small v-if="file.status">
-                                                {{ file.message ? file.message: file.status }}
-                                            </v-chip>
-                                        </td>
-                                    </tr>
-                                    </tbody>
+                        <v-form ref="form" v-model="valid">
+                            <input type="file" id="file" style="display: none" ref="fileInput" multiple
+                                   @change="addFiles()" :accept="accept"/>
+                            <v-combobox multiple chips v-model="filesInfo" @click="openSelectFile" disable-lookup
+                                        hide-no-data hide-selected :prepend-icon="'$file'" :label="$trans('file_label')"
+                                        :error-messages="validate.documents" :rules="rules.documentsRules"
+                                        append-icon="" @click:prepend="openSelectFile" ref="upload_input"
+                                        onkeydown="return event.keyCode === 9? event: (event.keyCode === 8 || event.keyCode === 46)"
+                                        deletable-chips class="tag-input" clearable @click:clear="removeAllFile">
+                                <template v-slot:selection="{ index }">
+                                    <div v-if="index < 1">
+                                        <v-chip v-for="(file, key) in filesInfo" small text-color="white"
+                                                :color="getStatusColor(key)"
+                                                close :key="key" @click:close="removeFile(key)">
+                                            {{ file.file.name }} ({{ formatSize(file.file.size) }})
+                                        </v-chip>
+                                    </div>
                                 </template>
-                            </v-simple-table>
-                        </div>
+                            </v-combobox>
+                            <div v-if="filesInfo.length">
+                                <v-simple-table>
+                                    <template v-slot:default>
+                                        <thead>
+                                        <tr>
+                                            <th class="text-left">{{$trans('name')}}</th>
+                                            <th class="text-left">{{$trans('size')}}</th>
+                                            <th class="text-left">{{$trans('status')}}</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="(file, index) in filesInfo" :key="index">
+                                            <td>
+                                                <div class="filename">{{file.file.name}} ({{file.progress}} %)</div>
+                                                <div class="progress"
+                                                     v-if="file.progress !== 0 || file.progress !== 100">
+                                                    <v-progress-linear
+                                                            color="light-blue"
+                                                            :value="file.progress"
+                                                            striped
+                                                    ></v-progress-linear>
+                                                </div>
+                                            </td>
+                                            <td>{{ formatSize(file.file.size) }}</td>
+                                            <td>
+                                                <v-chip :color="file.status" small v-if="file.status">
+                                                    {{ file.message ? file.message: file.status }}
+                                                </v-chip>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </template>
+                                </v-simple-table>
+                            </div>
+                        </v-form>
                     </v-container>
                 </v-card-text>
                 <v-card-actions class="justify-content-center">
-                    <v-btn color="primary" dark tile v-if="filesToUpload.length !== 0" @click="uploadAll">{{
-                        $trans('start_upload') }}
+                    <v-btn color="primary" dark tile v-if="filesToUpload.length !== 0 && valid" @click="uploadAll">
+                        {{ $trans('start_upload') }}
                     </v-btn>
-                    <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0" @click="uploadAll">{{
-                        $trans('re_upload') }}
+                    <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0" @click="uploadAll">
+                        {{ $trans('re_upload') }}
                     </v-btn>
                     <v-btn color="default" dark tile @click="closeModal()">{{ $trans('close') }}</v-btn>
                 </v-card-actions>
@@ -78,9 +85,21 @@
     data() {
       return {
         reload: false,
-        files: [],
+        valid: true,
         filesInfo: [],
         accept: this.$accept_mimes.join(),
+        maxSize: this.$file_max_size,
+        validate: {
+          documents: ''
+        },
+        rules: {
+          documentsRules: [
+            v => this.checkDocumentSize(v) || this.lengthOverloadSizeFilesArr() || this.$trans('error_file_size', {size: formatSize(this.$file_max_size)}),
+            v => this.checkMimeDocuments(v) || this.lengthMimeErrorFilesArr() || this.$trans('error_file_mime'),
+          ]
+        },
+        mime_error_files: [],
+        overload_size_files: [],
       }
     },
     methods: {
@@ -91,12 +110,44 @@
         this.$fileStore.dispatch('reload')
       },
       closeModal() {
-        this.files = []
         this.filesInfo = []
         this.hideUploadModal()
         if (this.reload) {
           this.reloadAction()
         }
+      },
+      openSelectFile() {
+        if (this.$refs.fileInput) {
+          this.$refs.fileInput.click()
+        }
+      },
+      checkMimeDocuments(documents) {
+        let acceptMimes = this.accept.split(",");
+        this.mime_error_files = []
+        let mime_arr = documents.map(({file}) => {
+          return file.type
+        })
+        mime_arr.forEach((item, index) => {
+          if (acceptMimes.indexOf(item) === -1) {
+            this.mime_error_files.push(index);
+          }
+        })
+        return this.mime_error_files.length === 0;
+      },
+      lengthMimeErrorFilesArr() {
+        return this.mime_error_files.length <= 0;
+      },
+      checkDocumentSize(documents) {
+        this.overload_size_files = []
+        documents.forEach((item, index) => {
+          if (item.file.size > parseInt(this.maxSize)) {
+            this.overload_size_files.push(index);
+          }
+        })
+        return this.overload_size_files.length === 0;
+      },
+      lengthOverloadSizeFilesArr() {
+        return this.overload_size_files.length <= 0;
       },
       async uploadAll() {
         this.filesInfo.forEach((item) => {
@@ -133,7 +184,8 @@
           onUploadProgress
         });
       },
-      getStatusColor(status) {
+      getStatusColor(key) {
+        let status = this.filesInfo[key].status
         switch (status) {
           case this.$trans('success_status'): {
             return '#4caf50';
@@ -142,34 +194,29 @@
             return '#ff5252'
           }
           default: {
-            return '#295671'
+            return this.mime_error_files.indexOf(key) !== -1 || this.overload_size_files.indexOf(key) !== -1 ? '#ff5252' : '#295671'
           }
         }
       },
       addFiles() {
-        this.files.forEach(item => {
-          let index = this.filesInfo.findIndex(info => {
-            return info.file.name === item.name
-              && info.file.size === item.size
-              && info.file.lastModified === item.lastModified
-              && info.file.type === item.type
-          })
-          if (index === -1) {
+        if (this.$refs.fileInput) {
+          let files = this.$refs.fileInput.files
+          files.forEach(item => {
             let fileInfo = this.createFileInfo(item)
             this.filesInfo.push(fileInfo)
-          }
-        })
+          })
+          this.$nextTick(() => {
+            const input = this.$refs.fileInput;
+            input.type = 'text';
+            input.type = 'file';
+          })
+        }
       },
       removeFile(key) {
-        let file = this.filesInfo[key]
-        if (this.files.indexOf(file) > -1) {
-          this.files.splice(this.files.indexOf(file))
-        }
         this.filesInfo.splice(key, 1)
       },
       removeAllFile() {
         this.filesInfo = []
-        this.files = []
       },
       createFileInfo(file) {
         return {

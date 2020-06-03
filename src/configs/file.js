@@ -22,5 +22,6 @@ export default {
     'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'pptx',
     'application/vnd.ms-excel': 'xls',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx'
-  }
+  },
+  file_max_size: 25000000
 }

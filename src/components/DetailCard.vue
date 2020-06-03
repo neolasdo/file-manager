@@ -68,7 +68,7 @@
                                 <v-col cols="12" v-if="selectedFiles.length === 1">
                                     <div v-for="item in $detailConfig.fileDetail" :key="item.key">
                                     <span class="body-1 font-weight-medium" v-if="selectedFiles[0][item.key]">
-                                            {{ item.label + ': '+ selectedFiles[0][item.key] }}
+                                            {{ item.label + ': '+ (item.formatFunc ? item.formatFunc(selectedFiles[0][item.key]): selectedFiles[0][item.key]) }}
                                         </span>
                                     </div>
                                 </v-col>

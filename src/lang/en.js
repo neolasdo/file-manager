@@ -70,5 +70,7 @@ export default {
   empty_folder: 'THIS FOLDER IS EMPTY',
   required_rule: 'This item is required.',
   name_length_rule: 'Please enter within 50 characters',
-  re_upload: 'Re-upload failed files'
+  re_upload: 'Re-upload failed files',
+  error_file_size: 'The maximum size of each file is :size',
+  error_file_mime: 'The file format is incorrect',
 }
