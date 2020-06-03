@@ -40,6 +40,11 @@
                             <v-row>
                                 <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
                                     <b v-if="!current.id">{{ $trans('no_item_selected') }}</b>
+                                    <div v-for="item in $detailConfig.folderDetail" :key="item.key" v-else>
+                                        <span class="body-1 font-weight-medium" v-if="current[item.key]">
+                                            {{ item.label + ': '+ current[item.key] }}
+                                        </span>
+                                    </div>
                                 </v-col>
                                 <v-col cols="12" v-if="selectedFolder.hasOwnProperty('id')">
                                     <div v-for="item in $detailConfig.folderDetail" :key="item.key">
