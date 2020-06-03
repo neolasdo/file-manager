@@ -14,7 +14,7 @@
                                         hide-no-data hide-selected :prepend-icon="'$file'" :label="$trans('file_label')"
                                         :error-messages="validate.documents" :rules="rules.documentsRules"
                                         append-icon="" @click:prepend="openSelectFile" ref="upload_input"
-                                        onkeydown="return event.keyCode === 9? event: (event.keyCode === 8 || event.keyCode === 46)"
+                                        onkeydown="return false"
                                         deletable-chips class="tag-input" clearable @click:clear="removeAllFile">
                                 <template v-slot:selection="{ index }">
                                     <div v-if="index < 1">
