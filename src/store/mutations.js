@@ -92,13 +92,9 @@ export default {
   },
   UPDATE_CURRENT(state, payload) {
     if (payload && payload.id) {
-      state.current.id = payload.id
-      state.current.name = payload.name
+      state.current = payload
     } else {
-      state.current = {
-        name: '',
-        id: ''
-      };
+      state.current = {};
     }
   },
   UPDATE_BREADCRUMB(state, payload) {

@@ -6,10 +6,7 @@ export default {
   sortType: '',
   filter: {},
   folders: [],
-  current: {
-    name: '',
-    id: ''
-  },
+  current: {},
   selectedFiles: [],
   selectedFolder: {},
   breadcrumb: [
