@@ -20,4 +20,21 @@ module.exports = function(app) {
       let folder = data.getByFolder(folderId? parseInt(folderId) : false);
       res.json(folder)
     })
+
+  app.route('/move')
+    .post(function (req, res) {
+      let folderId = req.body.dest
+      let folder = data.getByFolder(folderId? parseInt(folderId) : false);
+      res.json(folder)
+    })
+
+
+  app.route('/upload')
+    .post(function (req, res) {
+      setTimeout(function () {
+        res.json({
+          message: 'upload success'
+        })
+      }, 5000)
+    })
 };

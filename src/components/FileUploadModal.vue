@@ -14,7 +14,7 @@
                                         hide-no-data hide-selected :prepend-icon="'$file'" :label="$trans('file_label')"
                                         :error-messages="validate.documents" :rules="rules.documentsRules"
                                         append-icon="" @click:prepend="openSelectFile" ref="upload_input"
-                                        onkeydown="return false"
+                                        onkeydown="return false" :disabled="uploading"
                                         deletable-chips class="tag-input" clearable @click:clear="removeAllFile">
                                 <template v-slot:selection="{ index }">
                                     <div v-if="index < 1">
@@ -64,13 +64,13 @@
                     </v-container>
                 </v-card-text>
                 <v-card-actions class="justify-content-center">
-                    <v-btn color="primary" dark tile v-if="filesToUpload.length !== 0 && valid" @click="uploadAll">
+                    <v-btn color="primary" dark tile v-if="filesToUpload.length !== 0 && valid && !uploading" @click="uploadAll">
                         {{ $trans('start_upload') }}
                     </v-btn>
-                    <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0" @click="uploadAll">
+                    <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0 && !uploading" @click="uploadAll">
                         {{ $trans('re_upload') }}
                     </v-btn>
-                    <v-btn color="default" dark tile @click="closeModal()">{{ $trans('close') }}</v-btn>
+                    <v-btn color="default" dark tile @click="closeModal()" :disabled="uploading">{{ $trans('close') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -85,6 +85,7 @@
     data() {
       return {
         reload: false,
+        uploading: false,
         valid: true,
         filesInfo: [],
         accept: this.$accept_mimes.join(),
@@ -117,7 +118,7 @@
         }
       },
       openSelectFile() {
-        if (this.$refs.fileInput) {
+        if (this.$refs.fileInput && !this.uploading) {
           this.$refs.fileInput.click()
         }
       },
@@ -150,23 +151,35 @@
         return this.overload_size_files.length <= 0;
       },
       async uploadAll() {
-        this.filesInfo.forEach((item) => {
+        this.uploading = true
+        let promises = this.filesInfo.map((item) => {
           if (item.status !== this.$trans('success_status')) {
-            this.upload(item, function (onUploadProgress) {
-              item.progress = parseInt(Math.round((onUploadProgress.loaded * 100) / onUploadProgress.total));
-            })
-              .then(() => {
-                item.status = this.$trans('success_status')
+            return new Promise((resolve, reject) => {
+              this.upload(item, function (onUploadProgress) {
+                item.progress = parseInt(Math.round((onUploadProgress.loaded * 100) / onUploadProgress.total));
               })
-              .catch(errors => {
-                if (errors && errors.response && errors.response.data && errors.response.data.data && errors.response.data.data.file) {
-                  item.message = errors.response.data.data.file[0]
-                }
-                item.status = this.$trans('error_status')
-              });
+                .then(() => {
+                  item.status = this.$trans('success_status')
+                  resolve(item)
+                })
+                .catch(errors => {
+                  if (errors && errors.response && errors.response.data && errors.response.data.data && errors.response.data.data.file) {
+                    item.message = errors.response.data.data.file[0]
+                  }
+                  item.status = this.$trans('error_status')
+                  reject(item)
+                });
+            })
           }
         })
-        this.reload = true
+
+        Promise.all(promises).then(() => {
+          this.reload = true
+          this.uploading = false
+        }).catch(() => {
+          this.reload = true
+          this.uploading = false
+        })
       },
       upload(fileInfo, onUploadProgress) {
         let file = fileInfo.file
@@ -213,10 +226,14 @@
         }
       },
       removeFile(key) {
-        this.filesInfo.splice(key, 1)
+        if (!this.uploading) {
+          this.filesInfo.splice(key, 1)
+        }
       },
       removeAllFile() {
-        this.filesInfo = []
+        if (!this.uploading) {
+          this.filesInfo = []
+        }
       },
       createFileInfo(file) {
         return {
