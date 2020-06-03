@@ -7,6 +7,9 @@
                 </v-card-title>
                 <v-card-text>
                     <v-container>
+                        <v-overlay :value="uploading" absolute>
+                            <v-progress-circular indeterminate size="64"></v-progress-circular>
+                        </v-overlay>
                         <v-form ref="form" v-model="valid">
                             <input type="file" id="file" style="display: none" ref="fileInput" multiple
                                    @change="addFiles()" :accept="accept"/>
@@ -64,13 +67,16 @@
                     </v-container>
                 </v-card-text>
                 <v-card-actions class="justify-content-center">
-                    <v-btn color="primary" dark tile v-if="filesToUpload.length !== 0 && valid && !uploading" @click="uploadAll">
+                    <v-btn color="primary" dark tile v-if="filesToUpload.length !== 0 && valid && !uploading"
+                           @click="uploadAll">
                         {{ $trans('start_upload') }}
                     </v-btn>
-                    <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0 && !uploading" @click="uploadAll">
+                    <v-btn color="primary" dark tile v-if="filesUploadFailed.length !== 0 && !uploading"
+                           @click="uploadAll">
                         {{ $trans('re_upload') }}
                     </v-btn>
-                    <v-btn color="default" dark tile @click="closeModal()" :disabled="uploading">{{ $trans('close') }}</v-btn>
+                    <v-btn color="default" dark tile @click="closeModal()" :disabled="uploading">{{ $trans('close') }}
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -153,8 +159,8 @@
       async uploadAll() {
         this.uploading = true
         let promises = this.filesInfo.map((item) => {
-          if (item.status !== this.$trans('success_status')) {
-            return new Promise((resolve, reject) => {
+          return new Promise((resolve, reject) => {
+            if (item.status !== this.$trans('success_status')) {
               this.upload(item, function (onUploadProgress) {
                 item.progress = parseInt(Math.round((onUploadProgress.loaded * 100) / onUploadProgress.total));
               })
@@ -168,9 +174,11 @@
                   }
                   item.status = this.$trans('error_status')
                   reject(item)
-                });
-            })
-          }
+                })
+            } else {
+              resolve(item)
+            }
+          })
         })
 
         Promise.all(promises).then(() => {
