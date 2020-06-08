@@ -6,6 +6,8 @@ export default {
   create: true,
   comment: true,
   download: true,
-  moveFolder: true,
+  moveFolder: false,
   moveFile: true,
+  requestSign: true,
+  approvalRequest: true,
 }

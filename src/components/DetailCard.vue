@@ -109,7 +109,7 @@
                                         </v-list-item-group>
                                     </v-list>
                                 </v-col>
-                                <v-col cols="12">
+                                <v-col cols="12" v-if="$permissions.moveFolder">
                                     <v-subheader>{{ $trans('folders') }}</v-subheader>
                                     <v-list dense>
                                         <v-list-item-group>
@@ -128,6 +128,14 @@
                                 </v-col>
                             </v-row>
                         </v-card-text>
+                        <v-card-actions v-if="clipboard.files.length && ($permissions.requestSign || $permissions.approvalRequest)">
+                            <v-btn color="primary" text v-if="$permissions.requestSign" @click="$emit('request-sign', clipboard.files)">
+                                {{ $trans('request_sign') }}
+                            </v-btn>
+                            <v-btn color="primary" text v-if="$permissions.approvalRequest" @click="$emit('request-approval', clipboard.files)">
+                                {{ $trans('approval_request') }}
+                            </v-btn>
+                        </v-card-actions>
                     </v-tab-item>
                 </v-tabs-items>
             </v-tabs>

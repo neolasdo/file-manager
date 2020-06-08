@@ -78,10 +78,10 @@
                     </v-btn>
                 </template>
                 <v-list tile dense>
-                    <v-list-item v-if="$permissions.request_sign" @click="null">
+                    <v-list-item v-if="$permissions.requestSign" @click="$emit('request-sign', selectedFiles)">
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-if="$permissions.approval_request" @click="null">
+                    <v-list-item v-if="$permissions.approvalRequest" @click="$emit('request-approval', selectedFiles)">
                         <v-list-item-title>{{ $trans('approval_request') }}</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-if="$permissions.download" @click="download">

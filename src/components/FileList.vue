@@ -1,6 +1,6 @@
 <template>
     <div>
-        <file-context-menu ref="fileContextMenu"/>
+        <file-context-menu ref="fileContextMenu"  @request-sign="$emit('request-sign', $event)" @request-approval="$emit('request-approval', $event)"/>
         <div class="file-section text-left" v-if="files && files.length">
             <h4>{{ $trans('files') }}</h4>
             <v-col cols="12">
@@ -48,6 +48,9 @@
     computed: {
       files() {
         return this.$fileStore.state.files
+      },
+      view() {
+        return this.$fileStore.state.view
       },
       selectedItems() {
         return this.$fileStore.state.selectedFiles

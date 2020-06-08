@@ -1,6 +1,5 @@
 export default {
   accept_mimes: [
-    'image/jpg',
     'image/jpeg',
     'image/png',
     'application/pdf',
@@ -12,7 +11,6 @@ export default {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ],
   accept_extensions: {
-    'image/jpg': 'jpg',
     'image/jpeg': 'jpeg',
     'image/png': 'png',
     'application/pdf' : 'pdf',

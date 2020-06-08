@@ -11,7 +11,7 @@
       </v-toolbar>
       <v-card-text class="justify-content-center preview-area">
         <iframe v-if="isDocType" :src="itemViewPath" width='100%' :height="frameHeight + 'px'" frameborder='0'></iframe>
-        <img :src="item.path" v-if="isImageType" class="image-preview" aspect-ratio="1" @click.stop="dialog=false"/>
+        <img :src="item.path" v-if="isImageType" class="image-preview" aspect-ratio="1"/>
       </v-card-text>
     </v-card>
   </v-dialog>
