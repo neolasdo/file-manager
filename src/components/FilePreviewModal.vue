@@ -1,20 +1,24 @@
 <template>
-  <v-dialog v-model="showModal" persistent max-width="900px" scrollable fullscreen hide-overlay
-            transition="dialog-bottom-transition">
-    <v-card dark color="secondary" v-if="showModal" ref="previewCard">
-      <v-toolbar dark color="secondary">
-        <v-btn icon dark @click="closeModal">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn text @click="closeModal">{{ $trans('close') }}</v-btn>
-      </v-toolbar>
-      <v-card-text class="justify-content-center preview-area">
-        <iframe v-if="isDocType" :src="itemViewPath" width='100%' :height="frameHeight + 'px'" frameborder='0'></iframe>
-        <img :src="item.path" v-if="isImageType" class="image-preview" aspect-ratio="1"/>
-      </v-card-text>
-    </v-card>
-  </v-dialog>
+    <v-dialog v-model="showModal" persistent max-width="900px" scrollable fullscreen hide-overlay
+              transition="dialog-bottom-transition">
+        <v-card dark color="secondary" v-if="showModal" ref="previewCard">
+            <v-toolbar dark color="secondary">
+                <v-btn icon dark @click="closeModal">
+                    <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn text @click="closeModal">{{ $trans('close') }}</v-btn>
+            </v-toolbar>
+            <v-card-text class="justify-content-center preview-area" :style="{'height': `${frameHeight + 12}px`}">
+                <iframe v-if="isDocType" :src="itemViewPath" width='100%' :height="(frameHeight - 26) + 'px'"
+                        frameborder='0'></iframe>
+                <div :style="{'height': `${frameHeight - 20}px`, 'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}"
+                     v-if="isImageType">
+                    <img :src="item.path" class="image-preview" aspect-ratio="1"/>
+                </div>
+            </v-card-text>
+        </v-card>
+    </v-dialog>
 </template>
 
 <script>
@@ -64,7 +68,7 @@
         handler: function (newVal) {
           if (newVal) {
             setTimeout(() => {
-              this.frameHeight = this.$refs.previewCard.$el.clientHeight - 86;
+              this.frameHeight = this.$refs.previewCard.$el.clientHeight - 64;
             }, 0);
           }
         }
@@ -73,12 +77,13 @@
   }
 </script>
 <style>
-  .preview-area {
-    margin: auto !important;
-    text-align: center;
-    padding: 20px 0;
-  }
-  .image-preview {
-    max-width: 80% !important;
-  }
+    .preview-area {
+        margin: auto !important;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+    .image-preview {
+        max-width: 80% !important;
+    }
 </style>
