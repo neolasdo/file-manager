@@ -135,7 +135,7 @@
         this.uploading = true
         let promise = new Promise((resolve, reject) => {
           let formData = new FormData();
-          formData.append("files[]", this.files);
+          formData.append("files", this.files);
           formData.append("need_approval", this.need_approval);
           this.$fileStore.$axios.post(this.$fileStore.$getEndpoint('upload').route, formData, {
             headers: {
