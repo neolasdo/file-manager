@@ -80,7 +80,7 @@
           ]
         },
         mime_error_files: [],
-        overload_size_files: [],
+        overload_size_files: []
       }
     },
     methods: {
@@ -164,23 +164,17 @@
           this.reload = true
           this.progress = 0
           this.uploading = false
-          this.valid = true
           let status = errors.response.status;
           for (const [key] of Object.entries(this.validate)) {
             this.validate[key] = ''
           }
           if (status === 400) {
-            let fileMessages = []
-            for (const [key, value] of Object.entries(errors)) {
-              let validate = key.split('.')
-              if (validate[0] === 'files') {
-                fileMessages.push(value[0])
-              }
-              if (validate[1] !== undefined) {
-                this.errors.push(validate[1])
-              }
+            if (errors.response.data.data) {
+              this.validate.files = errors.response.data.data[Object.keys(errors.response.data.data)[0]][0]
+              this.errors = Object.keys(errors.response.data.data).map(item => {
+                return parseInt(item.split('.')[1])
+              })
             }
-            this.validate.files = fileMessages[0]
           }
           if (status === 403 || status === 500 || status === 404) {
             this.$snackbar(errors.response.data.message, {
@@ -206,7 +200,7 @@
         });
       },
       getStatusColor(key) {
-        return this.errors.indexOf[key] !== -1
+        return this.errors.indexOf(key) !== -1
         || this.mime_error_files.indexOf(key) !== -1
         || this.overload_size_files.indexOf(key) !== -1
           ? '#ff5252' : '#295671'
@@ -214,9 +208,7 @@
       addFiles() {
         if (this.$refs.fileInput) {
           this.valid = true;
-          for (const [key] of Object.entries(this.validate)) {
-            this.validate[key] = ''
-          }
+          this.validate.files = ''
           let files = this.$refs.fileInput.files
           this.files = [...(this.files), ...files]
           this.$nextTick(() => {
@@ -248,8 +240,5 @@
         return this.$fileStore.state.showUploadModal
       },
     },
-    beforeDestroy() {
-      this.hideUploadModal()
-    }
   }
 </script>
