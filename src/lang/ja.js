@@ -19,6 +19,7 @@ export default {
   success_status: '成功',
   error_status: '失敗',
   upload: 'ファイルのアップロード',
+  need_approval: '承認が必要',
   upload_to: ':folder_nameへのファイルアップロード',
   add_folder: 'フォルダーの追加',
   download: 'ダウンロード',

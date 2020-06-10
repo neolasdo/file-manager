@@ -42,5 +42,13 @@ export default {
   comments: {
     route: 'file/:id/comments',
     method: 'get'
+  },
+  request_approval: {
+    route: 'request-approval',
+    method: 'POST'
+  },
+  request_sign: {
+    route: 'request-sign',
+    method: 'POST'
   }
 }

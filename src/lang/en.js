@@ -19,6 +19,7 @@ export default {
   success_status: 'Success',
   error_status: 'Error',
   upload: 'Upload files',
+  need_approval: 'Need approval',
   upload_to: 'Upload files to :folder_name',
   add_folder: 'Add Folder',
   download: 'Download',

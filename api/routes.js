@@ -35,6 +35,6 @@ module.exports = function(app) {
         res.json({
           message: 'upload success'
         })
-      }, 5000)
+      }, 7000)
     })
 };
