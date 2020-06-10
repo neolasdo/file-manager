@@ -141,7 +141,9 @@
           if (this.current.id) {
             formData.append("folder_id", this.current.id);
           }
-          formData.append("need_approval", this.need_approval);
+          if (this.need_approval) {
+            formData.append("need_approval", true);
+          }
           this.$fileStore.$axios.post(this.$fileStore.$getEndpoint('upload').route, formData, {
             headers: {
               "Content-Type": "multipart/form-data"
