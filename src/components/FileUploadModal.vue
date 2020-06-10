@@ -15,7 +15,8 @@
                                     :value="progress"
                                     :width="10"
                                     color="light-blue"
-                            >{{ progress }}</v-progress-circular>
+                            >{{ progress }}
+                            </v-progress-circular>
                         </v-overlay>
                         <v-form ref="form" v-model="valid">
                             <input type="file" id="file" style="display: none" ref="fileInput" multiple
@@ -103,13 +104,13 @@
       },
       checkMimeDocuments(documents) {
         let acceptMimes = this.accept.split(",");
-        let MIMEtypes = RegExp(acceptMimes.join("|").replace( '*', '[^\\/,]+' ) );
+        let MIMEtypes = RegExp(acceptMimes.join("|").replace('*', '[^\\/,]+'));
         this.mime_error_files = []
         let mime_arr = documents.map(({type}) => {
           return type
         })
         mime_arr.forEach((item, index) => {
-          if (!MIMEtypes.test( item )) {
+          if (!MIMEtypes.test(item)) {
             this.mime_error_files.push(index);
           }
         })
@@ -152,7 +153,7 @@
 
         promise.then((res) => {
           this.files = []
-          this.need_approval =  false
+          this.need_approval = false
           this.progress = 0
           this.reload = true
           this.uploading = false
@@ -163,14 +164,23 @@
           this.reload = true
           this.progress = 0
           this.uploading = false
+          this.valid = true
           let status = errors.response.status;
           for (const [key] of Object.entries(this.validate)) {
             this.validate[key] = ''
           }
           if (status === 400) {
-            for (const [key, value] of Object.entries(errors.response.data.data)) {
-              this.validate[key] = value[0]
+            let fileMessages = []
+            for (const [key, value] of Object.entries(errors)) {
+              let validate = key.split('.')
+              if (validate[0] === 'files') {
+                fileMessages.push(value[0])
+              }
+              if (validate[1] !== undefined) {
+                this.errors.push(validate[1])
+              }
             }
+            this.validate.files = fileMessages[0]
           }
           if (status === 403 || status === 500 || status === 404) {
             this.$snackbar(errors.response.data.message, {
@@ -196,13 +206,17 @@
         });
       },
       getStatusColor(key) {
-        return this.errors[key]
+        return this.errors.indexOf[key] !== -1
         || this.mime_error_files.indexOf(key) !== -1
         || this.overload_size_files.indexOf(key) !== -1
           ? '#ff5252' : '#295671'
       },
       addFiles() {
         if (this.$refs.fileInput) {
+          this.valid = true;
+          for (const [key] of Object.entries(this.validate)) {
+            this.validate[key] = ''
+          }
           let files = this.$refs.fileInput.files
           this.files = [...(this.files), ...files]
           this.$nextTick(() => {
@@ -234,5 +248,8 @@
         return this.$fileStore.state.showUploadModal
       },
     },
+    beforeDestroy() {
+      this.hideUploadModal()
+    }
   }
 </script>
