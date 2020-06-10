@@ -223,11 +223,15 @@
           if (this.errors.indexOf(key) !== -1) {
             this.errors.splice(this.errors.indexOf(key), 1)
           }
-          if(this.mime_error_files.indexOf(key) !== -1) {
+          if (this.mime_error_files.indexOf(key) !== -1) {
             this.mime_error_files.splice(this.mime_error_files.indexOf(key), 1)
           }
-          if(this.overload_size_files.indexOf(key) !== -1) {
+          if (this.overload_size_files.indexOf(key) !== -1) {
             this.overload_size_files.splice(this.overload_size_files.indexOf(key), 1)
+          }
+          if (this.errors.length === 0 && this.overload_size_files === 0 && this.mime_error_files === 0) {
+            this.validate.files = ''
+            this.valid = true
           }
           this.files.splice(key, 1)
         }
@@ -235,6 +239,8 @@
       removeAllFile() {
         if (!this.uploading) {
           this.files = []
+          this.validate.files = ''
+          this.valid = true
           this.errors = []
           this.mime_error_files = []
           this.overload_size_files = []
