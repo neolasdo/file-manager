@@ -138,6 +138,9 @@
           this.files.forEach((item, i) => {
             formData.append('files[' + i + ']', item);
           })
+          if (this.current.id) {
+            formData.append("folder_id", this.current.id);
+          }
           formData.append("need_approval", this.need_approval);
           this.$fileStore.$axios.post(this.$fileStore.$getEndpoint('upload').route, formData, {
             headers: {
