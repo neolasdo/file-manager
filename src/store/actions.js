@@ -40,6 +40,12 @@ export default {
     })
     commit('UNLOADING');
   },
+  loading({commit}) {
+    commit('LOADING')
+  },
+  unloading({commit}) {
+    commit('UNLOADING')
+  },
   selectFolder({commit}, payload) {
     commit('RESET_SELECTED_FILES');
     commit('SELECT_FOLDER', payload);

@@ -34,7 +34,7 @@
                         <v-list-item-title>{{ $trans('move_to') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item  @click="$emit('request-sign', selectedItems)" v-if="canRequestSign">
+                <v-list-item @click="$emit('request-sign', selectedItems)" v-if="canRequestSign">
                     <v-list-item-icon>
                         <v-icon>mdi-signature-freehand</v-icon>
                     </v-list-item-icon>
@@ -42,7 +42,7 @@
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item  @click="$emit('request-approval', selectedItems)" v-if="$permissions.approvalRequest">
+                <v-list-item @click="$emit('request-approval', selectedItems)" v-if="$permissions.approvalRequest">
                     <v-list-item-icon>
                         <v-icon>mdi-file-check</v-icon>
                     </v-list-item-icon>
@@ -122,6 +122,7 @@
       },
       download() {
         let endpoint = this.$fileStore.$getEndpoint('download')
+        this.$fileStore.dispatch('loading')
 
         this.$fileStore.$axios({
           method: endpoint.method,
@@ -132,9 +133,12 @@
             })
           }
         }).then(res => {
+          this.$fileStore.dispatch('unloading')
           if (res.data && res.data.data) {
+            this.$fileStore.dispatch('loading')
             this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
               .then(response => {
+                this.$fileStore.dispatch('unloading')
                 const blob = new Blob([response.data])
                 const link = document.createElement('a')
                 link.href = URL.createObjectURL(blob)
@@ -144,9 +148,18 @@
                 link.click()
                 URL.revokeObjectURL(link.href)
                 document.body.removeChild(link)
-              }).catch(console.error)
+              })
+              .catch((errors) => {
+                if (errors.response && errors.response.data && errors.response.data.message) {
+                  this.$snackbar(errors.response.data.message, {
+                    color: 'error'
+                  })
+                }
+                this.$fileStore.dispatch('unloading')
+              })
           }
         }).catch(errors => {
+          this.$fileStore.dispatch('unloading')
           if (errors.response && errors.response.data && errors.response.data.message) {
             this.$snackbar(errors.response.data.message, {
               color: 'error'

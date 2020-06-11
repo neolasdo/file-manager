@@ -167,7 +167,7 @@
       },
       executeSearch() {
         this.menu = false
-        this.search({keyword: this.keyword, filter: this.filter })
+        this.search({keyword: this.keyword, filter: this.filter})
       },
       getAllType() {
         let allTypes = [];
@@ -179,7 +179,7 @@
       },
       download() {
         let endpoint = this.$fileStore.$getEndpoint('download')
-
+        this.$fileStore.dispatch('loading')
         this.$fileStore.$axios({
           method: endpoint.method,
           url: endpoint.route,
@@ -189,9 +189,12 @@
             })
           }
         }).then(res => {
+          this.$fileStore.dispatch('unloading')
           if (res.data && res.data.data) {
+            this.$fileStore.dispatch('loading')
             this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
               .then(response => {
+                this.$fileStore.dispatch('unloading')
                 const blob = new Blob([response.data])
                 const link = document.createElement('a')
                 link.href = URL.createObjectURL(blob)
@@ -201,9 +204,17 @@
                 link.click()
                 URL.revokeObjectURL(link.href)
                 document.body.removeChild(link)
-              }).catch(console.error)
+              })
+              .catch((errors) => {
+                if (errors.response && errors.response.data && errors.response.data.message) {
+                  this.$snackbar(errors.response.data.message, {
+                    color: 'error'
+                  })
+                }
+              })
           }
         }).catch(errors => {
+          this.$fileStore.dispatch('unloading')
           if (errors.response && errors.response.data && errors.response.data.message) {
             this.$snackbar(errors.response.data.message, {
               color: 'error'

@@ -164,6 +164,7 @@
           this.progress = 0
           this.reload = true
           this.uploading = false
+          this.closeModal()
           this.$snackbar(res.data.message, {
             color: 'success'
           })
