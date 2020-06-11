@@ -8,12 +8,13 @@
                     <v-hover v-slot:default="{ hover }" v-for="(item, index) in files" :key="index">
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
-                                <v-card class="pa-2 file-card ma-2" :class="{'active': checkFileSelected(item)}"
-                                        ref="files"
+                                <v-card class="pa-2 file-card ma-2" ref="files"
+                                        :class="{'active': checkFileSelected(item)}"
                                         @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
                                         @dblclick.stop.prevent="preview" v-on="on" width="180"
                                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
-                                    <v-overlay absolute opacity="0.45" :value="item.is_official !== undefined && !item.is_official"></v-overlay>
+                                    <v-overlay absolute color="#969696"
+                                               :value="item.is_official !== undefined && !item.is_official"></v-overlay>
 
                                     <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024"
                                             color="red" text-color="white">Too large
