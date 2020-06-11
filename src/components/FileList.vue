@@ -13,6 +13,8 @@
                                         @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
                                         @dblclick.stop.prevent="preview" v-on="on" width="180"
                                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
+                                    <v-overlay absolute opacity="0.45" :value="item.is_official !== undefined && !item.is_official"></v-overlay>
+
                                     <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024"
                                             color="red" text-color="white">Too large
                                     </v-chip>

@@ -78,7 +78,7 @@
                     </v-btn>
                 </template>
                 <v-list tile dense>
-                    <v-list-item v-if="$permissions.requestSign" @click="$emit('request-sign', selectedFiles)">
+                    <v-list-item v-if="canRequestSign" @click="$emit('request-sign', selectedFiles)">
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-if="$permissions.approvalRequest" @click="$emit('request-approval', selectedFiles)">
@@ -134,6 +134,12 @@
       keywordState() {
         return this.$fileStore.state.keywordState
       },
+      canRequestSign() {
+        let nonOfficial = this.selectedFiles.find(item => {
+          return item.is_official !== undefined && !item.is_official
+        })
+        return this.$permissions.requestSign && nonOfficial === undefined
+      }
     },
     methods: {
       openUploadModal() {

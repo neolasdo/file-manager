@@ -129,7 +129,7 @@
                             </v-row>
                         </v-card-text>
                         <v-card-actions v-if="clipboard.files.length && ($permissions.requestSign || $permissions.approvalRequest)">
-                            <v-btn color="primary" text v-if="$permissions.requestSign" @click="$emit('request-sign', clipboard.files)">
+                            <v-btn color="primary" text v-if="canRequestSign" @click="$emit('request-sign', clipboard.files)">
                                 {{ $trans('request_sign') }}
                             </v-btn>
                             <v-btn color="primary" text v-if="$permissions.approvalRequest" @click="$emit('request-approval', clipboard.files)">
@@ -166,6 +166,12 @@
       },
       current() {
         return this.$fileStore.state.current
+      },
+      canRequestSign() {
+        let nonOfficial = this.selectedFiles.find(item => {
+          return item.is_official !== undefined && !item.is_official
+        })
+        return this.$permissions.requestSign && nonOfficial === undefined
       },
       title() {
         if (this.selectedFiles.length === 1) {

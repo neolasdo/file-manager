@@ -144,6 +144,7 @@ let all = {
           files: [
             {
               name: 'File 13',
+              is_official: false,
               id: 13,
               isDir: false,
               path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_JPG_1MB.jpg',
@@ -153,6 +154,7 @@ let all = {
             },
             {
               name: 'File 14',
+              is_official: true,
               id: 14,
               isDir: false,
               path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_PNG_1MB.png',

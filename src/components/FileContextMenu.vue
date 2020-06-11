@@ -34,7 +34,7 @@
                         <v-list-item-title>{{ $trans('move_to') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item  @click="$emit('request-sign', selectedItems)" v-if="$permissions.requestSign">
+                <v-list-item  @click="$emit('request-sign', selectedItems)" v-if="canRequestSign">
                     <v-list-item-icon>
                         <v-icon>mdi-signature-freehand</v-icon>
                     </v-list-item-icon>
@@ -95,6 +95,12 @@
       selectedItems() {
         return this.$fileStore.state.selectedFiles
       },
+      canRequestSign() {
+        let nonOfficial = this.selectedItems.find(item => {
+          return item.is_official !== undefined && !item.is_official
+        })
+        return this.$permissions.requestSign && nonOfficial === undefined
+      }
     },
     methods: {
       deleteSelected() {
