@@ -135,6 +135,9 @@
                             <v-btn color="primary" text v-if="$permissions.approvalRequest" @click="$emit('request-approval', clipboard.files)">
                                 {{ $trans('approval_request') }}
                             </v-btn>
+                            <v-btn color="primary" text @click="resetClipboard">
+                                {{ $trans('reset') }}
+                            </v-btn>
                         </v-card-actions>
                     </v-tab-item>
                 </v-tabs-items>
@@ -206,6 +209,9 @@
       },
       removeFolderInClipboard(payload) {
         this.$fileStore.dispatch('removeFolderInClipboard', payload)
+      },
+      resetClipboard() {
+        this.$fileStore.dispatch('resetClipboard')
       },
     }
   }

@@ -203,7 +203,7 @@
         this.resetSelectedFiles()
       },
       requestSign(event) {
-        console.log('request sign', event)
+        this.$fileStore.dispatch('requestSign', event)
       },
       requestApproval(event) {
         console.log('request approval', event)

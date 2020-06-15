@@ -217,6 +217,27 @@ export default {
   changeSort({commit}, payload) {
     commit('UPDATE_SORT', payload)
     commit('UPDATE_LIST', payload)
+  },
+  async requestSign({commit}, payload) {
+    if (payload.length) {
+      commit('LOADING')
+      let endpoint = this.$getEndpoint('request_sign')
+      let data = {
+        files: payload.map(item => {
+          return item.id
+        }),
+      }
+      let response = executeAxios(this.$axios, endpoint, data)
+      await response.then(res => {
+        getMessage(res,this.$snackbar)
+      }).catch(error => {
+        getErrorMessage(error,this.$snackbar, this.$trans)
+      });
+      commit('UNLOADING');
+    }
+  },
+  resetClipboard({commit}) {
+    commit('RESET_CLIPBOARD');
   }
 }
 
