@@ -14,40 +14,7 @@ let all = {
               name: 'Dir 3',
               id: 3,
               children: [],
-              files: [
-                {
-                  name: 'File 1',
-                  id: 1,
-                  path: 'https://image.shutterstock.com/image-vector/example-signlabel-features-speech-bubble-600w-1223219908.jpg',
-                  mime: 'image/jpeg',
-                  size: 125123123,
-                  created_at: '2019-01-01'
-                },
-                {
-                  name: 'File 2',
-                  id: 2,
-                  path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_250kB.ppt',
-                  mime: 'application/vnd.ms-powerpoint',
-                  size: 12512223,
-                  created_at: '2019-01-01'
-                },
-                {
-                  name: 'File 3',
-                  id: 3,
-                  path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_250kB.ppt',
-                  mime: 'application/vnd.ms-powerpoint',
-                  size: 12512312,
-                  created_at: '2019-01-01'
-                },
-                {
-                  name: 'File 4',
-                  id: 4,
-                  path: 'https://file-examples.com/wp-content/uploads/2017/02/file-sample_500kB.doc',
-                  mime: 'application/msword',
-                  size: 1251231,
-                  created_at: '2019-01-01'
-                },
-              ]
+              files: []
             },
           ],
           files: [

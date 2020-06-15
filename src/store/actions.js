@@ -33,7 +33,7 @@ export default {
       commit('UNLOADING');
 
       if (!state.loaded) {
-        commit('loaded')
+        commit('LOADED')
       }
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
