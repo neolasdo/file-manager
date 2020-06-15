@@ -63,6 +63,9 @@ export default {
   UNLOADING(state) {
     state.isLoading = false;
   },
+  LOADED(state) {
+    state.loaded = true;
+  },
   UPDATE_LIST(state, payload) {
     state.files = payload.files ? payload.files: state.files
     state.folders = payload.children ? payload.children: state.folders

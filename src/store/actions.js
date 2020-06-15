@@ -30,15 +30,22 @@ export default {
           dispatch('selectFolder', item)
         }
       })
+      commit('UNLOADING');
 
+      if (!state.loaded) {
+        commit('loaded')
+      }
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
       commit('UPDATE_BREADCRUMB', item);
       commit('RESET_SEARCH');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
+      commit('UNLOADING');
+      if (!state.loaded) {
+        commit('LOADED')
+      }
     })
-    commit('UNLOADING');
   },
   loading({commit}) {
     commit('LOADING')
