@@ -65,7 +65,7 @@
                            style="height: 100%">
                         <v-container fluid class="file-explorer" @click="onClickContainer()"
                                      @contextmenu.prevent="showMainContextMenu($event)">
-                            <v-alert v-if="files.length === 0 && folders.length === 0" text color="info">
+                            <v-alert v-if="files.length === 0 && folders.length === 0 && !loading" text color="info">
                                 <h3>{{ $trans('empty_folder') }}</h3>
                             </v-alert>
                             <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
@@ -152,9 +152,6 @@
       },
       selectedItems() {
         return this.$fileStore.state.selectedFiles
-      },
-      isLoading() {
-        return this.$fileStore.state.isLoading
       },
       current() {
         return this.$fileStore.state.current
