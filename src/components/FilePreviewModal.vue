@@ -62,6 +62,9 @@
         this.showModal = true
       }
     },
+    beforeDestroy() {
+      clearInterval(this.loadInterval)
+    },
     watch: {
       showModal: {
         immediate: true,
