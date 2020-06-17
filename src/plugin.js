@@ -156,7 +156,7 @@ class Manager {
       endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
       axios: opts.axios ? opts.axios : optionsDefaults.axios,
       lang: opts.lang ? opts.lang : optionsDefaults.lang,
-      autoReload: opts.autoReload ? opts.autoReload : optionsDefaults.autoReload,
+      autoReload: opts.autoReload !== undefined ? opts.autoReload : true,
       reloadPreviewAfter: opts.reloadPreviewAfter ? opts.reloadPreviewAfter : optionsDefaults.reloadPreviewAfter,
       permissions: {...optionsDefaults.permissions, ...opts.permissions},
       dict: optionsDefaults.dict,
