@@ -1,16 +1,7 @@
 <template>
     <v-app class="file-manager-app">
         <v-card class="mt-3 file-manage-card">
-            <file-toolbar @request-sign="requestSign($event)" @request-approval="requestApproval($event)">
-                <template v-slot:searchFilter="slotProps">
-                    <slot name="searchFilter" v-bind:filter="slotProps.filter">
-                    </slot>
-                </template>
-                <template v-slot:additionMenuItem="slotProps">
-                    <slot name="additionMenuItem" v-bind:selectedFiles="slotProps.selectedFiles">
-                    </slot>
-                </template>
-            </file-toolbar>
+            <file-toolbar @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
             <v-container fluid class="pa-0">
                 <v-row no-gutters>
                     <v-col cols="6">

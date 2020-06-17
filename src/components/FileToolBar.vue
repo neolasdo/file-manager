@@ -12,36 +12,34 @@
                   </template>
                   <v-card tile max-width="500px">
                     <v-container>
-                        <slot name="searchFilter" v-bind:filter="filter">
-                          <v-row align="center">
-                            <v-col cols="4">
-                              <v-subheader>{{ $trans('type') }}</v-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                              <v-select v-model="filter.mime" :items="getAllType()" item-text="text"
-                                        item-value="value"
-                                        menu-props="auto" label="タイプ" hide-details single-line>
-                              </v-select>
-                            </v-col>
-                            <v-col cols="4">
-                              <v-subheader>{{ $trans('created_date') }}</v-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                              <v-select v-model="filter.created_date" :items="timeRanges" item-text="text"
-                                        item-value="value"
-                                        menu-props="auto" label="作成日" hide-details single-line>
-                              </v-select>
-                            </v-col>
-                            <v-col cols="4">
-                              <v-subheader>{{ $trans('status') }}</v-subheader>
-                            </v-col>
-                            <v-col cols="8">
-                              <v-select v-model="filter.status" :items="statusList" item-text="text" item-value="value"
-                                        menu-props="auto" label="ステータス" hide-details single-line>
-                              </v-select>
-                            </v-col>
-                          </v-row>
-                        </slot>
+                      <v-row align="center">
+                        <v-col cols="4">
+                          <v-subheader>{{ $trans('type') }}</v-subheader>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-select v-model="filter.mime" :items="getAllType()" item-text="text"
+                                    item-value="value"
+                                    menu-props="auto" label="タイプ" hide-details single-line>
+                          </v-select>
+                        </v-col>
+                        <v-col cols="4">
+                          <v-subheader>{{ $trans('created_date') }}</v-subheader>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-select v-model="filter.created_date" :items="timeRanges" item-text="text"
+                                    item-value="value"
+                                    menu-props="auto" label="作成日" hide-details single-line>
+                          </v-select>
+                        </v-col>
+                        <v-col cols="4">
+                          <v-subheader>{{ $trans('status') }}</v-subheader>
+                        </v-col>
+                        <v-col cols="8">
+                          <v-select v-model="filter.status" :items="statusList" item-text="text" item-value="value"
+                                    menu-props="auto" label="ステータス" hide-details single-line>
+                          </v-select>
+                        </v-col>
+                      </v-row>
                       <v-card-actions class="justify-center">
                         <v-btn color="secondary" tile @click="reset">{{ this.$trans('reset') }}</v-btn>
                         <v-btn color="primary" tile @click="executeSearch">{{ this.$trans('search') }}</v-btn>

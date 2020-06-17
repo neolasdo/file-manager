@@ -24,7 +24,9 @@ let all = {
               path: 'https://file-examples.com/wp-content/uploads/2017/02/file-sample_500kB.docx',
               mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
               size: 125133,
-              created_at: '2019-01-01'
+              created_at: '2019-01-01',
+              label: 'Requesting',
+              labelColor: 'primary'
             },
             {
               name: 'File 6',

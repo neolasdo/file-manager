@@ -16,8 +16,8 @@
                                     <v-overlay absolute color="#969696"
                                                :value="item.is_official !== undefined && !item.is_official"></v-overlay>
 
-                                    <v-chip x-small label class="status-label" v-if="item.size >= 1024 * 1024 * 1024"
-                                            color="red" text-color="white">Too large
+                                    <v-chip x-small label class="status-label" v-if="item.label"
+                                            :color="item.labelColor ? item.labelColor : 'primary'" text-color="white">{{item.label}}
                                     </v-chip>
                                     <v-card-text>
                                         <v-img :src="fileThumbnail(item)" alt=""></v-img>
@@ -134,7 +134,7 @@
 
     .status-label {
         position: absolute !important;
-        top: -16px !important;
+        top: -10px !important;
         right: 0 !important;
     }
 </style>

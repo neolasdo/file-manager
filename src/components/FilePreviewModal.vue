@@ -9,9 +9,14 @@
                 <v-spacer></v-spacer>
                 <v-btn text @click="closeModal">{{ $trans('close') }}</v-btn>
             </v-toolbar>
-            <v-card-text class="justify-content-center preview-area" :style="{'height': `${frameHeight + 12}px`}">
-                <iframe v-if="isDocType" :src="itemViewPath" width='100%' :height="(frameHeight - 26) + 'px'"
-                        frameborder='0'></iframe>
+            <v-card-text class="justify-content-center preview-area"
+                         :style="{'height': `${frameHeight + 12}px`}" style="position: relative">
+                <v-overlay :value="!loaded" absolute>
+                    <v-progress-circular indeterminate size="64"></v-progress-circular>
+                </v-overlay>
+                <iframe v-if="isDocType && renderIframe" width='100%' :height="(frameHeight - 26) + 'px'"
+                        frameborder='0' :src="itemViewPath" @load="onLoad" @error="onError($event)" ref="iframe">
+                </iframe>
                 <div :style="{'height': `${frameHeight - 20}px`, 'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}"
                      v-if="isImageType">
                     <img :src="item.path" class="image-preview" aspect-ratio="1"/>
@@ -31,6 +36,9 @@
     data() {
       return {
         showModal: false,
+        loaded: false,
+        renderIframe: true,
+        loadInterval: null,
         item: {
           name: '',
           id: '',
@@ -56,6 +64,25 @@
     methods: {
       closeModal() {
         this.showModal = false
+        this.loaded = false
+        clearInterval(this.loadInterval)
+      },
+      onLoad() {
+        this.loaded = true
+        clearInterval(this.loadInterval)
+      },
+      onError(e) {
+        this.loaded = true
+        console.log(e)
+        clearInterval(this.loadInterval)
+      },
+      reloadIframe() {
+        this.loadInterval = setInterval(() => {
+          this.renderIframe = false
+          this.$nextTick(() => {
+            this.renderIframe = true
+          })
+        }, 5000)
       },
       showPreview(item) {
         this.item = item
@@ -73,9 +100,12 @@
             setTimeout(() => {
               this.frameHeight = this.$refs.previewCard.$el.clientHeight - 64;
             }, 0);
+            if (this.isDocType) {
+              this.reloadIframe()
+            }
           }
         }
-      }
+      },
     }
   }
 </script>
