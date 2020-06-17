@@ -136,5 +136,6 @@
         position: absolute !important;
         top: -10px !important;
         right: 0 !important;
+        z-index: 10;
     }
 </style>

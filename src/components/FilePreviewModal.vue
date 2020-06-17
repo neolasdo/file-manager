@@ -11,7 +11,7 @@
             </v-toolbar>
             <v-card-text class="justify-content-center preview-area"
                          :style="{'height': `${frameHeight + 12}px`}" style="position: relative">
-                <v-overlay :value="!loaded" absolute>
+                <v-overlay :value="isDocType && !loaded" absolute>
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
                 <iframe v-if="isDocType && renderIframe" width='100%' :height="(frameHeight - 26) + 'px'"
