@@ -11,7 +11,7 @@
             </v-toolbar>
             <v-card-text class="justify-content-center preview-area"
                          :style="{'height': `${frameHeight + 12}px`}" style="position: relative">
-                <v-overlay :value="isDocType && !loaded" absolute>
+                <v-overlay :value="isDocType && !loaded && this.$autoReloadPreview" absolute>
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
                 <iframe v-if="isDocType && renderIframe" width='100%' :height="(frameHeight - 26) + 'px'"
@@ -52,7 +52,7 @@
     },
     computed: {
       itemViewPath() {
-        return "https://docs.google.com/viewerng/viewer?url=" + encodeURIComponent(this.item.path) + "&embedded=true"
+        return "https://docs.google.com/viewerng/viewer?url=https%3A%2F%2Fromusystem-dev.s3.ap-northeast-1.amazonaws.com%2F159115507048_file-example_PDF_1MB.pdf%3FX-Amz-Content-Sha256%3DUNSIGNED-PAYLOAD%26X-Amz-Algorithm%3DAWS4-HMAC-SHA256%26X-Amz-Credential%3DAKIATXLDAZQUI2JUFZPE%252F20200617%252Fap-northeast-1%252Fs3%252Faws4_request%26X-Amz-Date%3D20200617T081546Z%26X-Amz-SignedHeaders%3Dhost%26X-Amz-Expires%3D1800%26X-Amz-Signature%3Dacecc2e29b1c5979a1ce636b1deb384594c012303f3d0e667aabb9c181a3e6ef&embedded=true"
       },
       isDocType() {
         return isDocumentFile(this.item)
@@ -82,7 +82,7 @@
           this.$nextTick(() => {
             this.renderIframe = true
           })
-        }, 5000)
+        }, this.$reloadPreviewAfter ? this.$reloadPreviewAfter: 5000)
       },
       showPreview(item) {
         this.item = item
@@ -100,7 +100,7 @@
             setTimeout(() => {
               this.frameHeight = this.$refs.previewCard.$el.clientHeight - 64;
             }, 0);
-            if (this.isDocType) {
+            if (this.isDocType && this.$autoReloadPreview) {
               this.reloadIframe()
             }
           }

@@ -31,7 +31,9 @@ let optionsDefaults = {
   accept_extensions: file.accept_extensions,
   sort: sort,
   detailConfig: detail,
-  file_max_size: 25000000
+  file_max_size: 25000000,
+  autoReload: true,
+  reloadPreviewAfter: 5000
 }
 let Vue;
 
@@ -135,6 +137,8 @@ class Manager {
     store.$trans = Vue.prototype.$trans
     store.$sortConfig = options.sort
     Vue.prototype.$fileStore = store;
+    Vue.prototype.$autoReloadPreview = options.autoReload;
+    Vue.prototype.$reloadPreviewAfter = options.reloadPreviewAfter;
     Vue.prototype.$getEndpoint = store.$getEndpoint;
     Vue.prototype.$accept_mimes = options.accept_mimes;
     Vue.prototype.$accept_extensions = options.accept_extensions;
@@ -152,6 +156,8 @@ class Manager {
       endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
       axios: opts.axios ? opts.axios : optionsDefaults.axios,
       lang: opts.lang ? opts.lang : optionsDefaults.lang,
+      autoReload: opts.autoReload ? opts.autoReload : optionsDefaults.autoReload,
+      reloadPreviewAfter: opts.reloadPreviewAfter ? opts.reloadPreviewAfter : optionsDefaults.reloadPreviewAfter,
       permissions: {...optionsDefaults.permissions, ...opts.permissions},
       dict: optionsDefaults.dict,
       accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],

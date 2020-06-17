@@ -108,6 +108,8 @@ fileStore.$getEndpoint = function (name, meta = []) {
 fileStore.$axios = optionsDefaults.axios
 fileStore.$snackbar = Vue.prototype.$snackbar
 Vue.prototype.$fileStore = fileStore
+Vue.prototype.$autoReloadPreview = false;
+Vue.prototype.$reloadPreviewAfter = 5000;
 Vue.prototype.$getEndpoint = fileStore.$getEndpoint
 Vue.prototype.$axios = fileStore.$axios;
 Vue.prototype.$permissions = optionsDefaults.permissions;
