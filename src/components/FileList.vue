@@ -16,7 +16,7 @@
                                     <v-overlay absolute color="#969696"
                                                :value="item.is_official !== undefined && !item.is_official"></v-overlay>
 
-                                    <v-chip x-small label class="status-label" v-if="item.label"
+                                    <v-chip small label class="status-label" v-if="item.label" style="border-radius: 0 !important;"
                                             :color="item.labelColor ? item.labelColor : 'primary'" text-color="white">{{item.label}}
                                     </v-chip>
                                     <v-card-text>
@@ -134,8 +134,9 @@
 
     .status-label {
         position: absolute !important;
-        top: -10px !important;
+        top: 0px !important;
         right: 0 !important;
         z-index: 10;
+        font-size: 13px;
     }
 </style>

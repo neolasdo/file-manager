@@ -119,7 +119,8 @@ let all = {
               path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_JPG_1MB.jpg',
               mime: 'image/jpeg',
               size: 125133,
-              created_at: '2019-01-01'
+              created_at: '2019-01-01',
+              label: 'Requesting',
             },
             {
               name: 'File 14',
