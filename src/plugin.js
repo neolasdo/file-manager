@@ -243,5 +243,7 @@ function install(_Vue) {
 
 export default {
   Manager,
-  install
+  install,
+  FileComments,
+  FilePreviewModal
 }
