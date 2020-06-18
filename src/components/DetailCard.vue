@@ -18,7 +18,7 @@
                         <span>{{ $trans('clipboard') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :key="'comments'" v-if="selectedFiles.length === 1" @click="showComments = true">
+                <v-tab :key="'comments'" v-if="selectedFiles.length === 1 && $permissions.comment" @click="getComments()">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-comment-multiple-outline</v-icon>
@@ -26,7 +26,8 @@
                         <span>{{ $trans('comments') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length" @click="showComments = false">
+                <v-tab :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length"
+                       @click="showComments = false">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-clipboard-outline</v-icon>
@@ -35,7 +36,7 @@
                     </v-tooltip>
                 </v-tab>
                 <v-tabs-items v-model="tab" class="tab-content">
-                    <v-tab-item :key="'detail'">
+                    <v-tab-item :key="'detail'" class="tab-item">
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
@@ -59,11 +60,14 @@
                                         <v-list-item-group>
                                             <v-list-item v-for="(item, i) in selectedFiles" :key="i">
                                                 <v-list-item-content>
-                                                    <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
+                                                    <v-list-item-title class="font-weight-bold"
+                                                                       v-text="item.name"></v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-list-item-action>
                                                     <v-btn icon small>
-                                                        <v-icon @click="removeFileSelected(i)" color="grey lighten-1">mdi-close</v-icon>
+                                                        <v-icon @click="removeFileSelected(i)" color="grey lighten-1">
+                                                            mdi-close
+                                                        </v-icon>
                                                     </v-btn>
                                                 </v-list-item-action>
                                             </v-list-item>
@@ -80,16 +84,10 @@
                             </v-row>
                         </v-card-text>
                     </v-tab-item>
-                    <v-tab-item :key="'comments'" v-if="selectedFiles.length === 1">
-                        <v-card-text>
-                            <v-row>
-                                <v-col cols="12">
-                                    {{comments}}
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
+                    <v-tab-item :key="'comments'" v-if="$auth && $auth.id && selectedFiles.length === 1 && $permissions.comment" class="tab-item">
+                        <FileComments :user-id="$auth.id" :comments="comments" @addComment="addComment($event)" :canAddComment="$permissions.addComment"/>
                     </v-tab-item>
-                    <v-tab-item :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length">
+                    <v-tab-item :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length" class="tab-item">
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12">
@@ -98,11 +96,14 @@
                                         <v-list-item-group>
                                             <v-list-item v-for="(item, i) in clipboard.files" :key="i">
                                                 <v-list-item-content>
-                                                    <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
+                                                    <v-list-item-title class="font-weight-bold"
+                                                                       v-text="item.name"></v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-list-item-action>
                                                     <v-btn icon small>
-                                                        <v-icon @click="removeFileInClipboard(i)" color="grey lighten-1">mdi-close</v-icon>
+                                                        <v-icon @click="removeFileInClipboard(i)"
+                                                                color="grey lighten-1">mdi-close
+                                                        </v-icon>
                                                     </v-btn>
                                                 </v-list-item-action>
                                             </v-list-item>
@@ -115,11 +116,14 @@
                                         <v-list-item-group>
                                             <v-list-item v-for="(item, i) in clipboard.folders" :key="i">
                                                 <v-list-item-content>
-                                                    <v-list-item-title class="font-weight-bold" v-text="item.name"></v-list-item-title>
+                                                    <v-list-item-title class="font-weight-bold"
+                                                                       v-text="item.name"></v-list-item-title>
                                                 </v-list-item-content>
                                                 <v-list-item-action>
                                                     <v-btn icon small>
-                                                        <v-icon @click="removeFolderInClipboard(i)" color="grey lighten-1">mdi-close</v-icon>
+                                                        <v-icon @click="removeFolderInClipboard(i)"
+                                                                color="grey lighten-1">mdi-close
+                                                        </v-icon>
                                                     </v-btn>
                                                 </v-list-item-action>
                                             </v-list-item>
@@ -128,11 +132,14 @@
                                 </v-col>
                             </v-row>
                         </v-card-text>
-                        <v-card-actions v-if="clipboard.files.length && ($permissions.requestSign || $permissions.approvalRequest)">
-                            <v-btn color="primary" text v-if="canRequestSign" @click="$emit('request-sign', clipboard.files)">
+                        <v-card-actions
+                                v-if="clipboard.files.length && ($permissions.requestSign || $permissions.approvalRequest)">
+                            <v-btn color="primary" text v-if="canRequestSign"
+                                   @click="$emit('request-sign', clipboard.files)">
                                 {{ $trans('request_sign') }}
                             </v-btn>
-                            <v-btn color="primary" text v-if="$permissions.approvalRequest" @click="$emit('request-approval', clipboard.files)">
+                            <v-btn color="primary" text v-if="$permissions.approvalRequest"
+                                   @click="$emit('request-approval', clipboard.files)">
                                 {{ $trans('approval_request') }}
                             </v-btn>
                             <v-btn color="primary" text @click="resetClipboard">
@@ -148,9 +155,13 @@
 
 <script>
   import {formatSize} from '@/helpers/file'
+  import FileComments from "./FileComments";
 
   export default {
     name: 'DetailCard',
+    components: {
+      FileComments
+    },
     data() {
       return {
         tab: null,
@@ -187,11 +198,7 @@
         return this.current.name ? this.current.name : ''
       },
       comments() {
-        if (this.selectedFiles.length === 1 && this.showComments) {
-          this.$fileStore.dispatch('getComments')
-          return this.selectedFiles[0].comments
-        }
-        return []
+        return this.$fileStore.state.comments
       }
     },
     methods: {
@@ -213,6 +220,15 @@
       resetClipboard() {
         this.$fileStore.dispatch('resetClipboard')
       },
+      addComment(e) {
+        this.$fileStore.dispatch('addComment', e)
+        this.getComments()
+      },
+      getComments() {
+        if (this.selectedFiles.length === 1) {
+          this.$fileStore.dispatch('getComments')
+        }
+      },
     }
   }
 </script>
@@ -230,19 +246,23 @@
         user-select: none;
     }
 
-    .tab-content::-webkit-scrollbar {
+    .tab-content::-webkit-scrollbar, .comment-view::-webkit-scrollbar {
         width: 10px;
     }
 
-    .tab-content::-webkit-scrollbar-track {
+    .tab-content::-webkit-scrollbar-track, .comment-view::-webkit-scrollbar-track {
         background: #f1f1f1;
     }
 
-    .tab-content::-webkit-scrollbar-thumb {
+    .tab-content::-webkit-scrollbar-thumb, .comment-view::-webkit-scrollbar-thumb {
         background: #888;
     }
 
-    .tab-content::-webkit-scrollbar-thumb:hover {
+    .tab-content::-webkit-scrollbar-thumb:hover, .comment-view::-webkit-scrollbar-thumb:hover {
         background: #555;
+    }
+
+    .tab-item {
+        height: 100%
     }
 </style>

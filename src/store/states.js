@@ -20,6 +20,7 @@ export default {
     files: [],
     folders: []
   },
+  comments: [],
   showUploadModal: false,
   showFormModal: false,
   formCreate: false,

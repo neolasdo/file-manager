@@ -14,6 +14,29 @@ module.exports = function(app) {
 
     })
 
+  app.route('/file/:id/comments')
+    .get(function (req, res) {
+      let data = [];
+      for (let i=0; i<=100; i++) {
+        let comment = {
+          comment: 'test comment 1212121212',
+          created_at: '2020/3/4',
+          author: {
+            id: i%2===1? 1: 2,
+            email: 'test@gmail.com'
+          }
+        }
+        data.push(comment)
+      }
+      setTimeout(function () {
+        res.json({
+          data: data,
+          message: 'search success'
+        })
+      }, 1000)
+
+    })
+
   app.route('/move')
     .post(function (req, res) {
       let folderId = req.body.dest

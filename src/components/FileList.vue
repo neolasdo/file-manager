@@ -6,7 +6,7 @@
             <v-col cols="12">
                 <v-row align="start" justify="start">
                     <v-hover v-slot:default="{ hover }" v-for="(item, index) in files" :key="index">
-                        <v-tooltip bottom>
+                        <v-tooltip bottom z-index="7">
                             <template v-slot:activator="{ on }">
                                 <v-card class="pa-2 file-card ma-2" ref="files"
                                         :class="{'active': checkFileSelected(item)}"
@@ -136,7 +136,7 @@
         position: absolute !important;
         top: 0px !important;
         right: 0 !important;
-        z-index: 10;
+        z-index: 6;
         font-size: 13px;
     }
 </style>

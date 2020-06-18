@@ -20,6 +20,8 @@ import vuetifyPlugin from "./plugins/vuetify";
 import SnackBar from "./components/SnackBar";
 import detail from "./configs/detail";
 import sort from "./configs/sort";
+import FileComments from "./components/FileComments";
+import MoveFilesModal from "./components/MoveFilesModal";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -179,6 +181,10 @@ class Manager {
     return options
   }
 
+  setAuth(auth) {
+    Vue.prototype.$auth = auth
+  }
+
   getStore() {
     return this.store
   }
@@ -215,11 +221,13 @@ function install(_Vue) {
     }
     return
   }
-  _Vue.component('file-manager', FileManager)
+  _Vue.component('confirm-dialog', ConfirmDialog)
   _Vue.component('detail-card', DetailCard)
+  _Vue.component('file-comments', FileComments)
   _Vue.component('file-breadcrumb', FileBreadcrumb)
   _Vue.component('file-context-menu', FileContextMenu)
   _Vue.component('file-list', FileList)
+  _Vue.component('file-manager', FileManager)
   _Vue.component('file-preview-modal', FilePreviewModal)
   _Vue.component('file-tool-bar', FileToolBar)
   _Vue.component('file-upload-modal', FileUploadModal)
@@ -227,6 +235,8 @@ function install(_Vue) {
   _Vue.component('folder-list', FolderList)
   _Vue.component('form-modal', FormModal)
   _Vue.component('main-context-menu', MainContextMenu)
+  _Vue.component('move-file-modal', MoveFilesModal)
+  _Vue.component('snack-bar', SnackBar)
 
   Vue = _Vue;
 }

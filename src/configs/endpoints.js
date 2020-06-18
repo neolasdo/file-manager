@@ -43,6 +43,10 @@ export default {
     route: 'file/:id/comments',
     method: 'get'
   },
+  addComment: {
+    route: 'file/:id/comments',
+    method: 'post'
+  },
   request_approval: {
     route: 'request-approval',
     method: 'POST'

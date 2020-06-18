@@ -174,6 +174,7 @@ let all = {
               path: 'http://localhost/file15',
               mime: 'application/pdf',
               size: 1211111,
+              label: 'Requesting',
               created_at: '2019-01-01'
             },
             {

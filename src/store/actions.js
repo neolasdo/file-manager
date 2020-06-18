@@ -199,21 +199,36 @@ export default {
   },
   async getComments({state, commit}) {
     let fileSelected = state.selectedFiles[0]
+    commit('RESET_COMMENT_LIST')
+    commit('LOADING')
+    let endpoint = this.$getEndpoint('comments', [fileSelected.id])
+    let response = executeAxios(this.$axios, endpoint)
+    await response.then(res => {
+      getMessage(res,this.$snackbar)
+      commit('UNLOADING')
+      commit('LOAD_COMMENT', res.data.data)
+    }).catch(error => {
+      commit('UNLOADING')
+      getErrorMessage(error,this.$snackbar, this.$trans)
+    })
+  },
+  async addComment({state, commit, dispatch}, payload) {
+    let fileSelected = state.selectedFiles[0]
     if (fileSelected && !fileSelected.commentsLoaded) {
-      let endpoint = this.$getEndpoint('comments', [fileSelected.id])
-      let response = executeAxios(this.$axios, endpoint)
+      commit('LOADING')
+      let endpoint = this.$getEndpoint('addComment', [fileSelected.id])
+      let response = executeAxios(this.$axios, endpoint, {message: payload})
       await response.then(res => {
-        getMessage(res,this.$snackbar)
-        let payload = {
-          comments: res.data,
-          id: fileSelected.id
-        }
-        commit('LOAD_COMMENT', payload)
+        getMessage(res, this.$snackbar)
+        dispatch('getComments')
+        commit('UNLOADING')
       }).catch(error => {
+        commit('UNLOADING')
         getErrorMessage(error,this.$snackbar, this.$trans)
       })
     }
   },
+
   reload({state, dispatch}) {
     if (state.keyword !== '') {
       dispatch('search', {keyword: state.keyword, filter: state.filter})

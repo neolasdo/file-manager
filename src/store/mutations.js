@@ -135,13 +135,9 @@ export default {
     state.filter = {}
   },
   LOAD_COMMENT(state, payload) {
-    let index = state.files.findIndex(item => {
-      return item.id === payload.id
-    })
-    if (index !== -1) {
-      state.files[index].commentsLoaded = true
-      state.files[index].comments = payload.comments
-      state.selectedFiles[0] = state.files[index]
-    }
+    state.comments = payload
+  },
+  RESET_COMMENT_LIST(state) {
+    state.comments = []
   }
 }

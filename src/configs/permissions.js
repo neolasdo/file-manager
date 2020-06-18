@@ -5,6 +5,7 @@ export default {
   upload: true,
   create: true,
   comment: true,
+  addComment: true,
   download: true,
   moveFolder: false,
   moveFile: true,

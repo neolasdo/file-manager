@@ -48,7 +48,7 @@
             </v-container>
 
             <v-container fluid class="context-area">
-                <v-overlay :value="loading" absolute>
+                <v-overlay :value="loading" absolute z-index="100">
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
                 <v-row class="section-r">
