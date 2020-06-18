@@ -221,7 +221,6 @@ function install(_Vue) {
     }
     return
   }
-  _Vue.component('confirm-dialog', ConfirmDialog)
   _Vue.component('detail-card', DetailCard)
   _Vue.component('file-comments', FileComments)
   _Vue.component('file-breadcrumb', FileBreadcrumb)
