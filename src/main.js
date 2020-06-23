@@ -62,8 +62,8 @@ function createDialogConfirm(options) {
 
 Vue.prototype.$confirm = function (message, options = {}) {
   options.message = message
-  options.buttonTrueText = options.buttonTrueText ? options.buttonTrueText : Vue.prototype.$trans('yes')
-  options.buttonFalseText = options.buttonFalseText ? options.buttonFalseText : Vue.prototype.$trans('no')
+  options.buttonTrueText = options.buttonTrueText !== undefined ? options.buttonTrueText : Vue.prototype.$trans('yes')
+  options.buttonFalseText = options.buttonFalseText !== undefined ? options.buttonFalseText : Vue.prototype.$trans('no')
   return createDialogConfirm(options)
 }
 

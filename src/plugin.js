@@ -121,8 +121,8 @@ class Manager {
 
     Vue.prototype.$confirm = function (message, options = {}) {
       options.message = message
-      options.buttonTrueText = options.buttonTrueText ? options.buttonTrueText : Vue.prototype.$trans('yes')
-      options.buttonFalseText = options.buttonFalseText ? options.buttonFalseText : Vue.prototype.$trans('no')
+      options.buttonTrueText = options.buttonTrueText !== undefined ? options.buttonTrueText : Vue.prototype.$trans('yes')
+      options.buttonFalseText = options.buttonFalseText !== undefined ? options.buttonFalseText : Vue.prototype.$trans('no')
       const container = document.querySelector('[data-app=true]') || document.body
       return new Promise(resolve => {
         const cmp = new confirmDialog(Object.assign({}, {
