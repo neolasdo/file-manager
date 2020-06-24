@@ -96,10 +96,11 @@
         return this.$fileStore.state.selectedFiles
       },
       canRequestSign() {
-        let nonOfficial = this.selectedItems.find(item => {
-          return item.is_official !== undefined && !item.is_official
+        let invalid = this.selectedItems.find(item => {
+          return (item.is_official !== undefined && !item.is_official)
+          || (item.signable !== undefined && !item.signable)
         })
-        return this.$permissions.requestSign && nonOfficial === undefined
+        return this.$permissions.requestSign && invalid === undefined
       }
     },
     methods: {

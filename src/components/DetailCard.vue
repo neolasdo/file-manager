@@ -182,10 +182,11 @@
         return this.$fileStore.state.current
       },
       canRequestSign() {
-        let nonOfficial = this.selectedFiles.find(item => {
-          return item.is_official !== undefined && !item.is_official
+        let invalid = this.selectedFiles.find(item => {
+          return (item.is_official !== undefined && !item.is_official)
+            || (item.signable !== undefined && !item.signable)
         })
-        return this.$permissions.requestSign && nonOfficial === undefined
+        return this.$permissions.requestSign && invalid === undefined
       },
       title() {
         if (this.selectedFiles.length === 1) {
