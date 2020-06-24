@@ -74,4 +74,8 @@ export default {
   re_upload: '失敗したファイルを再アップロード',
   error_file_size: '各ファイルの最大サイズは:size です',
   error_file_mime: 'ファイル形式が正しくありません。',
+  approval_request_pending: '社労士確認待ち',
+  sign_request_pending: '従業員署名待ち',
+  sign_request_signed: '署名済み',
+  sign_request_reject: '却下済み',
 }

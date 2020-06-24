@@ -15,9 +15,8 @@
                                         @contextmenu.prevent.stop="showContextMenu(item, $event)">
                                     <v-overlay absolute color="#969696"
                                                :value="item.is_official !== undefined && !item.is_official"></v-overlay>
-
-                                    <v-chip small label class="status-label" v-if="item.label" style="border-radius: 0 !important;"
-                                            :color="item.labelColor ? item.labelColor : 'primary'" text-color="white">{{item.label}}
+                                    <v-chip small label class="status-label" v-if="getLabel(item)" style="border-radius: 0 !important;"
+                                            :color="getLabelColor(item)" text-color="white">{{getLabel(item)}}
                                     </v-chip>
                                     <v-card-text>
                                         <v-img :src="fileThumbnail(item)" alt=""></v-img>
@@ -60,6 +59,23 @@
       }
     },
     methods: {
+      getLabel(item) {
+        if (item.count_pending_approval_request > 0) {
+          return this.$trans('approval_request_pending')
+        }
+        if (item.count_pending_sign_request > 0) {
+          return this.$trans('sign_request_pending')
+        }
+        if (item.count_signed_sign_request > 0) {
+          return this.$trans('sign_request_signed')
+        }
+      },
+      getLabelColor(item) {
+        if (item.count_signed_sign_request > 0) {
+          return 'success'
+        }
+        return 'primary'
+      },
       resetSelectedFiles() {
         this.$fileStore.dispatch('resetSelectedFiles')
       },

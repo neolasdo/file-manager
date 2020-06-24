@@ -25,8 +25,9 @@ let all = {
               mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
               size: 125133,
               created_at: '2019-01-01',
-              label: 'Requesting',
-              labelColor: 'primary'
+              count_pending_approval_request: 1,
+              count_pending_sign_request: 0,
+              count_signed_sign_request: 0,
             },
             {
               name: 'File 6',

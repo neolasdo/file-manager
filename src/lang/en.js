@@ -74,4 +74,8 @@ export default {
   re_upload: 'Re-upload failed files',
   error_file_size: 'The maximum size of each file is :size',
   error_file_mime: 'The file format is incorrect',
+  approval_request_pending: 'Waiting for approval',
+  sign_request_pending: 'Waiting for Sign',
+  sign_request_signed: 'Signed',
+  sign_request_reject: 'Sign request reject',
 }

@@ -98,7 +98,7 @@
       canRequestSign() {
         let invalid = this.selectedItems.find(item => {
           return (item.is_official !== undefined && !item.is_official)
-          || (item.signable !== undefined && !item.signable)
+          || (item.count_signed_sign_request + item.count_pending_sign_request > 0)
         })
         return this.$permissions.requestSign && invalid === undefined
       }
