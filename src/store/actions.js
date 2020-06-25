@@ -240,7 +240,7 @@ export default {
     commit('UPDATE_SORT', payload)
     commit('UPDATE_LIST', payload)
   },
-  async requestSign({commit}, payload) {
+  async requestSign({commit, dispatch}, payload) {
     if (payload.length) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('request_sign')
@@ -251,6 +251,7 @@ export default {
       }
       let response = executeAxios(this.$axios, endpoint, data)
       await response.then(res => {
+        dispatch('reload')
         getMessage(res,this.$snackbar)
       }).catch(error => {
         getErrorMessage(error,this.$snackbar, this.$trans)
