@@ -38,7 +38,7 @@
         </v-card-text>
         <v-card-actions v-if="canAddComment">
             <v-text-field v-model="newMessage" label="コメントを入力" type="text" no-details hide-details
-                          append-outer-icon="mdi-send" class="ma-0 pa-0" outlined :disabled="newMessage.trim() === ''"
+                          append-outer-icon="mdi-send" class="ma-0 pa-0" outlined
                           @keyup.enter="addComment" @click:append-outer="addComment"/>
         </v-card-actions>
     </div>
@@ -75,9 +75,11 @@
         }
       },
       addComment() {
-        this.$emit('addComment', this.newMessage.trim())
-        this.newMessage = ''
-        this.loadingMore = false
+        if (this.newMessage.trim() !== '') {
+          this.$emit('addComment', this.newMessage.trim())
+          this.newMessage = ''
+          this.loadingMore = false
+        }
       },
       scrollToEnd() {
         if (this.$refs.containerMessageDisplay) {
