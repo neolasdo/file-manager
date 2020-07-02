@@ -115,9 +115,7 @@ Vue.prototype.$axios = fileStore.$axios;
 Vue.prototype.$permissions = optionsDefaults.permissions;
 Vue.prototype.$sortConfig = optionsDefaults.sort;
 Vue.prototype.$detailConfig = optionsDefaults.detailConfig;
-Vue.prototype.$auth = {
-  id: 1
-}
+
 
 new Vue({
   vuetify,

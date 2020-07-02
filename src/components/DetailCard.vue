@@ -84,8 +84,8 @@
                             </v-row>
                         </v-card-text>
                     </v-tab-item>
-                    <v-tab-item value="comments" v-if="$auth && $auth.id && selectedFiles.length === 1 && $permissions.comment" class="tab-item">
-                        <FileComments :user-id="$auth.id" :comments="comments" @addComment="addComment($event)" :canAddComment="$permissions.addComment" @loadMore="loadMoreComment"/>
+                    <v-tab-item value="comments" v-if="selectedFiles.length === 1 && $permissions.comment" class="tab-item">
+                        <FileComments :comments="comments" @addComment="addComment($event)" :canAddComment="$permissions.addComment" @loadMore="loadMoreComment"/>
                     </v-tab-item>
                     <v-tab-item value="clipboard" v-if="clipboard.files.length + clipboard.folders.length" class="tab-item">
                         <v-card-text>

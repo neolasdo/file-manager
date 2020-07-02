@@ -53,10 +53,6 @@
           return []
         }
       },
-      userId: {
-        type: Number,
-        required: true
-      },
       canAddComment: {
         type: Boolean,
         default() {

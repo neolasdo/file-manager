@@ -181,10 +181,6 @@ class Manager {
     return options
   }
 
-  setAuth(auth) {
-    Vue.prototype.$auth = auth
-  }
-
   getStore() {
     return this.store
   }
