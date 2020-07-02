@@ -17,10 +17,12 @@ module.exports = function(app) {
   app.route('/file/:id/comments')
     .get(function (req, res) {
       let data = [];
-      for (let i=0; i<=100; i++) {
+      let page = parseInt(req.query.page ? req.query.page : 1)
+      for (let i=0; i<=10; i++) {
         let comment = {
-          comment: 'test comment 1212121212',
+          message: 'test comment 1212121212',
           created_at: '2020/3/4',
+          isMy: i%2===1,
           author: {
             id: i%2===1? 1: 2,
             email: 'test@gmail.com'
@@ -30,7 +32,18 @@ module.exports = function(app) {
       }
       setTimeout(function () {
         res.json({
-          data: data,
+          data: {
+            data: data,
+            pagination: {
+              base: "http://localhost/api/v1/file-manager/file/82/comments?page=1",
+              current: page,
+              last: 10,
+              next: null,
+              prev: null,
+              size: 10,
+              total: 2,
+            }
+          },
           message: 'search success'
         })
       }, 1000)

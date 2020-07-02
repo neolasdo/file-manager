@@ -198,11 +198,12 @@ export default {
     commit('UNLOADING');
   },
   async getComments({state, commit}) {
+    let data = {}
     let fileSelected = state.selectedFiles[0]
     commit('RESET_COMMENT_LIST')
     commit('LOADING')
     let endpoint = this.$getEndpoint('comments', [fileSelected.id])
-    let response = executeAxios(this.$axios, endpoint)
+    let response = executeAxios(this.$axios, endpoint, data)
     await response.then(res => {
       getMessage(res,this.$snackbar)
       commit('UNLOADING')
@@ -212,9 +213,28 @@ export default {
       getErrorMessage(error,this.$snackbar, this.$trans)
     })
   },
+  async loadMoreComments({state, commit}) {
+    let commentPaginate = state.commentPaginate
+    let fileSelected = state.selectedFiles[0]
+    if (commentPaginate.current < commentPaginate.last) {
+      let endpoint = this.$getEndpoint('comments', [fileSelected.id])
+      let response = executeAxios(this.$axios, endpoint, {
+        page:  commentPaginate.current ? commentPaginate.current + 1: 1
+      })
+      commit('LOADING')
+      await response.then(res => {
+        getMessage(res,this.$snackbar)
+        commit('UNLOADING')
+        commit('ADD_COMMENTS', res.data.data)
+      }).catch(error => {
+        commit('UNLOADING')
+        getErrorMessage(error,this.$snackbar, this.$trans)
+      })
+    }
+  },
   async addComment({state, commit, dispatch}, payload) {
     let fileSelected = state.selectedFiles[0]
-    if (fileSelected && !fileSelected.commentsLoaded) {
+    if (fileSelected) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('addComment', [fileSelected.id])
       let response = executeAxios(this.$axios, endpoint, {message: payload})

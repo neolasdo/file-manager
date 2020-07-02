@@ -1,15 +1,15 @@
 <template>
     <div style="height: 100% !important;">
         <v-card-text class="comment-view">
-            <div ref="containerMessageDisplay" class="container-message-display">
-                <div v-for="(item, index) in comments" :key="index" class="message-container">
-                    <template v-if="isMy(item)">
+            <div ref="containerMessageDisplay" class="container-message-display" id="scrollDiv">
+                <div v-for="(item, index) in comments" :key="index" class="message-container" v-scroll:#scrollDiv="onScroll">
+                    <template v-if="item.isMy">
                         <div class="myself-message-body">
                             <div class="message-content">
                                 <template>
                                     <div class="message-text" :style="{background: '#fff', color: '#525252'}">
                                         <p class="message-username">{{item.author.email}}</p>
-                                        <p>{{item.comment}}</p>
+                                        <p>{{item.message}}</p>
                                     </div>
                                 </template>
                                 <div class="message-timestamp" :style="{'justify-content': 'flex-end'}">
@@ -24,7 +24,7 @@
                                 <template>
                                     <div class="message-text" :style="{background: '#1976d2', color: '#fff'}">
                                         <p class="message-username">{{item.author.email}}</p>
-                                        <p>{{item.comment}}</p>
+                                        <p>{{item.message}}</p>
                                     </div>
                                 </template>
                                 <div class="message-timestamp" :style="{'justify-content': 'baseline'}">
@@ -38,7 +38,7 @@
         </v-card-text>
         <v-card-actions v-if="canAddComment">
             <v-text-field v-model="newMessage" label="コメントを入力" type="text" no-details hide-details
-                          append-outer-icon="mdi-send" class="ma-0 pa-0" outlined
+                          append-outer-icon="mdi-send" class="ma-0 pa-0" outlined :disabled="newMessage.trim() === ''"
                           @keyup.enter="addComment" @click:append-outer="addComment"/>
         </v-card-actions>
     </div>
@@ -66,21 +66,28 @@
     },
     data() {
       return {
-        newMessage: ''
+        newMessage: '',
+        loadingMore: false,
+        scrollHeight: 0
       }
     },
     methods: {
-      isMy(comment) {
-        return comment.author && comment.author.id === this.userId
+      onScroll(e) {
+        if (e.target.scrollTop === 0) {
+          this.loadingMore = true
+          this.$emit('loadMore')
+        }
       },
       addComment() {
-        this.$emit('addComment', this.newMessage)
+        this.$emit('addComment', this.newMessage.trim())
         this.newMessage = ''
+        this.loadingMore = false
       },
       scrollToEnd() {
         if (this.$refs.containerMessageDisplay) {
           let scrollDiv = this.$refs.containerMessageDisplay;
-          scrollDiv.scrollTop = scrollDiv.scrollHeight;
+          scrollDiv.scrollTop = scrollDiv.scrollHeight - this.scrollHeight;
+          this.scrollHeight = scrollDiv.scrollHeight
         }
       }
     },

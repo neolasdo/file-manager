@@ -21,6 +21,8 @@ export default {
     folders: []
   },
   comments: [],
+  commentPaginate: {},
+  itemComment: undefined,
   showUploadModal: false,
   showFormModal: false,
   formCreate: false,

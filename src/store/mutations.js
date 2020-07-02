@@ -135,9 +135,18 @@ export default {
     state.filter = {}
   },
   LOAD_COMMENT(state, payload) {
-    state.comments = payload
+    state.comments = payload.data
+    state.itemComment = state.selectedFiles[0] ? state.selectedFiles[0].id: undefined
+    state.commentPaginate = payload.pagination
+  },
+  ADD_COMMENTS(state, payload) {
+    state.comments = [...(payload.data), ...(state.comments)]
+    state.itemComment = state.selectedFiles[0] ? state.selectedFiles[0].id: undefined
+    state.commentPaginate = payload.pagination
   },
   RESET_COMMENT_LIST(state) {
     state.comments = []
+    state.itemComment = undefined
+    state.commentPaginate = {}
   }
 }

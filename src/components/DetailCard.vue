@@ -10,7 +10,7 @@
             </v-toolbar>
 
             <v-tabs v-model="tab" style="height: calc(100% - 64px);">
-                <v-tab :key="'detail'" @click="showComments = false">
+                <v-tab :href="'#detail'" @click="showComments = false">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-information-outline</v-icon>
@@ -18,7 +18,7 @@
                         <span>{{ $trans('clipboard') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :key="'comments'" v-if="selectedFiles.length === 1 && $permissions.comment" @click="getComments()">
+                <v-tab :href="'#comments'" v-if="selectedFiles.length === 1 && $permissions.comment" @click="getComments()">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-comment-multiple-outline</v-icon>
@@ -26,7 +26,7 @@
                         <span>{{ $trans('comments') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length"
+                <v-tab :href="'#clipboard'" v-if="clipboard.files.length + clipboard.folders.length"
                        @click="showComments = false">
                     <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
@@ -36,7 +36,7 @@
                     </v-tooltip>
                 </v-tab>
                 <v-tabs-items v-model="tab" class="tab-content">
-                    <v-tab-item :key="'detail'" class="tab-item">
+                    <v-tab-item value="detail" class="tab-item">
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
@@ -84,10 +84,10 @@
                             </v-row>
                         </v-card-text>
                     </v-tab-item>
-                    <v-tab-item :key="'comments'" v-if="$auth && $auth.id && selectedFiles.length === 1 && $permissions.comment" class="tab-item">
-                        <FileComments :user-id="$auth.id" :comments="comments" @addComment="addComment($event)" :canAddComment="$permissions.addComment"/>
+                    <v-tab-item value="comments" v-if="$auth && $auth.id && selectedFiles.length === 1 && $permissions.comment" class="tab-item">
+                        <FileComments :user-id="$auth.id" :comments="comments" @addComment="addComment($event)" :canAddComment="$permissions.addComment" @loadMore="loadMoreComment"/>
                     </v-tab-item>
-                    <v-tab-item :key="'clipboard'" v-if="clipboard.files.length + clipboard.folders.length" class="tab-item">
+                    <v-tab-item value="clipboard" v-if="clipboard.files.length + clipboard.folders.length" class="tab-item">
                         <v-card-text>
                             <v-row>
                                 <v-col cols="12">
@@ -173,6 +173,11 @@
         return this.$fileStore.state.clipboard
       },
       selectedFiles() {
+        let files = this.$fileStore.state.selectedFiles
+        let itemComment = this.$fileStore.state.itemComment
+        if (files.length === 1 && files[0].id !== itemComment && this.tab === 'comments') {
+          this.$fileStore.dispatch('getComments')
+        }
         return this.$fileStore.state.selectedFiles
       },
       selectedFolder() {
@@ -206,6 +211,9 @@
       formatSize(size) {
         return formatSize(size);
       },
+      loadMoreComment() {
+        this.$fileStore.dispatch('loadMoreComments')
+      },
       close() {
         this.$emit('close')
       },
@@ -226,7 +234,9 @@
         this.getComments()
       },
       getComments() {
-        if (this.selectedFiles.length === 1) {
+        let files = this.selectedFiles
+        let itemComment = this.$fileStore.state.itemComment
+        if (files.length === 1 && files[0].id !== itemComment && this.tab === 'comments') {
           this.$fileStore.dispatch('getComments')
         }
       },
