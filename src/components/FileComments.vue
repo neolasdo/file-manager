@@ -12,7 +12,7 @@
                                         <p>{{item.message}}</p>
                                     </div>
                                 </template>
-                                <div class="message-timestamp" :style="{'justify-content': 'flex-end'}">
+                                <div class="message-timestamp" :style="{'justify-content': 'baseline'}">
                                     {{ item.created_at }}
                                 </div>
                             </div>
@@ -27,7 +27,7 @@
                                         <p>{{item.message}}</p>
                                     </div>
                                 </template>
-                                <div class="message-timestamp" :style="{'justify-content': 'baseline'}">
+                                <div class="message-timestamp" :style="{'justify-content': 'flex-end'}">
                                     {{ item.created_at }}
                                 </div>
                             </div>
@@ -109,7 +109,6 @@
         -ms-user-select: none;
         user-select: none;
     }
-
     .container-message-display {
         padding: 20px 0;
         background-color: #f2f2f2;
@@ -124,22 +123,20 @@
         margin: 5px 0 5px 0;
         font-size: 14px;
     }
-
-    .container-message-display .my-message > .message-timestamp {
+    .container-message-display .other-message > .message-timestamp {
         text-align: right;
     }
-
-    .container-message-display .other-message {
+    .container-message-display .my-message {
         justify-content: flex-start;
         padding-left: 15px;
         align-items: flex-start;
     }
     .container-message-display .other-message > .message-text {
-        color: #fff;
-        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
     }
     .container-message-display .my-message > .message-text {
-        border-bottom-right-radius: 0;
+        color: #fff;
+        border-bottom-left-radius: 0;
     }
     .container-message-display .message-container {
         display: flex;
@@ -147,58 +144,49 @@
         flex-direction: column;
     }
     .container-message-display .message-username {
-        font-size: 12x !important;
+        font-size: 0.85rem !important;
         font-weight: bold;
     }
-
     .container-message-display::-webkit-scrollbar {
         width: 10px;
     }
-
     .container-message-display::-webkit-scrollbar-track {
         background: #f1f1f1;
     }
-
     .container-message-display::-webkit-scrollbar-thumb {
         background: #888;
     }
-
     .container-message-display::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
-
     .myself-message-body {
+        display: flex;
+        align-items: flex-end;
+        padding-left: 10px;
+    }
+    .other-message-body {
         display: flex;
         align-items: flex-end;
         padding-right: 10px;
         justify-content: flex-end;
     }
-
-    .other-message-body {
+    .message-content{
         display: flex;
-        align-items: flex-end;
-        padding-left: 10px;
+        justify-content: flex-start;
+        flex-direction: column;
+        width: 100%;
     }
-
     .other-message-body .message-content{
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-        flex-direction: column;
-    }
-
-    .myself-message-body .message-content{
-        display: flex;
         align-items: flex-end;
-        justify-content: flex-start;
-        flex-direction: column;
     }
-
+    .myself-message-body .message-content{
+        align-items: flex-start;
+    }
     .message-timestamp {
         padding: 2px 7px;
         border-radius: 15px;
         margin: 0;
-        max-width: 50%;
+        max-width: 75%;
         overflow-wrap: break-word;
         text-align: left;
         font-size: 10px;
@@ -207,25 +195,22 @@
         display: flex;
         align-items: center;
     }
-
     .message-text {
         background: #fff;
         padding: 6px 10px;
         line-height: 14px;
         border-radius: 15px;
         margin: 5px 0 5px 0;
-        max-width: 100%;
+        max-width: 80%;
         overflow-wrap: break-word;
         text-align: left;
         white-space: pre-wrap;
         word-break: break-word;
     }
-
     .myself-message-body .message-text {
-        border-bottom-right-radius: 0px;
-    }
-
-    .other-message-body .message-text {
         border-bottom-left-radius: 0px;
+    }
+    .other-message-body .message-text {
+        border-bottom-right-radius: 0px;
     }
 </style>

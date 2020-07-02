@@ -21,7 +21,7 @@ module.exports = function(app) {
       for (let i=0; i<=10; i++) {
         let comment = {
           message: 'test comment 1212121212',
-          created_at: '2020/3/4',
+          created_at: '2020/3/4 03:02',
           isMy: i%2===1,
           author: {
             id: i%2===1? 1: 2,
