@@ -85,7 +85,8 @@
                         </v-card-text>
                     </v-tab-item>
                     <v-tab-item value="comments" v-if="selectedFiles.length === 1 && $permissions.comment" class="tab-item">
-                        <FileComments :comments="comments" @addComment="addComment($event)" :canAddComment="$permissions.addComment" @loadMore="loadMoreComment"/>
+                        <FileComments v-if="showComments" :comments="comments" @addComment="addComment($event)"
+                                      :canAddComment="$permissions.addComment" @loadMore="loadMoreComment"/>
                     </v-tab-item>
                     <v-tab-item value="clipboard" v-if="clipboard.files.length + clipboard.folders.length" class="tab-item">
                         <v-card-text>
@@ -176,6 +177,7 @@
         let files = this.$fileStore.state.selectedFiles
         let itemComment = this.$fileStore.state.itemComment
         if (files.length === 1 && files[0].id !== itemComment && this.tab === 'comments') {
+          this.reloadCommentComponent()
           this.$fileStore.dispatch('getComments')
         }
         return this.$fileStore.state.selectedFiles
@@ -211,6 +213,12 @@
       formatSize(size) {
         return formatSize(size);
       },
+      reloadCommentComponent() {
+        this.showComments = false;
+        this.$nextTick(() => {
+          this.showComments = true
+        })
+      },
       loadMoreComment() {
         this.$fileStore.dispatch('loadMoreComments')
       },
@@ -234,6 +242,7 @@
         this.getComments()
       },
       getComments() {
+        this.showComments = true
         let files = this.selectedFiles
         let itemComment = this.$fileStore.state.itemComment
         if (files.length === 1 && files[0].id !== itemComment && this.tab === 'comments') {

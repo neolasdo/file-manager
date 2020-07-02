@@ -20,7 +20,7 @@ module.exports = function(app) {
       let page = parseInt(req.query.page ? req.query.page : 1)
       for (let i=0; i<=10; i++) {
         let comment = {
-          message: 'test comment 1212121212',
+          message: 'test comment 00000'+(10 * (page-1) +i),
           created_at: '2020/3/4 03:02',
           isMy: i%2===1,
           author: {

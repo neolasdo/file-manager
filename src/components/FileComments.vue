@@ -2,13 +2,15 @@
     <div style="height: 100% !important;">
         <v-card-text class="comment-view">
             <div ref="containerMessageDisplay" class="container-message-display" id="scrollDiv">
-                <div v-for="(item, index) in comments" :key="index" class="message-container" v-scroll:#scrollDiv="onScroll">
+                <div v-for="(item, index) in comments" :key="index" class="message-container"
+                     v-scroll:#scrollDiv="onScroll">
                     <template v-if="item.isMy">
                         <div class="myself-message-body">
                             <div class="message-content">
                                 <template>
                                     <div class="message-text" :style="{background: '#fff', color: '#525252'}">
-                                        <p class="message-username">{{item.author.name ? item.author.name : item.author.email}}</p>
+                                        <p class="message-username">{{item.author.name ? item.author.name :
+                                            item.author.email}}</p>
                                         <p>{{item.message}}</p>
                                     </div>
                                 </template>
@@ -23,7 +25,8 @@
                             <div class="message-content">
                                 <template>
                                     <div class="message-text" :style="{background: '#1976d2', color: '#fff'}">
-                                        <p class="message-username">{{item.author.name ? item.author.name : item.author.email}}</p>
+                                        <p class="message-username">{{item.author.name ? item.author.name :
+                                            item.author.email}}</p>
                                         <p>{{item.message}}</p>
                                     </div>
                                 </template>
@@ -63,22 +66,24 @@
     data() {
       return {
         newMessage: '',
-        loadingMore: false,
+        scrolled: false,
+        triggerScroll: true,
         scrollHeight: 0
       }
     },
     methods: {
       onScroll(e) {
         if (e.target.scrollTop === 0) {
-          this.loadingMore = true
           this.$emit('loadMore')
+          this.scrolled = false
         }
       },
       addComment() {
         if (this.newMessage.trim() !== '') {
           this.$emit('addComment', this.newMessage.trim())
           this.newMessage = ''
-          this.loadingMore = false
+          this.scrollHeight = 0
+          this.scrollToEnd()
         }
       },
       scrollToEnd() {
@@ -86,19 +91,17 @@
           let scrollDiv = this.$refs.containerMessageDisplay;
           scrollDiv.scrollTop = scrollDiv.scrollHeight - this.scrollHeight;
           this.scrollHeight = scrollDiv.scrollHeight
+          this.scrolled = true
         }
-      }
+      },
     },
     updated () {
       this.$nextTick(function () {
-        this.scrollToEnd()
+        if (!this.scrolled) {
+          this.scrollToEnd()
+        }
       })
     },
-    beforeMount() {
-      this.$nextTick(function () {
-        this.scrollToEnd()
-      })
-    }
   }
 </script>
 

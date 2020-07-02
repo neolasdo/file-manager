@@ -13,6 +13,7 @@ export default {
       let selectedFiles = state.selectedFiles
       let selectedFolder = state.selectedFolder
       commit('UPDATE_LIST', res.data.data)
+      commit('RESET_COMMENT_LIST')
       commit('UPDATE_CURRENT', res.data.data)
       commit('UPDATE_BREADCRUMB', res.data.data.breadcrumb ? res.data.data: item);
       commit('RESET_SEARCH');
@@ -39,6 +40,7 @@ export default {
       getErrorMessage(error,this.$snackbar, this.$trans)
       commit('UPDATE_BREADCRUMB', item);
       commit('RESET_SEARCH');
+      commit('RESET_COMMENT_LIST');
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
       commit('UNLOADING');
@@ -55,17 +57,21 @@ export default {
   },
   selectFolder({commit}, payload) {
     commit('RESET_SELECTED_FILES');
+    commit('RESET_COMMENT_LIST');
     commit('SELECT_FOLDER', payload);
   },
   resetSelectedFiles({commit}) {
     commit('RESET_SELECTED_FILES');
+    commit('RESET_COMMENT_LIST');
   },
   removeFileSelected({commit}, payload) {
     commit('REMOVE_FILE_SELECTED', payload);
+    commit('RESET_COMMENT_LIST', payload);
     commit('RESET_SELECTED_FOLDER');
   },
   addFileSelected({commit}, payload) {
     commit('ADD_FILE_SELECTED', payload);
+    commit('RESET_COMMENT_LIST', payload);
     commit('RESET_SELECTED_FOLDER');
   },
   addFilesToClipboard({commit}) {
@@ -81,6 +87,7 @@ export default {
     commit('REMOVE_FOLDER_IN_CLIPBOARD', payload);
   },
   async moveFiles({state, dispatch, commit}, payload) {
+    commit('RESET_COMMENT_LIST');
     let dest = state.current.id
     let clipboard = state.clipboard
     let files = clipboard.files
@@ -118,6 +125,7 @@ export default {
     }
   },
   async deleteFolder({dispatch, state, commit}, payload) {
+    commit('RESET_COMMENT_LIST');
     commit('LOADING')
     let endpoint = this.$getEndpoint('deleteFolder', [payload])
     let response = executeAxios(this.$axios, endpoint, payload)
@@ -136,6 +144,7 @@ export default {
     commit('UNLOADING');
   },
   async deleteSelected({dispatch, state, commit}) {
+    commit('RESET_COMMENT_LIST');
     commit('LOADING')
     let endpoint =  this.$getEndpoint('delete')
     let response = executeAxios(this.$axios, endpoint, {
@@ -178,6 +187,7 @@ export default {
   async search({commit}, payload) {
     commit('LOADING')
     commit('SEARCH', payload)
+    commit('RESET_COMMENT_LIST');
     let endpoint = this.$getEndpoint('search')
     let data = {
       ...{keyword: payload.keyword},
