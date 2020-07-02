@@ -135,12 +135,12 @@ export default {
     state.filter = {}
   },
   LOAD_COMMENT(state, payload) {
-    state.comments = payload.data
+    state.comments = Array.isArray(payload.data) ? payload.data.reverse() : []
     state.itemComment = state.selectedFiles[0] ? state.selectedFiles[0].id: undefined
     state.commentPaginate = payload.pagination
   },
   ADD_COMMENTS(state, payload) {
-    state.comments = [...(payload.data), ...(state.comments)]
+    state.comments = [...(Array.isArray(payload.data) ? payload.data.reverse() : []), ...(state.comments)]
     state.itemComment = state.selectedFiles[0] ? state.selectedFiles[0].id: undefined
     state.commentPaginate = payload.pagination
   },
