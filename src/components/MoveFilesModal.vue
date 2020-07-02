@@ -60,18 +60,18 @@
       },
       async getFolders(folderId) {
         this.loading = true
-        let endpoint = this.$fileStore.$getEndpoint('get')
+        let endpoint = this.$store.$getEndpoint('get')
         let data = {}
         if (folderId) {
           data.folder_id = folderId
         }
         let response
         if (endpoint.method.toUpperCase() === 'GET') {
-          response = this.$fileStore.$axios.get(endpoint.route, {
+          response = this.$store.$axios.get(endpoint.route, {
             params: data
           })
         } else {
-          response = this.$fileStore.$axios({
+          response = this.$store.$axios({
             method: endpoint.method,
             url: endpoint.route,
             data: data
@@ -90,7 +90,7 @@
           if (error.data && error.data.message) {
             errMess = error.data.message
           }
-          this.$fileStore.$snackbar(errMess, {
+          this.$store.$snackbar(errMess, {
             color: 'error'
           })
         })
@@ -98,10 +98,10 @@
       showDialog() {
         this.dialog = true
         this.getFolders();
-        return this.$fileStore.state.showUploadModal
+        return this.$store.state.fileManager.showUploadModal
       },
       moveFiles() {
-        this.$fileStore.dispatch('moveFiles', {
+        this.$store.dispatch('fileManager/moveFiles', {
           id: this.folders[this.dest] ? this.folders[this.dest].id : this.current.id,
           files: this.selectedFiles,
           folder: this.selectedFolder
@@ -111,13 +111,13 @@
     },
     computed: {
       selectedFiles() {
-        return this.$fileStore.state.selectedFiles
+        return this.$store.state.fileManager.selectedFiles
       },
       selectedFolder() {
-        return this.$fileStore.state.selectedFolder
+        return this.$store.state.fileManager.selectedFolder
       },
       currentFolder() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
     },
   }

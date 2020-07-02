@@ -23,12 +23,12 @@
     },
     computed: {
       isSearching() {
-        return this.$fileStore.state.isSearching
+        return this.$store.state.fileManager.isSearching
       },
     },
     methods: {
       getByFolder(payload) {
-        this.$fileStore.dispatch('getByFolder', payload)
+        this.$store.dispatch('fileManager/getByFolder', payload)
       },
       openFolder(item) {
         this.getByFolder(item)

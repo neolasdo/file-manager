@@ -93,7 +93,7 @@
     },
     computed: {
       selectedItems() {
-        return this.$fileStore.state.selectedFiles
+        return this.$store.state.fileManager.selectedFiles
       },
       canRequestSign() {
         let invalid = this.selectedItems.find(item => {
@@ -105,13 +105,13 @@
     },
     methods: {
       deleteSelected() {
-        this.$fileStore.dispatch('deleteSelected')
+        this.$store.dispatch('fileManager/deleteSelected')
       },
       openFormModal(payload) {
-        this.$fileStore.dispatch('openFormModal', payload)
+        this.$store.dispatch('fileManager/openFormModal', payload)
       },
       addClipboard() {
-        this.$fileStore.dispatch('addFilesToClipboard')
+        this.$store.dispatch('fileManager/addFilesToClipboard')
       },
       showContextMenu(e) {
         this.showMenu = false;
@@ -122,10 +122,10 @@
         });
       },
       download() {
-        let endpoint = this.$fileStore.$getEndpoint('download')
-        this.$fileStore.dispatch('loading')
+        let endpoint = this.$store.$getEndpoint('download')
+        this.$store.dispatch('fileManager/loading')
 
-        this.$fileStore.$axios({
+        this.$store.$axios({
           method: endpoint.method,
           url: endpoint.route,
           data: {
@@ -134,12 +134,12 @@
             })
           }
         }).then(res => {
-          this.$fileStore.dispatch('unloading')
+          this.$store.dispatch('fileManager/unloading')
           if (res.data && res.data.data) {
-            this.$fileStore.dispatch('loading')
-            this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
+            this.$store.dispatch('fileManager/loading')
+            this.$store.$axios.get(res.data.data.link, {responseType: 'blob'})
               .then(response => {
-                this.$fileStore.dispatch('unloading')
+                this.$store.dispatch('fileManager/unloading')
                 const blob = new Blob([response.data])
                 const link = document.createElement('a')
                 link.href = URL.createObjectURL(blob)
@@ -156,11 +156,11 @@
                     color: 'error'
                   })
                 }
-                this.$fileStore.dispatch('unloading')
+                this.$store.dispatch('fileManager/unloading')
               })
           }
         }).catch(errors => {
-          this.$fileStore.dispatch('unloading')
+          this.$store.dispatch('fileManager/unloading')
           if (errors.response && errors.response.data && errors.response.data.message) {
             this.$snackbar(errors.response.data.message, {
               color: 'error'

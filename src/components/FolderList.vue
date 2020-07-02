@@ -47,18 +47,18 @@
     },
     computed: {
       folders() {
-        return this.$fileStore.state.folders
+        return this.$store.state.fileManager.folders
       },
       selectedFolder() {
-        return this.$fileStore.state.selectedFolder
+        return this.$store.state.fileManager.selectedFolder
       },
     },
     methods: {
       getByFolder(payload) {
-        this.$fileStore.dispatch('getByFolder', payload)
+        this.$store.dispatch('fileManager/getByFolder', payload)
       },
       selectFolder(payload) {
-        this.$fileStore.dispatch('selectFolder', payload)
+        this.$store.dispatch('fileManager/selectFolder', payload)
       },
       openFolder(item) {
         this.getByFolder(item)

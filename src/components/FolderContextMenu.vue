@@ -74,24 +74,24 @@
     },
     computed: {
       current() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
     },
     methods: {
       getByFolder(payload) {
-        this.$fileStore.dispatch('getByFolder', payload)
+        this.$store.dispatch('fileManager/getByFolder', payload)
       },
       deleteFolder(payload) {
         this.$confirm(this.$trans('confirm_delete_folder'), {
           buttonTrueColor: 'error'
         }).then(res => {
           if (res) {
-            this.$fileStore.dispatch('deleteFolder', payload)
+            this.$store.dispatch('fileManager/deleteFolder', payload)
           }
         })
       },
       openFormModal(payload) {
-        this.$fileStore.dispatch('openFormModal', payload)
+        this.$store.dispatch('fileManager/openFormModal', payload)
       },
       showContextMenu(e) {
         this.showMenu = false;
@@ -102,7 +102,7 @@
         });
       },
       addClipboard() {
-        this.$fileStore.dispatch('addFolderToClipboard')
+        this.$store.dispatch('fileManager/addFolderToClipboard')
       },
       move() {
         this.$refs.moveModal.showDialog()

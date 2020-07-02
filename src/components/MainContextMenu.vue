@@ -36,13 +36,13 @@
     name: 'DocumentContextMenu',
     computed: {
       selectedItems() {
-        return this.$fileStore.state.selectedItems
+        return this.$store.state.fileManager.selectedItems
       },
       current() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
       clipboard() {
-        return this.$fileStore.state.clipboard
+        return this.$store.state.fileManager.clipboard
       },
     },
     data() {
@@ -54,23 +54,23 @@
     },
     methods: {
       createFolder(payload) {
-        this.$fileStore.dispatch('createFolder', payload)
+        this.$store.dispatch('fileManager/createFolder', payload)
       },
       resetSelectedFiles() {
-        this.$fileStore.dispatch('resetSelectedFiles')
+        this.$store.dispatch('fileManager/resetSelectedFiles')
       },
       openUploadModal() {
-        this.$fileStore.dispatch('openUploadModal')
+        this.$store.dispatch('fileManager/openUploadModal')
       },
       openFormModal(payload) {
-        this.$fileStore.dispatch('openFormModal', payload)
+        this.$store.dispatch('fileManager/openFormModal', payload)
       },
       moveFiles() {
         this.$confirm(this.$trans('confirm_move_files'), {
           buttonTrueColor: 'warning'
         }).then(res => {
           if (res) {
-            this.$fileStore.dispatch('moveFiles')
+            this.$store.dispatch('fileManager/moveFiles')
           }
         })
       },

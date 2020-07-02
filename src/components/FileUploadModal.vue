@@ -85,10 +85,10 @@
     },
     methods: {
       hideUploadModal() {
-        this.$fileStore.dispatch('hideUploadModal')
+        this.$store.dispatch('fileManager/hideUploadModal')
       },
       reloadAction() {
-        this.$fileStore.dispatch('reload')
+        this.$store.dispatch('fileManager/reload')
       },
       closeModal() {
         this.filesInfo = []
@@ -144,7 +144,7 @@
           if (this.need_approval) {
             formData.append("need_approval", true);
           }
-          this.$fileStore.$axios.post(this.$fileStore.$getEndpoint('upload').route, formData, {
+          this.$store.$axios.post(this.$store.$getEndpoint('upload').route, formData, {
             headers: {
               "Content-Type": "multipart/form-data"
             }, onUploadProgress: progressEvent => {
@@ -200,7 +200,7 @@
           formData.append("folder_id", this.current.id);
         }
 
-        return this.$fileStore.$axios.post(this.$fileStore.$getEndpoint('upload').route, formData, {
+        return this.$store.$axios.post(this.$store.$getEndpoint('upload').route, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           },
@@ -260,10 +260,10 @@
     },
     computed: {
       current() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
       showDialog() {
-        return this.$fileStore.state.showUploadModal
+        return this.$store.state.fileManager.showUploadModal
       },
     },
   }

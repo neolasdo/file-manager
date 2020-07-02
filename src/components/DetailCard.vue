@@ -170,16 +170,16 @@
     },
     computed: {
       clipboard() {
-        return this.$fileStore.state.clipboard
+        return this.$store.state.fileManager.clipboard
       },
       selectedFiles() {
-        return this.$fileStore.state.selectedFiles
+        return this.$store.state.fileManager.selectedFiles
       },
       selectedFolder() {
-        return this.$fileStore.state.selectedFolder
+        return this.$store.state.fileManager.selectedFolder
       },
       current() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
       canRequestSign() {
         let invalid = this.selectedFiles.find(item => {
@@ -199,7 +199,7 @@
         return this.current.name ? this.current.name : ''
       },
       comments() {
-        return this.$fileStore.state.comments
+        return this.$store.state.fileManager.comments
       }
     },
     methods: {
@@ -210,24 +210,24 @@
         this.$emit('close')
       },
       removeFileSelected(payload) {
-        this.$fileStore.dispatch('removeFileSelected', payload)
+        this.$store.dispatch('fileManager/removeFileSelected', payload)
       },
       removeFileInClipboard(payload) {
-        this.$fileStore.dispatch('removeFileInClipboard', payload)
+        this.$store.dispatch('fileManager/removeFileInClipboard', payload)
       },
       removeFolderInClipboard(payload) {
-        this.$fileStore.dispatch('removeFolderInClipboard', payload)
+        this.$store.dispatch('fileManager/removeFolderInClipboard', payload)
       },
       resetClipboard() {
-        this.$fileStore.dispatch('resetClipboard')
+        this.$store.dispatch('fileManager/resetClipboard')
       },
       addComment(e) {
-        this.$fileStore.dispatch('addComment', e)
+        this.$store.dispatch('fileManager/addComment', e)
         this.getComments()
       },
       getComments() {
         if (this.selectedFiles.length === 1) {
-          this.$fileStore.dispatch('getComments')
+          this.$store.dispatch('fileManager/getComments')
         }
       },
     }

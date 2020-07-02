@@ -50,24 +50,24 @@
     },
     computed: {
       selectedFiles() {
-        return this.$fileStore.state.selectedFiles
+        return this.$store.state.fileManager.selectedFiles
       },
       selectedFolder() {
-        return this.$fileStore.state.selectedFolder
+        return this.$store.state.fileManager.selectedFolder
       },
       current() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
       showFormModal() {
-        return this.$fileStore.state.showFormModal
+        return this.$store.state.fileManager.showFormModal
       },
       formCreate() {
-        return this.$fileStore.state.formCreate
+        return this.$store.state.fileManager.formCreate
       },
     },
     methods: {
       hideFormModal(payload) {
-        this.$fileStore.dispatch('hideFormModal', payload)
+        this.$store.dispatch('fileManager/hideFormModal', payload)
       },
       async createFolder() {
         let endpoint = this.$getEndpoint('createFolder')
@@ -79,11 +79,11 @@
           data.parent_id = this.current.id
         }
         if (endpoint.method.toUpperCase() === 'GET') {
-          request = this.$fileStore.$axios.get(endpoint.route, {
+          request = this.$store.$axios.get(endpoint.route, {
             params: data
           })
         } else {
-          request = this.$fileStore.$axios({
+          request = this.$store.$axios({
             method: endpoint.method,
             url: endpoint.route,
             data: data
@@ -99,7 +99,7 @@
             })
           }
 
-          this.$fileStore.dispatch('hideFormModal', true)
+          this.$store.dispatch('fileManager/hideFormModal', true)
         }).catch(errors => {
           let status = errors.response.status;
           if (status && errors.response && errors.response.data && errors.response.data.data) {
@@ -126,11 +126,11 @@
               name: this.name,
             }
             if (endpoint.method.toUpperCase() === 'GET') {
-              request = this.$fileStore.$axios.get(endpoint.route, {
+              request = this.$store.$axios.get(endpoint.route, {
                 params: data
               })
             } else {
-              request = this.$fileStore.$axios({
+              request = this.$store.$axios({
                 method: endpoint.method,
                 url: endpoint.route,
                 data: data
@@ -151,11 +151,11 @@
               name: this.name,
             }
             if (endpoint.method.toUpperCase() === 'GET') {
-              request = this.$fileStore.$axios.get(endpoint.route, {
+              request = this.$store.$axios.get(endpoint.route, {
                 params: data
               })
             } else {
-              request = this.$fileStore.$axios({
+              request = this.$store.$axios({
                 method: endpoint.method,
                 url: endpoint.route,
                 data: data

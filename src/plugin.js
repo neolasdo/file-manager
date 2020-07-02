@@ -22,6 +22,7 @@ import detail from "./configs/detail";
 import sort from "./configs/sort";
 import FileComments from "./components/FileComments";
 import MoveFilesModal from "./components/MoveFilesModal";
+import Vuex from "vuex";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -56,6 +57,9 @@ class Manager {
     if (!Vue.prototype.$vuetify) {
       Vue.prototype.$vuetify = vuetifyPlugin
     }
+    if (!Vue.prototype.$store) {
+      Vue.prototype.$store = new Vuex.Store({ })
+    }
     const options = this.mergeOptions(opts)
     let vuetify = Vue.prototype.$vuetify
 
@@ -81,9 +85,9 @@ class Manager {
     }
     Vue.prototype.$endpoints = options.endpoints
 
-    store.$axios = options.axios
-    store.$snackbar = Vue.prototype.$snackbar
-    store.$getEndpoint = function (name, meta = {}) {
+    Vue.prototype.$store.$axios = options.axios
+    Vue.prototype.$store.$snackbar = Vue.prototype.$snackbar
+    Vue.prototype.$store.$getEndpoint = function (name, meta = {}) {
       let endpoint = Object.assign({}, Vue.prototype.$endpoints[name])
 
       if (!endpoint) return {
@@ -136,9 +140,9 @@ class Manager {
       })
     }
 
-    store.$trans = Vue.prototype.$trans
-    store.$sortConfig = options.sort
-    Vue.prototype.$fileStore = store;
+    Vue.prototype.$store.$trans = Vue.prototype.$trans
+    Vue.prototype.$store.$sortConfig = options.sort
+    Vue.prototype.$store.registerModule('fileManager', store)
     Vue.prototype.$autoReloadPreview = options.autoReload;
     Vue.prototype.$reloadPreviewAfter = options.reloadPreviewAfter;
     Vue.prototype.$getEndpoint = store.$getEndpoint;

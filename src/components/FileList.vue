@@ -49,13 +49,13 @@
     },
     computed: {
       files() {
-        return this.$fileStore.state.files
+        return this.$store.state.fileManager.files
       },
       view() {
-        return this.$fileStore.state.view
+        return this.$store.state.fileManager.view
       },
       selectedItems() {
-        return this.$fileStore.state.selectedFiles
+        return this.$store.state.fileManager.selectedFiles
       }
     },
     methods: {
@@ -77,13 +77,13 @@
         return 'primary'
       },
       resetSelectedFiles() {
-        this.$fileStore.dispatch('resetSelectedFiles')
+        this.$store.dispatch('fileManager/resetSelectedFiles')
       },
       removeFileSelected(payload) {
-        this.$fileStore.dispatch('removeFileSelected', payload)
+        this.$store.dispatch('fileManager/removeFileSelected', payload)
       },
       addFileSelected(payload) {
-        this.$fileStore.dispatch('addFileSelected', payload)
+        this.$store.dispatch('fileManager/addFileSelected', payload)
       },
       fileThumbnail(item) {
         return getFileThumbnail(item)

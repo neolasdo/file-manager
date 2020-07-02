@@ -27,7 +27,8 @@ Vue.config.productionTip = false
 
 Vue.prototype.$dict = lang
 Vue.prototype.$lang = 'en'
-
+Vue.use(Vuex)
+const store = new Vuex.Store({ })
 Vue.prototype.$accept_mimes = file.accept_mimes;
 Vue.prototype.$accept_extensions = file.accept_extensions;
 Vue.prototype.$file_max_size = file.file_max_size;
@@ -83,11 +84,10 @@ Vue.prototype.$snackbar = function (message, options = {}) {
     container.appendChild(cmp.$mount().$el)
   })
 }
-Vue.use(Vuex)
-fileStore.$trans = Vue.prototype.$trans
+store.$trans = Vue.prototype.$trans
 Vue.prototype.$endpoints = optionsDefaults.endpoints
 
-fileStore.$getEndpoint = function (name, meta = []) {
+store.$getEndpoint = function (name, meta = []) {
   let endpoint = Object.assign({}, Vue.prototype.$endpoints[name])
 
   if (!endpoint) return {
@@ -105,13 +105,12 @@ fileStore.$getEndpoint = function (name, meta = []) {
   return endpoint
 }
 
-fileStore.$axios = optionsDefaults.axios
-fileStore.$snackbar = Vue.prototype.$snackbar
-Vue.prototype.$fileStore = fileStore
+store.$axios = optionsDefaults.axios
+store.$snackbar = Vue.prototype.$snackbar
 Vue.prototype.$autoReloadPreview = false;
 Vue.prototype.$reloadPreviewAfter = 5000;
-Vue.prototype.$getEndpoint = fileStore.$getEndpoint
-Vue.prototype.$axios = fileStore.$axios;
+Vue.prototype.$getEndpoint = store.$getEndpoint
+Vue.prototype.$axios = store.$axios;
 Vue.prototype.$permissions = optionsDefaults.permissions;
 Vue.prototype.$sortConfig = optionsDefaults.sort;
 Vue.prototype.$detailConfig = optionsDefaults.detailConfig;
@@ -119,8 +118,11 @@ Vue.prototype.$auth = {
   id: 1
 }
 
+store.registerModule('fileManager', fileStore)
+
 new Vue({
   vuetify,
+  store,
   render: h => h(App),
 }).$mount('#app')
 

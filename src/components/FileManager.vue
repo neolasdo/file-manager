@@ -111,31 +111,31 @@
     },
     computed: {
       formattedBreadcrumb() {
-        return this.$fileStore.state.breadcrumb.map(item => {
+        return this.$store.state.fileManager.breadcrumb.map(item => {
           item.disabled = item.id === this.current.id;
           return item;
         })
       },
       loading() {
-        return this.$fileStore.state.isLoading
+        return this.$store.state.fileManager.isLoading
       },
       loaded() {
-        return this.$fileStore.state.loaded
+        return this.$store.state.fileManager.loaded
       },
       files() {
-        return this.$fileStore.state.files
+        return this.$store.state.fileManager.files
       },
       folders() {
-        return this.$fileStore.state.folders
+        return this.$store.state.fileManager.folders
       },
       sortKey() {
-        return this.$fileStore.state.sortKey
+        return this.$store.state.fileManager.sortKey
       },
       sortType() {
-        return this.$fileStore.state.sortType
+        return this.$store.state.fileManager.sortType
       },
       sortLabel() {
-        let key = this.$fileStore.state.sortKey
+        let key = this.$store.state.fileManager.sortKey
         let index = this.$sortConfig.fields.findIndex(item => {
           return item.key === key
         })
@@ -145,31 +145,31 @@
         return ''
       },
       selectedItems() {
-        return this.$fileStore.state.selectedFiles
+        return this.$store.state.fileManager.selectedFiles
       },
       current() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
       keywordState() {
-        return this.$fileStore.state.keyword
+        return this.$store.state.fileManager.keyword
       },
     },
     methods: {
       getByFolder(payload) {
-        this.$fileStore.dispatch('getByFolder', payload)
+        this.$store.dispatch('fileManager/getByFolder', payload)
       },
       createFolder(payload) {
-        this.$fileStore.dispatch('createFolder', payload)
+        this.$store.dispatch('fileManager/createFolder', payload)
       },
       resetSelectedFiles() {
-        this.$fileStore.dispatch('resetSelectedFiles')
+        this.$store.dispatch('fileManager/resetSelectedFiles')
       },
       changeSort(key) {
         let type = 'ASC'
         if (this.sortKey === key) {
           type = this.sortType.toUpperCase() === 'ASC' ? 'DESC' : 'ASC'
         }
-        this.$fileStore.dispatch('changeSort', {sortKey: key, sortType: type})
+        this.$store.dispatch('fileManager/changeSort', {sortKey: key, sortType: type})
       },
       showMainContextMenu(e) {
         if (this.keywordState === '') {
@@ -194,7 +194,7 @@
         this.resetSelectedFiles()
       },
       requestSign(event) {
-        this.$fileStore.dispatch('requestSign', event)
+        this.$store.dispatch('fileManager/requestSign', event)
       },
       requestApproval(event) {
         console.log('request approval', event)

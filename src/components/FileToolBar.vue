@@ -124,13 +124,13 @@
     },
     computed: {
       selectedFiles() {
-        return this.$fileStore.state.selectedFiles
+        return this.$store.state.fileManager.selectedFiles
       },
       current() {
-        return this.$fileStore.state.current
+        return this.$store.state.fileManager.current
       },
       keywordState() {
-        return this.$fileStore.state.keywordState
+        return this.$store.state.fileManager.keywordState
       },
       canRequestSign() {
         let invalid = this.selectedFiles.find(item => {
@@ -142,22 +142,22 @@
     },
     methods: {
       openUploadModal() {
-        this.$fileStore.dispatch('openUploadModal')
+        this.$store.dispatch('fileManager/openUploadModal')
       },
       deleteSelected() {
         this.$confirm(this.$trans('confirm_delete_files'), {
           buttonTrueColor: 'error'
         }).then(res => {
           if (res) {
-            this.$fileStore.dispatch('deleteSelected')
+            this.$store.dispatch('fileManager/deleteSelected')
           }
         })
       },
       openFormModal(payload) {
-        this.$fileStore.dispatch('openFormModal', payload)
+        this.$store.dispatch('fileManager/openFormModal', payload)
       },
       search(payload) {
-        this.$fileStore.dispatch('search', payload)
+        this.$store.dispatch('fileManager/search', payload)
       },
       reset() {
         this.filter.status = ''
@@ -177,9 +177,9 @@
         return allTypes
       },
       download() {
-        let endpoint = this.$fileStore.$getEndpoint('download')
-        this.$fileStore.dispatch('loading')
-        this.$fileStore.$axios({
+        let endpoint = this.$store.$getEndpoint('download')
+        this.$store.dispatch('loading')
+        this.$store.$axios({
           method: endpoint.method,
           url: endpoint.route,
           data: {
@@ -188,12 +188,12 @@
             })
           }
         }).then(res => {
-          this.$fileStore.dispatch('unloading')
+          this.$store.dispatch('fileManager/unloading')
           if (res.data && res.data.data) {
-            this.$fileStore.dispatch('loading')
-            this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
+            this.$store.dispatch('fileManager/loading')
+            this.$store.$axios.get(res.data.data.link, {responseType: 'blob'})
               .then(response => {
-                this.$fileStore.dispatch('unloading')
+                this.$store.dispatch('unloading')
                 const blob = new Blob([response.data])
                 const link = document.createElement('a')
                 link.href = URL.createObjectURL(blob)
@@ -213,7 +213,7 @@
               })
           }
         }).catch(errors => {
-          this.$fileStore.dispatch('unloading')
+          this.$store.dispatch('fileManager/unloading')
           if (errors.response && errors.response.data && errors.response.data.message) {
             this.$snackbar(errors.response.data.message, {
               color: 'error'
