@@ -8,7 +8,7 @@
                             <div class="message-content">
                                 <template>
                                     <div class="message-text" :style="{background: '#fff', color: '#525252'}">
-                                        <p class="message-username">{{item.author.email}}</p>
+                                        <p class="message-username">{{item.author.name ? item.author.name : item.author.email}}</p>
                                         <p>{{item.message}}</p>
                                     </div>
                                 </template>
@@ -23,7 +23,7 @@
                             <div class="message-content">
                                 <template>
                                     <div class="message-text" :style="{background: '#1976d2', color: '#fff'}">
-                                        <p class="message-username">{{item.author.email}}</p>
+                                        <p class="message-username">{{item.author.name ? item.author.name : item.author.email}}</p>
                                         <p>{{item.message}}</p>
                                     </div>
                                 </template>
