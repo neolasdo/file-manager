@@ -215,7 +215,6 @@ export default {
     let endpoint = this.$getEndpoint('comments', [fileSelected.id])
     let response = executeAxios(this.$axios, endpoint, data)
     await response.then(res => {
-      getMessage(res,this.$snackbar)
       commit('UNLOADING')
       commit('LOAD_COMMENT', res.data.data)
     }).catch(error => {
@@ -233,7 +232,6 @@ export default {
       })
       commit('LOADING')
       await response.then(res => {
-        getMessage(res,this.$snackbar)
         commit('UNLOADING')
         commit('ADD_COMMENTS', res.data.data)
       }).catch(error => {
