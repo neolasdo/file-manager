@@ -1,5 +1,5 @@
 <template>
-    <v-app class="file-manager-app">
+    <v-app class="file-manager-app" app>
         <v-card class="mt-3 file-manage-card">
             <file-toolbar @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
             <v-container fluid class="pa-0">
@@ -67,10 +67,10 @@
             <form-modal ref="formModal"></form-modal>
             <span class="pa-2 font-italic caption">{{ $trans('select_multi_helper') }}</span>
         </v-card>
-        <v-navigation-drawer v-model="showDetail" app right clipped style="z-index:100;">
+        <div v-if="showDetail" class="sidebar-menu">
           <detail-card @close="showDetail=false" @request-sign="requestSign($event)"
                                      @request-approval="requestApproval($event)"/>
-        </v-navigation-drawer>
+        </div>
     </v-app>
 </template>
 
@@ -99,7 +99,7 @@
     data() {
       return {
         showMenu: false,
-        showDetail: true,
+        showDetail: false,
         x: 0,
         y: 0,
       }
@@ -197,6 +197,9 @@
     },
     beforeMount() {
       this.getByFolder()
+    },
+    beforeDestroy() {
+      this.showDetail = false
     }
   }
 </script>
@@ -241,5 +244,14 @@
         position: absolute;
         height: 100%;
         top: 0;
+    }
+
+    .sidebar-menu {
+      height: 100vh !important;
+      position: fixed;
+      z-index: 100;
+      right: 0;
+      max-width: 300px;
+      min-width: 250px;
     }
 </style>
