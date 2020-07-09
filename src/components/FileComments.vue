@@ -4,11 +4,11 @@
             <div ref="containerMessageDisplay" class="container-message-display" id="scrollDiv">
                 <div v-for="(item, index) in comments" :key="index" class="message-container"
                      v-scroll:#scrollDiv="onScroll">
-                    <template v-if="item.isMy">
-                        <div class="myself-message-body">
+                    <template v-if="!item.isMy">
+                        <div class="other-message-body">
                             <div class="message-content">
                                 <template>
-                                    <div class="message-text" :style="{background: '#1976d2', color: '#fff'}">
+                                    <div class="message-text" :style="{background: '#fff', color: '#525252'}">
                                         <p class="message-username">{{item.author.name ? item.author.name :
                                             item.author.email}}</p>
                                         <p>{{item.message}}</p>
@@ -21,10 +21,10 @@
                         </div>
                     </template>
                     <template v-else>
-                        <div class="other-message-body">
+                        <div class="myself-message-body">
                             <div class="message-content">
                                 <template>
-                                    <div class="message-text" :style="{background: '#fff', color: '#525252'}">
+                                    <div class="message-text" :style="{background: '#1976d2', color: '#fff'}">
                                         <p class="message-username">{{item.author.name ? item.author.name :
                                             item.author.email}}</p>
                                         <p>{{item.message}}</p>
@@ -128,18 +128,18 @@
         margin: 5px 0 5px 0;
         font-size: 14px;
     }
-    .container-message-display .other-message > .message-timestamp {
+    .container-message-display .my-message > .message-timestamp {
         text-align: right;
     }
-    .container-message-display .my-message {
+    .container-message-display .other-message {
         justify-content: flex-start;
         padding-left: 15px;
         align-items: flex-start;
     }
-    .container-message-display .other-message > .message-text {
+    .container-message-display .my-message > .message-text {
         border-bottom-right-radius: 0;
     }
-    .container-message-display .my-message > .message-text {
+    .container-message-display .other-message > .message-text {
         color: #fff;
         border-bottom-left-radius: 0;
     }
@@ -164,12 +164,12 @@
     .container-message-display::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
-    .myself-message-body {
+    .other-message-body {
         display: flex;
         align-items: flex-end;
         padding-left: 10px;
     }
-    .other-message-body {
+    .myself-message-body {
         display: flex;
         align-items: flex-end;
         padding-right: 10px;
@@ -181,10 +181,10 @@
         flex-direction: column;
         width: 100%;
     }
-    .other-message-body .message-content{
+    .myself-message-body .message-content{
         align-items: flex-end;
     }
-    .myself-message-body .message-content{
+    .other-message-body .message-content{
         align-items: flex-start;
     }
     .message-timestamp {
@@ -212,10 +212,10 @@
         white-space: pre-wrap;
         word-break: break-word;
     }
-    .myself-message-body .message-text {
+    .other-message-body .message-text {
         border-bottom-left-radius: 0px;
     }
-    .other-message-body .message-text {
+    .myself-message-body .message-text {
         border-bottom-right-radius: 0px;
     }
 </style>
