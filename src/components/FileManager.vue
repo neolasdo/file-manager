@@ -51,31 +51,26 @@
                 <v-overlay :value="loading" absolute z-index="100">
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
-                <v-row class="section-r">
-                    <v-col :cols="showDetail ? 6: 12" :md="showDetail ? 9: 12" :sm="showDetail ? 8: 12"
-                           style="height: 100%">
-                        <v-container fluid class="file-explorer" @click="onClickContainer()"
-                                     @contextmenu.prevent="showMainContextMenu($event)">
-                            <v-alert v-if="files.length === 0 && folders.length === 0 && !loading && loaded" text color="info">
-                                <h3>{{ $trans('empty_folder') }}</h3>
-                            </v-alert>
-                            <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
-                            <file-list ref="fileList" @show-context-menu="showFileContextMenu()"
-                                       @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
-                        </v-container>
-                        <main-context-menu ref="contextMenu"/>
-                    </v-col>
-                    <v-col v-if="showDetail" cols="6" md="3" sm="4" style="height: 100%">
-                        <detail-card @close="showDetail=false" @request-sign="requestSign($event)"
-                                     @request-approval="requestApproval($event)"/>
-                    </v-col>
-                </v-row>
+                    <v-container fluid class="file-explorer" @click="onClickContainer()"
+                                  @contextmenu.prevent="showMainContextMenu($event)">
+                        <v-alert v-if="files.length === 0 && folders.length === 0 && !loading && loaded" text color="info">
+                            <h3>{{ $trans('empty_folder') }}</h3>
+                        </v-alert>
+                        <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
+                        <file-list ref="fileList" @show-context-menu="showFileContextMenu()"
+                                    @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
+                    </v-container>
+                    <main-context-menu ref="contextMenu"/>
             </v-container>
             <v-divider></v-divider>
             <file-upload-modal ref="uploadModal"></file-upload-modal>
             <form-modal ref="formModal"></form-modal>
             <span class="pa-2 font-italic caption">{{ $trans('select_multi_helper') }}</span>
         </v-card>
+        <v-navigation-drawer v-model="showDetail" app right clipped style="z-index:100;">
+          <detail-card @close="showDetail=false" @request-sign="requestSign($event)"
+                                     @request-approval="requestApproval($event)"/>
+        </v-navigation-drawer>
     </v-app>
 </template>
 

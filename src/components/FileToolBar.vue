@@ -1,13 +1,13 @@
 <template>
     <div>
-        <v-toolbar color="primary" dark>
+        <v-toolbar color="primary" dark dense>
             <v-text-field dark v-model="keyword">
                 <span slot="prepend-inner">
                   <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
                   <template v-slot:activator="{ on }">
                     <v-btn tile small v-on="on" text>
                       {{ $trans('filter') }}
-                      <v-icon>mdi-menu</v-icon>
+                      <v-icon small>mdi-menu</v-icon>
                     </v-btn>
                   </template>
                   <v-card tile max-width="500px">
@@ -49,13 +49,13 @@
                 </v-menu>
                 </span>
                 <v-btn tile text small slot="append" @click="search({keyword: keyword, filter: filter })">
-                    <v-icon>mdi-magnify</v-icon>
+                    <v-icon small>mdi-magnify</v-icon>
                 </v-btn>
             </v-text-field>
             <v-spacer></v-spacer>
             <v-menu offset-y v-if="$permissions.upload || $permissions.create">
                 <template v-slot:activator="{ on }">
-                    <v-btn tile v-on="on" dark outlined>
+                    <v-btn small tile v-on="on" dark outlined>
                         <v-icon>mdi-plus</v-icon>
                         {{ $trans('new') }}
                     </v-btn>
