@@ -73,7 +73,7 @@
 <style>
   .dir-card.active {
     color: #4385f4 !important;
-    background-color: #e5e5e5 !important;
+    background-color: #E8F0FE !important;
     border: 1px solid #4385f4 !important
   }
 
