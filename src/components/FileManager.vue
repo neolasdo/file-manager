@@ -1,7 +1,7 @@
 <template>
     <v-app class="file-manager-app">
         <v-card class="file-manage-card">
-            <file-toolbar @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
+            <file-toolbar/>
             <v-container fluid class="pa-0" style="border-bottom: 1px solid #a5a5a5;">
                 <v-row no-gutters>
                     <v-col cols="6">
@@ -63,9 +63,9 @@
                 </v-container>
                 <main-context-menu ref="contextMenu"/>
                 <folder-context-menu ref="folderContextMenu"/>
-                <file-context-menu ref="fileContextMenu" @request-sign="$emit('request-sign', $event)" @request-approval="$emit('request-approval', $event)"/>
+                <file-context-menu ref="fileContextMenu"/>
                 <div v-if="showDetail" class="sidebar-detail">
-                  <detail-card @close="showDetail=false" @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
+                  <detail-card @close="showDetail=false"/>
                 </div>
             </v-container>
             <file-upload-modal ref="uploadModal"></file-upload-modal>
@@ -184,12 +184,6 @@
       },
       onClickContainer() {
         this.$fileStore.dispatch('hideContext')
-      },
-      requestSign(event) {
-        this.$fileStore.dispatch('requestSign', event)
-      },
-      requestApproval(event) {
-        console.log('request approval', event)
       },
     },
     beforeMount() {

@@ -135,12 +135,10 @@
                         </v-card-text>
                         <v-card-actions
                                 v-if="clipboard.files.length && ($permissions.requestSign || $permissions.approvalRequest)">
-                            <v-btn color="primary" text v-if="canRequestSign"
-                                   @click="$emit('request-sign', clipboard.files)">
+                            <v-btn color="primary" text v-if="canRequestSign" @click="requestSign">
                                 {{ $trans('request_sign') }}
                             </v-btn>
-                            <v-btn color="primary" text v-if="$permissions.approvalRequest"
-                                   @click="$emit('request-approval', clipboard.files)">
+                            <v-btn color="primary" text v-if="$permissions.approvalRequest" @click="requestApproval">
                                 {{ $trans('approval_request') }}
                             </v-btn>
                             <v-btn color="primary" text @click="resetClipboard">
@@ -221,6 +219,12 @@
       },
       loadMoreComment() {
         this.$fileStore.dispatch('loadMoreComments')
+      },
+      requestSign() {
+        this.$fileStore.dispatch('requestSign', this.clipboard.files)
+      },
+      requestApproval() {
+        console.log('request approval', this.clipboard.files)
       },
       close() {
         this.$emit('close')

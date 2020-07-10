@@ -76,10 +76,10 @@
                     </v-btn>
                 </template>
                 <v-list tile dense>
-                    <v-list-item v-if="canRequestSign" @click="$emit('request-sign', selectedFiles)">
+                    <v-list-item v-if="canRequestSign" @click="requestSign">
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-if="$permissions.approvalRequest" @click="$emit('request-approval', selectedFiles)">
+                    <v-list-item v-if="$permissions.approvalRequest" @click="requestApproval">
                         <v-list-item-title>{{ $trans('approval_request') }}</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-if="$permissions.download" @click="download">
@@ -166,6 +166,12 @@
       executeSearch() {
         this.menu = false
         this.search({keyword: this.keyword, filter: this.filter})
+      },
+      requestSign() {
+        this.$fileStore.dispatch('requestSign', this.selectedFiles)
+      },
+      requestApproval() {
+        console.log('request approval', this.selectedFiles)
       },
       getAllType() {
         let allTypes = [];

@@ -34,7 +34,7 @@
                         <v-list-item-title>{{ $trans('move_to') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item @click="$emit('request-sign', selectedItems)" v-if="canRequestSign">
+                <v-list-item @click="requestSign()" v-if="canRequestSign">
                     <v-list-item-icon>
                         <v-icon>mdi-signature-freehand</v-icon>
                     </v-list-item-icon>
@@ -42,7 +42,7 @@
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item @click="$emit('request-approval', selectedItems)" v-if="$permissions.approvalRequest">
+                <v-list-item @click="requestApproval" v-if="$permissions.approvalRequest">
                     <v-list-item-icon>
                         <v-icon>mdi-file-check</v-icon>
                     </v-list-item-icon>
@@ -121,6 +121,12 @@
       },
       addClipboard() {
         this.$fileStore.dispatch('addFilesToClipboard')
+      },
+      requestSign() {
+        this.$fileStore.dispatch('requestSign', this.selectedItems)
+      },
+      requestApproval() {
+        console.log('request approval', this.selectedItems)
       },
       download() {
         let endpoint = this.$fileStore.$getEndpoint('download')
