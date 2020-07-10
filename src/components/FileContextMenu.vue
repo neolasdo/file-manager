@@ -144,27 +144,7 @@
           this.$fileStore.dispatch('unloading')
           if (res.data && res.data.data) {
             this.$fileStore.dispatch('loading')
-            this.$fileStore.$axios.get(res.data.data.link, {responseType: 'blob'})
-              .then(response => {
-                this.$fileStore.dispatch('unloading')
-                const blob = new Blob([response.data])
-                const link = document.createElement('a')
-                link.href = URL.createObjectURL(blob)
-                link.setAttribute('download', res.data.data.name)
-                link.style.display = "none";
-                document.body.appendChild(link)
-                link.click()
-                URL.revokeObjectURL(link.href)
-                document.body.removeChild(link)
-              })
-              .catch((errors) => {
-                if (errors.response && errors.response.data && errors.response.data.message) {
-                  this.$snackbar(errors.response.data.message, {
-                    color: 'error'
-                  })
-                }
-                this.$fileStore.dispatch('unloading')
-              })
+            window.open(res.data.data.link, '_self');
           }
         }).catch(errors => {
           this.$fileStore.dispatch('unloading')
