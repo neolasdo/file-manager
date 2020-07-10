@@ -289,6 +289,22 @@ export default {
   },
   resetClipboard({commit}) {
     commit('RESET_CLIPBOARD');
+  },
+  showMainContextMenu({commit, dispatch}, payload) {
+    commit('SHOW_MAIN_CONTEXT', payload)
+    dispatch('resetSelectedFiles')
+  },
+  showFileContextMenu({commit}, payload) {
+    commit('SHOW_FILE_CONTEXT', payload)
+  },
+  showFolderContextMenu({commit}, payload) {
+    commit('SHOW_FOLDER_CONTEXT', payload)
+  },
+  hideContext({commit}) {
+    commit('HIDE_CONTEXT')
+  },
+  resetState({commit}) {
+    commit('RESET_STATE')
   }
 }
 

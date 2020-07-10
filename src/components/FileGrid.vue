@@ -1,37 +1,36 @@
 <template>
-  <div>
-    <v-list two-line subheader dense v-if="files && files.length">
-      <v-subheader>{{ $trans('files') }}</v-subheader>
-
-      <v-list-item 
-        v-for="(item, index) in files" class="file-item"
-        :key="index" :class="{'active': checkFileSelected(item)}"
-        @contextmenu.prevent.stop="showContextMenu(item, $event)"
-        @click.stop="toggleFileSelect(item, $event)"
-        @dblclick.stop.prevent="preview"
-      >
-      <v-overlay absolute color="#969696" :value="item.is_official !== undefined && !item.is_official"></v-overlay>
-        <v-list-item-avatar tile>
-          <v-img :src="fileThumbnail(item)" alt=""></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-content>
-          <v-list-item-title> 
-              {{item.name}}
-          </v-list-item-title>
-          <v-list-item-subtitle v-text="item.created_at"></v-list-item-subtitle>
-        </v-list-item-content>
-
-        <v-list-item-action>
-          <v-list-item-action-text>
-            <strong v-if="getLabel(item)" :class="getLabelColor(item)+'--text'">{{getLabel(item)}}</strong><br>
-            <strong>{{formatSize(item.size)}}</strong><br>
-          </v-list-item-action-text>
-        </v-list-item-action>
-      </v-list-item>
-    </v-list>
-    <file-preview-modal ref="filePreviewModal"/>
-  </div>
+    <div>
+      <div class="file-section text-left" v-if="files && files.length">
+          <h4 cla>{{ $trans('files') }}</h4>
+          <v-col cols="12">
+              <v-row align="start" justify="start">
+                  <v-hover v-slot:default="{ hover }" v-for="(item, index) in files" :key="index">
+                      <v-tooltip bottom z-index="7">
+                          <template v-slot:activator="{ on }">
+                              <v-card class="pa-2 file-card ma-2" ref="files"
+                                      :class="{'active': checkFileSelected(item)}"
+                                      @click.stop="toggleFileSelect(item, $event)" :elevation="hover ? 8 : 4" tile
+                                      @dblclick.stop.prevent="preview" v-on="on" width="180"
+                                      @contextmenu.prevent.stop="showContextMenu(item, $event)">
+                                  <v-overlay absolute color="#969696"
+                                              :value="item.is_official !== undefined && !item.is_official"></v-overlay>
+                                  <v-chip small label class="status-label" v-if="getLabel(item)" style="border-radius: 0 !important;"
+                                          :color="getLabelColor(item)" text-color="white">{{getLabel(item)}}
+                                  </v-chip>
+                                  <v-card-text>
+                                      <v-img :src="fileThumbnail(item)" alt=""></v-img>
+                                      <h4 class="text-truncate pt-3 file-name">{{ item.name }}</h4>
+                                  </v-card-text>
+                              </v-card>
+                          </template>
+                          <span>{{ item.name }}</span>
+                      </v-tooltip>
+                  </v-hover>
+              </v-row>
+          </v-col>
+      </div>
+      <file-preview-modal ref="filePreviewModal"/>
+    </div>
 </template>
 
 <script>
@@ -53,7 +52,7 @@
       },
       selectedItems() {
         return this.$fileStore.state.selectedFiles
-      },
+      }
     },
     methods: {
       getLabel(item) {
@@ -117,7 +116,6 @@
           this.resetSelectedFiles()
           this.addFileSelected(item);
         }
-
         this.$fileStore.dispatch('showFileContextMenu', {
           x: e.clientX,
           y: e.clientY
@@ -128,26 +126,28 @@
 </script>
 
 <style>
-  .file-item.active {
-      color: #4385f4 !important;
-      background-color: #E8F0FE !important;
-  }
+    .file-card.active {
+        color: #4385f4 !important;
+        background-color: #E8F0FE !important;
+        border: 1px solid #4385f4 !important
+    }
 
-  .file-item:not(.active){
-      color: #000 !important;
-      background-color: #fff !important;
-  }
+    .file-card:not(.active) {
+        color: #000 !important;
+        background-color: #fff !important;
+        border: 1px solid #fff !important
+    }
 
-  h4.file-name {
-      font-size: 1em !important;
-      font-weight: bold;
-  }
+    h4.file-name {
+        font-size: 1em !important;
+        font-weight: bold;
+    }
 
-  .status-label {
-      position: absolute !important;
-      top: 0px !important;
-      right: 0 !important;
-      z-index: 6;
-      font-size: 13px;
-  }
+    .status-label {
+        position: absolute !important;
+        top: 0px !important;
+        right: 0 !important;
+        z-index: 6;
+        font-size: 13px;
+    }
 </style>

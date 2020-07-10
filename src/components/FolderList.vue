@@ -1,44 +1,30 @@
 <template>
   <div>
-    <div class="folder-section text-left" v-if="folders && folders.length">
-      <h4>{{ $trans('folders') }}</h4>
-      <v-col cols="12">
-        <v-row align="start" justify="start">
-          <v-hover v-slot:default="{ hover }" v-for="(item, index) in folders" :key="index">
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-card class="pa-2 dir-card ma-2" :class="{'active': checkFolderSelected(item)}"
-                        :elevation="hover ? 8 : 4" ref="folders" tile v-on="on" width="180"
-                        @contextmenu.prevent.stop="showContextMenu(item, $event)"
-                        @click.prevent.stop="selectFolder(item)"
-                        @dblclick.stop.prevent="openFolder(item)">
-                  <v-list-item dense class="pa-1">
-                    <v-list-item-icon class="mr-3">
-                      <v-icon>mdi-folder</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                      <v-list-item-title>{{ item.name }}</v-list-item-title>
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-card>
-              </template>
-              <span>{{ item.name }}</span>
-            </v-tooltip>
-          </v-hover>
-        </v-row>
-      </v-col>
-    </div>
-    <folder-context-menu ref="folderContextMenu" :item="selectedFolder"/>
+    <v-list two-line subheader dense v-if="folders && folders.length">
+      <v-subheader>{{ $trans('folders') }}</v-subheader>
+
+      <v-list-item
+        v-for="(item, index) in folders" class="folder-item"
+        :key="index" :class="{'active': checkFolderSelected(item)}"
+        @contextmenu.prevent.stop="showContextMenu(item, $event)"
+        @click.prevent.stop="selectFolder(item)"
+        @dblclick.stop.prevent="openFolder(item)"
+      >
+        <v-list-item-avatar>
+          <v-icon>mdi-folder</v-icon>
+        </v-list-item-avatar>
+
+        <v-list-item-content>
+          <v-list-item-title v-text="item.name"></v-list-item-title>
+          <v-list-item-subtitle v-text="item.created_at"></v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
 <script>
-  import FolderContextMenu from './FolderContextMenu'
-
   export default {
-    components: {
-      'folder-context-menu': FolderContextMenu
-    },
     data() {
       return {
         selectedItem: {},
@@ -64,12 +50,11 @@
         this.getByFolder(item)
       },
       showContextMenu(item, e) {
-        this.$emit('show-context-menu')
         this.selectFolder(item)
-        this.$refs.folderContextMenu.showContextMenu(e)
-      },
-      hideContextMenu() {
-        this.$refs.folderContextMenu.hideContextMenu()
+        this.$fileStore.dispatch('showFolderContextMenu', {
+          x: e.clientX,
+          y: e.clientY
+        })
       },
       checkFolderSelected(item) {
         return this.selectedFolder && item.id === this.selectedFolder.id
@@ -78,15 +63,13 @@
   }
 </script>
 <style>
-  .dir-card.active {
+  .folder-item.active {
     color: #4385f4 !important;
-    background-color: #e5e5e5 !important;
-    border: 1px solid #4385f4 !important
+    background-color: #E8F0FE !important;
   }
 
-  .dir-card:not(.active) {
+  .folder-item:not(.active) {
     color: #000 !important;
     background-color: #fff !important;
-    border: 1px solid #fff !important
   }
 </style>

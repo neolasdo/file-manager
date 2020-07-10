@@ -44,20 +44,26 @@
       clipboard() {
         return this.$fileStore.state.clipboard
       },
-    },
-    data() {
-      return {
-        showMenu: false,
-        x: 0,
-        y: 0,
+      x() {
+        return this.$fileStore.state.pointerEvent.x
+      },
+      y() {
+        return this.$fileStore.state.pointerEvent.y
+      },
+      showMenu: {
+        get: function () {
+          return this.$fileStore.state.showMainContext
+        },
+        set: function (newValue) {
+          if (!newValue) {
+            this.$fileStore.dispatch('hideContext')
+          }
+        }
       }
     },
     methods: {
       createFolder(payload) {
         this.$fileStore.dispatch('createFolder', payload)
-      },
-      resetSelectedFiles() {
-        this.$fileStore.dispatch('resetSelectedFiles')
       },
       openUploadModal() {
         this.$fileStore.dispatch('openUploadModal')
@@ -74,18 +80,6 @@
           }
         })
       },
-      showContextMenu(e) {
-        this.showMenu = false;
-        this.x = e.clientX;
-        this.y = e.clientY;
-        this.resetSelectedFiles()
-        this.$nextTick(() => {
-          this.showMenu = true;
-        });
-      },
-      hideContextMenu() {
-        this.showMenu = false;
-      }
     }
   }
 </script>
