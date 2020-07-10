@@ -84,13 +84,6 @@
       'file-preview-modal': FilePreviewModal,
       'move-files-modal': MoveFilesModal
     },
-    data() {
-      return {
-        showMenu: false,
-        x: 0,
-        y: 0,
-      }
-    },
     computed: {
       selectedItems() {
         return this.$fileStore.state.selectedFiles
@@ -101,7 +94,23 @@
           || (item.count_signed_sign_request + item.count_pending_sign_request > 0)
         })
         return this.$permissions.requestSign && invalid === undefined
-      }
+      },
+      x() {
+        return this.$fileStore.state.pointerEvent.x
+      },
+      y() {
+        return this.$fileStore.state.pointerEvent.y
+      },
+      showMenu: {
+        get: function () {
+          return this.$fileStore.state.showFileContext
+        },
+        set: function (newValue) {
+          if (!newValue) {
+            this.$fileStore.dispatch('hideContext')
+          }
+        }
+      },
     },
     methods: {
       deleteSelected() {
@@ -112,14 +121,6 @@
       },
       addClipboard() {
         this.$fileStore.dispatch('addFilesToClipboard')
-      },
-      showContextMenu(e) {
-        this.showMenu = false;
-        this.x = e.clientX;
-        this.y = e.clientY;
-        this.$nextTick(() => {
-          this.showMenu = true;
-        });
       },
       download() {
         let endpoint = this.$fileStore.$getEndpoint('download')
@@ -167,9 +168,6 @@
             })
           }
         })
-      },
-      hideContextMenu() {
-        this.showMenu = false;
       },
       canPreview() {
         return this.selectedItems.length === 1 && canPreview(this.selectedItems[0])

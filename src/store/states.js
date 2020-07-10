@@ -27,4 +27,11 @@ export default {
   showFormModal: false,
   formCreate: false,
   isLoading: false,
+  showMainContext: false,
+  showFolderContext: false,
+  showFileContext: false,
+  pointerEvent: {
+    x: 0,
+    y: 0
+  }
 }

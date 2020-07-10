@@ -1,16 +1,19 @@
 <template>
-    <v-app class="file-manager-app" app>
-        <v-card class="mt-3 file-manage-card">
+    <v-app class="file-manager-app">
+        <v-card class="file-manage-card">
             <file-toolbar @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
-            <v-container fluid class="pa-0">
+            <v-container fluid class="pa-0" style="border-bottom: 1px solid #a5a5a5;">
                 <v-row no-gutters>
                     <v-col cols="6">
                         <file-breadcrumb :breadcrumb="formattedBreadcrumb"/>
                     </v-col>
                     <v-col cols="6" class="pa-2 text-right">
+                         <v-btn icon small @click="gridView = !gridView">
+                              <v-icon>{{gridView ? 'mdi-view-list' : 'mdi-view-grid'}}</v-icon>
+                          </v-btn>
                         <v-tooltip bottom>
                             <template v-slot:activator="{ on }">
-                                <v-btn icon small dark active-class="active" v-on="on"
+                                <v-btn icon small dark active-class="active" v-on="on" class="ml-2"
                                        :color="showDetail ? 'primary': 'secondary'" @click="showDetail = !showDetail">
                                     <v-icon>mdi-information-outline</v-icon>
                                 </v-btn>
@@ -47,42 +50,41 @@
                 </v-row>
             </v-container>
 
-            <v-container fluid class="context-area">
+            <v-container fluid class="context-area pa-0">
                 <v-overlay :value="loading" absolute z-index="100">
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
-                    <v-container fluid class="file-explorer" @click="onClickContainer()"
-                                  @contextmenu.prevent="showMainContextMenu($event)">
-                        <v-alert v-if="files.length === 0 && folders.length === 0 && !loading && loaded" text color="info">
-                            <h3>{{ $trans('empty_folder') }}</h3>
-                        </v-alert>
-                        <folder-list ref="folderList" @show-context-menu="showFolderContextMenu()"/>
-                        <file-list ref="fileList" @show-context-menu="showFileContextMenu()"
-                                    @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
-                    </v-container>
-                    <main-context-menu ref="contextMenu"/>
+                <v-container fluid class="file-explorer pa-0" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
+                  <v-alert v-if="files.length === 0 && folders.length === 0 && !loading && loaded" text color="info">
+                      <h3>{{ $trans('empty_folder') }}</h3>
+                  </v-alert>
+                  <grid-view v-if="gridView"/>
+                  <list-view v-else/>
+                </v-container>
+                <main-context-menu ref="contextMenu"/>
+                <folder-context-menu ref="folderContextMenu"/>
+                <file-context-menu ref="fileContextMenu" @request-sign="$emit('request-sign', $event)" @request-approval="$emit('request-approval', $event)"/>
+                <div v-if="showDetail" class="sidebar-detail">
+                  <detail-card @close="showDetail=false" @request-sign="requestSign($event)" @request-approval="requestApproval($event)"/>
+                </div>
             </v-container>
-            <v-divider></v-divider>
             <file-upload-modal ref="uploadModal"></file-upload-modal>
             <form-modal ref="formModal"></form-modal>
-            <span class="pa-2 font-italic caption">{{ $trans('select_multi_helper') }}</span>
         </v-card>
-        <div v-if="showDetail" class="sidebar-menu">
-          <detail-card @close="showDetail=false" @request-sign="requestSign($event)"
-                                     @request-approval="requestApproval($event)"/>
-        </div>
     </v-app>
 </template>
 
 <script>
   import FileToolBar from './FileToolBar'
   import FileBreadcrumb from './FileBreadcrumb'
-  import FolderList from './FolderList'
-  import FileList from './FileList'
+  import FileContextMenu from './FileContextMenu'
   import MainContextMenu from "./MainContextMenu"
   import DetailCard from "./DetailCard";
   import FileUploadModal from "./FileUploadModal";
   import FormModal from "./FormModal";
+  import ListView from "./ListView";
+  import GridView from "./GridView";
+  import FolderContextMenu from './FolderContextMenu'
 
   export default {
     name: 'FileManager',
@@ -91,14 +93,17 @@
       'detail-card': DetailCard,
       'file-toolbar': FileToolBar,
       'file-breadcrumb': FileBreadcrumb,
-      'folder-list': FolderList,
-      'file-list': FileList,
       'file-upload-modal': FileUploadModal,
       'form-modal': FormModal,
+      'list-view': ListView,
+      'grid-view': GridView,
+      'file-context-menu': FileContextMenu,
+      'folder-context-menu': FolderContextMenu
     },
     data() {
       return {
         showMenu: false,
+        gridView: true,
         showDetail: false,
         x: 0,
         y: 0,
@@ -168,25 +173,17 @@
       },
       showMainContextMenu(e) {
         if (this.keywordState === '') {
-          this.$refs.contextMenu.showContextMenu(e)
-          this.$refs.folderList.hideContextMenu()
-          this.$refs.fileList.hideContextMenu()
+          this.$fileStore.dispatch('showMainContextMenu', {
+            x: e.clientX,
+            y: e.clientY
+          })
         }
       },
-      showFolderContextMenu() {
-        this.$refs.contextMenu.hideContextMenu()
-        this.$refs.fileList.hideContextMenu()
-      },
-      showFileContextMenu() {
-        this.$refs.contextMenu.hideContextMenu()
-        this.$refs.folderList.hideContextMenu()
-      },
       hideMainContextMenu() {
-        this.$refs.contextMenu.hideContextMenu()
+        this.$fileStore.dispatch('hideContext')
       },
       onClickContainer() {
-        this.hideMainContextMenu()
-        this.resetSelectedFiles()
+        this.$fileStore.dispatch('hideContext')
       },
       requestSign(event) {
         this.$fileStore.dispatch('requestSign', event)
@@ -199,7 +196,7 @@
       this.getByFolder()
     },
     beforeDestroy() {
-      this.showDetail = false
+      this.$fileStore.dispatch('resetState')
     }
   }
 </script>
@@ -235,7 +232,7 @@
 
     .context-area {
         background-color: #e5e5e5;
-        height: calc(100% - 133px);
+        height: calc(100% - 93px);
         position: relative;
     }
 
@@ -246,11 +243,12 @@
         top: 0;
     }
 
-    .sidebar-menu {
-      height: 100vh !important;
-      position: fixed;
+    .sidebar-detail {
+      height: 100% !important;
+      position: absolute;
       z-index: 100;
       right: 0;
+      top: 0;
       max-width: 300px;
       min-width: 250px;
     }

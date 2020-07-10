@@ -55,19 +55,8 @@
     components: {
       'move-files-modal': MoveFilesModal
     },
-    props: {
-      item: {
-        type: Object,
-        default() {
-          return {}
-        }
-      }
-    },
     data() {
       return {
-        showMenu: false,
-        x: 0,
-        y: 0,
         showEditModal: false,
         name: ''
       }
@@ -76,6 +65,25 @@
       current() {
         return this.$fileStore.state.current
       },
+      x() {
+        return this.$fileStore.state.pointerEvent.x
+      },
+      y() {
+        return this.$fileStore.state.pointerEvent.y
+      },
+      showMenu: {
+        get: function () {
+          return this.$fileStore.state.showFolderContext
+        },
+        set: function (newValue) {
+          if (!newValue) {
+            this.$fileStore.dispatch('hideContext')
+          }
+        }
+      },
+      item() {
+        return this.$fileStore.state.selectedFolder
+      }
     },
     methods: {
       getByFolder(payload) {
@@ -93,22 +101,11 @@
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
       },
-      showContextMenu(e) {
-        this.showMenu = false;
-        this.x = e.clientX;
-        this.y = e.clientY;
-        this.$nextTick(() => {
-          this.showMenu = true;
-        });
-      },
       addClipboard() {
         this.$fileStore.dispatch('addFolderToClipboard')
       },
       move() {
         this.$refs.moveModal.showDialog()
-      },
-      hideContextMenu() {
-        this.showMenu = false;
       },
       openFolder() {
         this.getByFolder(this.item)

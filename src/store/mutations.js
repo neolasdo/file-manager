@@ -148,5 +148,67 @@ export default {
     state.comments = []
     state.itemComment = undefined
     state.commentPaginate = {}
+  },
+  SHOW_MAIN_CONTEXT(state, payload) {
+    state.showMainContext = true
+    state.showFolderContext = false
+    state.showFileContext = false
+    state.pointerEvent = payload
+  },
+  SHOW_FILE_CONTEXT(state, payload) {
+    state.showMainContext = false
+    state.showFolderContext = false
+    state.showFileContext = true
+    state.pointerEvent = payload
+  },
+  SHOW_FOLDER_CONTEXT(state, payload) {
+    state.showMainContext = false
+    state.showFolderContext = true
+    state.showFileContext = false
+    state.pointerEvent = payload
+  },
+  HIDE_CONTEXT(state) {
+    state.showMainContext = false
+    state.showFolderContext = false
+    state.showFileContext = false
+  },
+  RESET_STATE(state) {
+    Object.assign(state, {
+      files: [],
+      loaded: false,
+      isSearching: false,
+      keyword: '',
+      sortKey: '',
+      sortType: '',
+      filter: {},
+      folders: [],
+      current: {},
+      selectedFiles: [],
+      selectedFolder: {},
+      breadcrumb: [
+        {
+          text: '',
+          id: ''
+        }
+      ],
+      clipboard: {
+        files: [],
+        folders: []
+      },
+      comments: [],
+      commentPaginate: {},
+      itemComment: undefined,
+      showUploadModal: false,
+      showFormModal: false,
+      formCreate: false,
+      isLoading: false,
+      showMainContext: false,
+      showFolderContext: false,
+      showFileContext: false,
+      pointerEvent: {
+        x: 0,
+        y: 0
+      }
+    })
   }
 }
