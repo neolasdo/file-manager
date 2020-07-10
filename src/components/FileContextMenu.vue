@@ -143,7 +143,6 @@
         }).then(res => {
           this.$fileStore.dispatch('unloading')
           if (res.data && res.data.data) {
-            this.$fileStore.dispatch('loading')
             window.open(res.data.data.link, '_self');
           }
         }).catch(errors => {
