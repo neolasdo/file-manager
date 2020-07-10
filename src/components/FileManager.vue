@@ -21,7 +21,7 @@
                             <span v-if="showDetail">{{ $trans('click_hide_detail') }}</span>
                             <span v-if="!showDetail">{{ $trans('click_show_detail') }}</span>
                         </v-tooltip>
-                        <v-menu offset-y>
+                        <v-menu offset-y z-index="11">
                             <template v-slot:activator="{ on }">
                                 <v-btn text small v-on="on" light class="ml-2" tile>
                                     {{ sortLabel }}
@@ -51,7 +51,7 @@
             </v-container>
 
             <v-container fluid class="context-area pa-0">
-                <v-overlay :value="loading" absolute z-index="100">
+                <v-overlay :value="loading" absolute z-index="11">
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
                 <v-container fluid class="file-explorer pa-0" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
@@ -240,7 +240,7 @@
     .sidebar-detail {
       height: 100% !important;
       position: absolute;
-      z-index: 100;
+      z-index: 10;
       right: 0;
       top: 0;
       max-width: 300px;

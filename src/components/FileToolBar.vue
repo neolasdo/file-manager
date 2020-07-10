@@ -3,7 +3,7 @@
         <v-toolbar color="primary" dark dense>
             <v-text-field dark v-model="keyword">
                 <span slot="prepend-inner">
-                  <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y>
+                  <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y z-index="11">
                   <template v-slot:activator="{ on }">
                     <v-btn tile small v-on="on" text>
                       {{ $trans('filter') }}
@@ -53,7 +53,7 @@
                 </v-btn>
             </v-text-field>
             <v-spacer></v-spacer>
-            <v-menu offset-y v-if="$permissions.upload || $permissions.create">
+            <v-menu offset-y v-if="$permissions.upload || $permissions.create" z-index="11">
                 <template v-slot:activator="{ on }">
                     <v-btn small tile v-on="on" dark outlined>
                         <v-icon>mdi-plus</v-icon>
@@ -69,7 +69,7 @@
                     </v-list-item>
                 </v-list>
             </v-menu>
-            <v-menu offset-y v-if="selectedFiles.length && ($permissions.download || $permissions.delete)">
+            <v-menu offset-y v-if="selectedFiles.length && ($permissions.download || $permissions.delete)" z-index="11">
                 <template v-slot:activator="{ on }">
                     <v-btn v-on="on" icon class="ml-2" dark>
                         <v-icon>mdi-menu</v-icon>
