@@ -12,6 +12,7 @@ export default {
   dont_sign: 'Don\'t sign',
   signed: 'Signed',
   waiting_signature: 'Waiting for sign',
+  waiting_approval: 'Waiting for approval',
   reject: 'Reject',
   new: 'New',
   name_label: 'Name',

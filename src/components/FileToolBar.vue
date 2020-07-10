@@ -115,10 +115,9 @@
         ],
         statusList: [
           {text: this.$trans('all'), value: ''},
-          {text: this.$trans('dont_sign'), value: 'no_signature_required'},
-          {text: this.$trans('signed'), value: 'signed'},
+          {text: this.$trans('waiting_approval'), value: 'waiting_approval'},
           {text: this.$trans('waiting_signature'), value: 'waiting_signature'},
-          {text: this.$trans('reject'), value: 'reject'},
+          {text: this.$trans('signed'), value: 'signed'},
         ]
       }
     },
