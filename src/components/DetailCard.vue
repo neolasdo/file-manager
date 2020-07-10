@@ -15,7 +15,7 @@
                         <template v-slot:activator="{ on }">
                             <v-icon v-on="on" left>mdi-information-outline</v-icon>
                         </template>
-                        <span>{{ $trans('clipboard') }}</span>
+                        <span>{{ $trans('detail') }}</span>
                     </v-tooltip>
                 </v-tab>
                 <v-tab :href="'#comments'" v-if="selectedFiles.length === 1 && $permissions.comment" @click="getComments()">
