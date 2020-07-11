@@ -56,7 +56,7 @@
                 </v-overlay>
                 <v-container fluid class="file-explorer pa-0" @click="onClickContainer()" @contextmenu.prevent="showMainContextMenu($event)">
                   <v-alert v-if="files.length === 0 && folders.length === 0 && !loading && loaded" text color="info">
-                      <h3>{{ $trans('empty_folder') }}</h3>
+                      <h3>{{ isSearching ? $$trans('search_empty') :$trans('empty_folder') }}</h3>
                   </v-alert>
                   <grid-view v-if="gridView"/>
                   <list-view v-else/>
@@ -153,6 +153,9 @@
       keywordState() {
         return this.$fileStore.state.keyword
       },
+      isSearching() {
+        return this.$fileStore.state.isSearching
+      }
     },
     methods: {
       getByFolder(payload) {

@@ -70,6 +70,7 @@ export default {
   no: 'いいえ',
   server_error: 'サーバーエラーが発生しました',
   empty_folder: 'このフォルダーは空です',
+  search_empty: '検索条件に一致するファイルがありません。',
   required_rule: 'これは必須項目です。',
   length_rule: '50文字以内で入力してください。',
   re_upload: '失敗したファイルを再アップロード',

@@ -200,12 +200,13 @@ export default {
       commit('UPDATE_LIST', res.data.data)
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
+      commit('UNLOADING');
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
+      commit('UNLOADING');
     })
-    commit('UNLOADING');
   },
   async getComments({state, commit}) {
     let data = {}

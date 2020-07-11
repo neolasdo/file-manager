@@ -70,6 +70,7 @@ export default {
   no: 'NO',
   server_error: 'System Error',
   empty_folder: 'THIS FOLDER IS EMPTY',
+  search_empty: 'Can\'t find any folder/files with search',
   required_rule: 'This item is required.',
   name_length_rule: 'Please enter within 50 characters',
   re_upload: 'Re-upload failed files',
