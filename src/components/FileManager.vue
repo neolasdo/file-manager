@@ -31,7 +31,7 @@
                                 </v-btn>
                             </template>
                             <v-list tile dense>
-                                <v-list-item v-for="item in $sortConfig.fields" :key="item.key"
+                                <v-list-item v-for="item in $config.sortConfig.fields" :key="item.key"
                                              @click="changeSort(item.key)">
                                     <v-list-item-content>
                                         <v-list-item-title>{{ item.label }}</v-list-item-title>
@@ -136,11 +136,11 @@
       },
       sortLabel() {
         let key = this.$fileStore.state.sortKey
-        let index = this.$sortConfig.fields.findIndex(item => {
+        let index = this.$config.sortConfig.fields.findIndex(item => {
           return item.key === key
         })
         if (index !== -1) {
-          return this.$sortConfig.fields[index].label
+          return this.$config.sortConfig.fields[index].label
         }
         return ''
       },

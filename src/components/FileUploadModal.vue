@@ -37,7 +37,7 @@
                                     </div>
                                 </template>
                             </v-combobox>
-                            <v-checkbox v-model="need_approval" :label="$trans('need_approval')"></v-checkbox>
+                            <v-checkbox v-model="need_approval" :label="$trans('need_approval')" v-if="!$config.hideNeedApprovalCheckBox"></v-checkbox>
                         </v-form>
                     </v-container>
                 </v-card-text>
@@ -67,15 +67,15 @@
         need_approval: false,
         files: [],
         errors: [],
-        accept: this.$accept_mimes.join(),
-        maxSize: this.$file_max_size,
+        accept: this.$config.accept_mimes.join(),
+        maxSize: this.$config.file_max_size,
         progress: 0,
         validate: {
           files: ''
         },
         rules: {
           filesRules: [
-            v => this.checkDocumentSize(v) || this.lengthOverloadSizeFilesArr() || this.$trans('error_file_size', {size: formatSize(this.$file_max_size)}),
+            v => this.checkDocumentSize(v) || this.lengthOverloadSizeFilesArr() || this.$trans('error_file_size', {size: formatSize(this.$config.file_max_size)}),
             v => this.checkMimeDocuments(v) || this.lengthMimeErrorFilesArr() || this.$trans('error_file_mime'),
           ]
         },

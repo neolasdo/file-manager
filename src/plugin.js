@@ -35,7 +35,8 @@ let optionsDefaults = {
   detailConfig: detail,
   file_max_size: 25000000,
   autoReload: true,
-  reloadPreviewAfter: 5000
+  reloadPreviewAfter: 5000,
+  hideNeedApprovalCheckBox: false
 }
 let Vue;
 
@@ -58,13 +59,14 @@ class Manager {
     }
     const options = this.mergeOptions(opts)
     let vuetify = Vue.prototype.$vuetify
-
+    let config = {}
     /**
      * Register Snackbar
      * @type {ExtendedVue<Vue, any, any, any, Record<never, any>> | ExtendedVue<Vue, any, any, any, any> | ExtendedVue<Vue, {}, {}, {}, Record<never, any>> | ExtendedVue<Vue, {}, {}, {}, any> | ExtendedVue<Vue, {}, {}, {}, {}> | OptionsVue<Vue, any, any, any, Record<never, any>, any> | OptionsVue<Vue, any, any, any, any, any> | OptionsVue<Vue, {}, {}, {}, Record<never, any>, any> | OptionsVue<Vue, {}, {}, {}, any, any> | OptionsVue<Vue, {}, {}, {}, {}, Record<string, any>> | void}
      */
     const snackbar = Vue.extend(Object.assign({vuetify}, SnackBar))
 
+    config.hideNeedApprovalCheckBox = options.hideNeedApprovalCheckBox
     Vue.prototype.$snackbar = function (message, options = {}) {
       options.message = message
       const container = document.querySelector('[data-app=true]') || document.body
@@ -100,10 +102,10 @@ class Manager {
       }
       return endpoint
     }
-    Vue.prototype.$dict = options.dict
-    Vue.prototype.$lang = options.lang
+    config.dict = options.dict
+    config.lang = options.lang
     Vue.prototype.$trans = function (key, replace = {}) {
-      let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
+      let currentLang = config.dict[config.lang]
       if (currentLang) {
         let tranRes = currentLang[key] ? currentLang[key] : key
         for (const [key, value] of Object.entries(replace)) {
@@ -139,16 +141,17 @@ class Manager {
     store.$trans = Vue.prototype.$trans
     store.$sortConfig = options.sort
     Vue.prototype.$fileStore = store;
-    Vue.prototype.$autoReloadPreview = options.autoReload;
-    Vue.prototype.$reloadPreviewAfter = options.reloadPreviewAfter;
-    Vue.prototype.$getEndpoint = store.$getEndpoint;
-    Vue.prototype.$accept_mimes = options.accept_mimes;
-    Vue.prototype.$accept_extensions = options.accept_extensions;
-    Vue.prototype.$file_max_size = options.file_max_size;
-    Vue.prototype.$permissions = options.permissions;
-    Vue.prototype.$sortConfig = options.sort;
-    Vue.prototype.$detailConfig = options.detailConfig;
+    config.autoReloadPreview = options.autoReload;
+    config.reloadPreviewAfter = options.reloadPreviewAfter;
+    config.accept_mimes = options.accept_mimes;
+    config.accept_extensions = options.accept_extensions;
+    config.file_max_size = options.file_max_size;
+    config.sortConfig = options.sort;
+    config.detailConfig = options.detailConfig;
+    Vue.prototype.$config = config
 
+    Vue.prototype.$getEndpoint = store.$getEndpoint;
+    Vue.prototype.$permissions = options.permissions;
     this.store = store
     this.permissions = options.permissions
   }
@@ -156,6 +159,7 @@ class Manager {
   mergeOptions(opts) {
     let options = {
       endpoints: {...optionsDefaults.endpoints, ...opts.endpoints},
+      hideNeedApprovalCheckBox: opts.hideNeedApprovalCheckBox ? opts.hideNeedApprovalCheckBox : optionsDefaults.hideNeedApprovalCheckBox,
       axios: opts.axios ? opts.axios : optionsDefaults.axios,
       lang: opts.lang ? opts.lang : optionsDefaults.lang,
       autoReload: opts.autoReload !== undefined ? opts.autoReload : true,
@@ -188,6 +192,12 @@ class Manager {
   updatePermission(config) {
     Vue.prototype.$permissions = {...this.permissions, ...config}
     this.permissions = Vue.prototype.$permissions
+  }
+
+  changeConfig(configName, value) {
+    if (Vue.prototype.$config[configName] !== undefined) {
+      Vue.prototype.$config[configName] = value
+    }
   }
 
   changeEndpoint(name, opts = {}) {

@@ -21,19 +21,23 @@ let optionsDefaults = {
   permissions: permissions,
   sort: sort,
   detailConfig: detail,
+  hideNeedApprovalCheckBox: true
 }
 
 Vue.config.productionTip = false
 
-Vue.prototype.$dict = lang
-Vue.prototype.$lang = 'en'
+let config = {}
 
-Vue.prototype.$accept_mimes = file.accept_mimes;
-Vue.prototype.$accept_extensions = file.accept_extensions;
-Vue.prototype.$file_max_size = file.file_max_size;
+config.dict = lang
+config.hideNeedApprovalCheckBox = optionsDefaults.hideNeedApprovalCheckBox
+config.lang = 'en'
+
+config.accept_mimes = file.accept_mimes;
+config.accept_extensions = file.accept_extensions;
+config.file_max_size = file.file_max_size;
 
 Vue.prototype.$trans = function (key, replace = {}) {
-  let currentLang = Vue.prototype.$dict[Vue.prototype.$lang]
+  let currentLang = config.dict[config.lang]
   if (currentLang) {
     let tranRes = currentLang[key] ? currentLang[key] : key
     for (const [key, value] of Object.entries(replace)) {
@@ -108,14 +112,14 @@ fileStore.$getEndpoint = function (name, meta = []) {
 fileStore.$axios = optionsDefaults.axios
 fileStore.$snackbar = Vue.prototype.$snackbar
 Vue.prototype.$fileStore = fileStore
-Vue.prototype.$autoReloadPreview = false;
-Vue.prototype.$reloadPreviewAfter = 5000;
+config.autoReloadPreview = false;
+config.reloadPreviewAfter = 5000;
 Vue.prototype.$getEndpoint = fileStore.$getEndpoint
 Vue.prototype.$axios = fileStore.$axios;
 Vue.prototype.$permissions = optionsDefaults.permissions;
-Vue.prototype.$sortConfig = optionsDefaults.sort;
-Vue.prototype.$detailConfig = optionsDefaults.detailConfig;
-
+config.sortConfig = optionsDefaults.sort;
+config.detailConfig = optionsDefaults.detailConfig;
+Vue.prototype.$config = config
 
 new Vue({
   vuetify,

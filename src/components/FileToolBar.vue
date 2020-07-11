@@ -176,7 +176,7 @@
       getAllType() {
         let allTypes = [];
         allTypes.push({text: this.$trans('all'), value: ''})
-        for (const [key, value] of Object.entries(this.$accept_extensions)) {
+        for (const [key, value] of Object.entries(this.$config.accept_extensions)) {
           allTypes.push({text: value.toUpperCase(), value: key})
         }
         return allTypes
