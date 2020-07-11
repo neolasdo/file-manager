@@ -196,8 +196,8 @@ class Manager {
     this.permissions = Vue.prototype.$permissions
   }
 
-  changeConfig(configName, value) {
-    Vue.prototype.$pluginConfig = {...this.pluginConfig, ...{configName : value}}
+  changeConfig(name, value) {
+    Vue.prototype.$pluginConfig[name] = value
     this.config = Vue.prototype.$pluginConfig
   }
 
