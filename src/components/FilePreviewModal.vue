@@ -11,7 +11,7 @@
             </v-toolbar>
             <v-card-text class="justify-content-center preview-area"
                          :style="{'height': `${frameHeight + 12}px`}" style="position: relative">
-                <v-overlay :value="isDocType && !loaded && this.$config.autoReloadPreview" absolute>
+                <v-overlay :value="isDocType && !loaded && this.$pluginConfig.autoReloadPreview" absolute>
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
                 <iframe v-if="isDocType && renderIframe" width='100%' :height="(frameHeight - 26) + 'px'"
@@ -82,7 +82,7 @@
           this.$nextTick(() => {
             this.renderIframe = true
           })
-        }, this.$config.reloadPreviewAfter ? this.$config.reloadPreviewAfter : 5000)
+        }, this.$pluginConfig.reloadPreviewAfter ? this.$pluginConfig.reloadPreviewAfter : 5000)
       },
       showPreview(item) {
         this.item = item
@@ -100,7 +100,7 @@
             setTimeout(() => {
               this.frameHeight = this.$refs.previewCard.$el.clientHeight - 64;
             }, 0);
-            if (this.isDocType && this.$config.autoReloadPreview) {
+            if (this.isDocType && this.$pluginConfig.autoReloadPreview) {
               this.reloadIframe()
             }
           }

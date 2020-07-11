@@ -119,7 +119,7 @@ Vue.prototype.$axios = fileStore.$axios;
 Vue.prototype.$permissions = optionsDefaults.permissions;
 config.sortConfig = optionsDefaults.sort;
 config.detailConfig = optionsDefaults.detailConfig;
-Vue.prototype.$config = config
+Vue.prototype.$pluginConfig = config
 
 new Vue({
   vuetify,

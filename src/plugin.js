@@ -43,6 +43,7 @@ let Vue;
 class Manager {
   store
   permissions
+  config
 
   constructor(opts = optionsDefaults) {
     if (!Vue && typeof window !== 'undefined' && window.Vue) {
@@ -148,11 +149,12 @@ class Manager {
     config.file_max_size = options.file_max_size;
     config.sortConfig = options.sort;
     config.detailConfig = options.detailConfig;
-    Vue.prototype.$config = config
+    Vue.prototype.$pluginConfig = config
 
     Vue.prototype.$getEndpoint = store.$getEndpoint;
     Vue.prototype.$permissions = options.permissions;
     this.store = store
+    this.config = config
     this.permissions = options.permissions
   }
 
@@ -195,9 +197,8 @@ class Manager {
   }
 
   changeConfig(configName, value) {
-    if (Vue.prototype.$config[configName] !== undefined) {
-      Vue.prototype.$config[configName] = value
-    }
+    Vue.prototype.$pluginConfig = {...this.pluginConfig, ...{configName : value}}
+    this.config = Vue.prototype.$pluginConfig
   }
 
   changeEndpoint(name, opts = {}) {

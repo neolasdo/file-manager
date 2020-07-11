@@ -41,14 +41,14 @@
                             <v-row>
                                 <v-col cols="12" v-if="!selectedFiles.length && !selectedFolder.hasOwnProperty('id')">
                                     <b v-if="!current.id">{{ $trans('no_item_selected') }}</b>
-                                    <div v-for="item in $config.detailConfig.folderDetail" :key="item.key" v-else>
+                                    <div v-for="item in $pluginConf.detailConfig.folderDetail" :key="item.key" v-else>
                                         <span class="body-1 font-weight-medium" v-if="current[item.key]">
                                             {{ item.label + ': '+ current[item.key] }}
                                         </span>
                                     </div>
                                 </v-col>
                                 <v-col cols="12" v-if="selectedFolder.hasOwnProperty('id')">
-                                    <div v-for="item in $config.detailConfig.folderDetail" :key="item.key">
+                                    <div v-for="item in $pluginConf.detailConfig.folderDetail" :key="item.key">
                                         <span class="body-1 font-weight-medium" v-if="selectedFolder[item.key]">
                                             {{ item.label + ': '+ selectedFolder[item.key] }}
                                         </span>
@@ -75,7 +75,7 @@
                                     </v-list>
                                 </v-col>
                                 <v-col cols="12" v-if="selectedFiles.length === 1">
-                                    <div v-for="item in $config.detailConfig.fileDetail" :key="item.key">
+                                    <div v-for="item in $pluginConf.detailConfig.fileDetail" :key="item.key">
                                     <span class="body-1 font-weight-medium" v-if="selectedFiles[0][item.key]">
                                             {{ item.label + ': '+ (item.formatFunc ? item.formatFunc(selectedFiles[0][item.key]): selectedFiles[0][item.key]) }}
                                         </span>
