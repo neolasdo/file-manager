@@ -108,21 +108,23 @@
 <style>
     .comment-view {
         height: calc(100% - 32px);
-        overflow-y: auto;
+        height: -moz-calc(100% - 32px);
+        height: -webkit-calc(100% - 32px);
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
-        user-select: none;
+        user-select: none;       
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overflow-y: scroll;
+        padding: 20px 10px !important;
+        background-color: #f2f2f2;
     }
     .container-message-display {
-        padding: 20px 0;
-        background-color: #f2f2f2;
-        height: 100% !important;
-        overflow-y: scroll;
+        height: auto;
         display: flex;
         flex-direction: column;
         flex: 1;
-        overflow-x: hidden;
     }
     .container-message-display .message-text > p {
         margin: 5px 0 5px 0;
@@ -152,27 +154,25 @@
         font-size: 0.85rem !important;
         font-weight: bold;
     }
-    .container-message-display::-webkit-scrollbar {
-        width: 10px;
+    .comment-view::-webkit-scrollbar {
+        width: 8px !important;
     }
-    .container-message-display::-webkit-scrollbar-track {
+    .comment-view::-webkit-scrollbar-track {
         background: #f1f1f1;
     }
-    .container-message-display::-webkit-scrollbar-thumb {
+    .comment-view::-webkit-scrollbar-thumb {
         background: #888;
     }
-    .container-message-display::-webkit-scrollbar-thumb:hover {
+    .comment-view::-webkit-scrollbar-thumb:hover {
         background: #555;
     }
     .other-message-body {
         display: flex;
         align-items: flex-end;
-        padding-left: 10px;
     }
     .myself-message-body {
         display: flex;
         align-items: flex-end;
-        padding-right: 10px;
         justify-content: flex-end;
     }
     .message-content{

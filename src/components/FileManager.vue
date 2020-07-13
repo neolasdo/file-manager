@@ -229,7 +229,9 @@
 
     .context-area {
         background-color: #e5e5e5;
-        height: calc(100% - 93px);
+        height: calc(100vh - 93px);
+        height: -moz-calc(100vh - 93px);
+        height: -webkit-calc(100vh - 93px);
         position: relative;
     }
 

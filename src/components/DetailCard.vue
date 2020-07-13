@@ -263,6 +263,8 @@
 
     .tab-content {
         height: calc(100% - 48px);
+        height: -moz-calc(100% - 48px);
+        height: -webkit-calc(100% - 48px);
         overflow-y: auto;
         -webkit-user-select: none;
         -moz-user-select: none;
