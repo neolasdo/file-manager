@@ -14,8 +14,8 @@
                                       @contextmenu.prevent.stop="showContextMenu(item, $event)">
                                   <v-overlay absolute color="#969696"
                                               :value="item.is_official !== undefined && !item.is_official"></v-overlay>
-                                  <v-chip small label class="status-label" v-if="getLabel(item)" style="border-radius: 0 !important;"
-                                          :color="getLabelColor(item)" text-color="white">{{getLabel(item)}}
+                                  <v-chip small label class="status-label" v-if="item.label" style="border-radius: 0 !important;"
+                                          :color="item.label_color" text-color="white">{{item.label}}
                                   </v-chip>
                                   <v-card-text>
                                       <v-img :src="fileThumbnail(item)" alt=""></v-img>

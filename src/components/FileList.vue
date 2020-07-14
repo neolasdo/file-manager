@@ -24,7 +24,7 @@
 
         <v-list-item-action>
           <v-list-item-action-text class="text-right">
-            <strong v-if="getLabel(item)" :class="getLabelColor(item)+'--text'">{{getLabel(item)}}</strong><br>
+            <strong v-if="item.label" :class="item.label_color+'--text'">{{item.label}}</strong><br>
             <strong>{{formatSize(item.size)}}</strong><br>
           </v-list-item-action-text>
         </v-list-item-action>
@@ -56,23 +56,6 @@
       },
     },
     methods: {
-      getLabel(item) {
-        if (item.count_pending_approval_request > 0) {
-          return this.$trans('approval_request_pending')
-        }
-        if (item.count_pending_sign_request > 0) {
-          return this.$trans('sign_request_pending')
-        }
-        if (item.count_signed_sign_request > 0) {
-          return this.$trans('sign_request_signed')
-        }
-      },
-      getLabelColor(item) {
-        if (item.count_signed_sign_request > 0) {
-          return 'success'
-        }
-        return 'primary'
-      },
       resetSelectedFiles() {
         this.$fileStore.dispatch('resetSelectedFiles')
       },
