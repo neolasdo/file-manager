@@ -24,7 +24,7 @@
           <template v-for="item in current.children">
             <v-list-item
               :key="item.id"
-              v-if="item.hasChildren || (item.children && item.children.length)"
+              v-if="item.document_count || item.hasChildren || (item.children && item.children.length)"
             >
               <v-list-item-icon>
                 <v-icon>mdi-folder</v-icon>
@@ -116,15 +116,15 @@ export default {
   methods: {
     disabledSelect(item) {
       if (this.type === "sign") {
-        return !(
-          (item.is_official &&
+        return (
+          !(item.is_official &&
             !item.count_signed_sign_request &&
             !item.count_pending_sign_request) ||
           this.disableFileIds.includes(item.id)
         );
       } else {
-        return !(
-          (item.is_official && !item.count_pending_approval_request) ||
+        return (
+          !(item.is_official && !item.count_pending_approval_request) ||
           this.disableFileIds.includes(item.id)
         );
       }
