@@ -22,10 +22,7 @@
             <v-list-item-content>...</v-list-item-content>
           </v-list-item>
           <template v-for="item in current.children">
-            <v-list-item
-              :key="item.id"
-              v-if="item.document_count || item.hasChildren || (item.children && item.children.length)"
-            >
+            <v-list-item :key="item.id">
               <v-list-item-icon>
                 <v-icon>mdi-folder</v-icon>
               </v-list-item-icon>
