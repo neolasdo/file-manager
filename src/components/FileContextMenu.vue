@@ -26,7 +26,7 @@
                         <v-list-item-title>{{ $trans('move_to') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item @click="requestSign()" v-if="canRequestSign">
+                <v-list-item @click="requestSign()" v-if="$permissions.requestSign">
                     <v-list-item-icon>
                         <v-icon>mdi-signature-freehand</v-icon>
                     </v-list-item-icon>
@@ -80,13 +80,6 @@
       selectedItems() {
         return this.$fileStore.state.selectedFiles
       },
-      canRequestSign() {
-        let invalid = this.selectedItems.find(item => {
-          return (item.is_official !== undefined && !item.is_official)
-          || (item.count_signed_sign_request + item.count_pending_sign_request > 0)
-        })
-        return this.$permissions.requestSign && invalid === undefined
-      },
       x() {
         return this.$fileStore.state.pointerEvent.x
       },
@@ -112,10 +105,13 @@
         this.$fileStore.dispatch('openFormModal', payload)
       },
       requestSign() {
-        this.$fileStore.dispatch('requestSign', this.selectedItems)
+        this.$fileStore.dispatch('addSignFilesRequest', this.selectedItems)
+        this.$fileStore.dispatch('showRequestModal', 'sign')
       },
       requestApproval() {
-        this.$fileStore.dispatch('requestApproval', this.selectedItems)
+        this.$fileStore.dispatch('addApprovalFilesRequest', this.selectedItems)
+        this.$fileStore.dispatch('showRequestModal', 'approval')
+        
       },
       download() {
         let endpoint = this.$fileStore.$getEndpoint('download')

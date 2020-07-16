@@ -191,5 +191,67 @@ export default {
         y: 0
       }
     })
+  },
+  ADD_FILES_REQUEST(state, payload) {
+    let type = state.requestingType
+    state.requestFiles[type] = [...(state.requestFiles[type]), ...payload]
+  },
+  ADD_SIGN_FILES_REQUEST(state, payload) {
+    let type = 'sign'
+    payload.forEach((item) => {
+      let existIdx = state.requestFiles[type].findIndex((file) => {
+        return file.id == item.id
+      })
+      if (existIdx !== -1) {
+        state.requestFiles[type][existIdx] = item
+      } else {
+        state.requestFiles[type].push(item)
+      }
+    })
+  },
+  ADD_APPROVAL_FILES_REQUEST(state, payload) {
+    let type = 'approval'
+    payload.forEach((item) => {
+      let existIdx = state.requestFiles[type].findIndex((file) => {
+        return file.id == item.id
+      })
+      if (existIdx !== -1) {
+        state.requestFiles[type][existIdx] = item
+      } else {
+        state.requestFiles[type].push(item)
+      }
+    })
+  },
+  REMOVE_FILES_REQUEST(state, index) {
+    let type = state.requestingType
+    state.requestFiles[type].splice(index, 1)
+  },
+  RESET_REQUEST_FILES(state) {
+    let type = state.requestingType
+    state.requestFiles[type] = []
+  },
+  ON_DELETE_FOLDER(state, folderId) {
+    for (const [key, value] of Object.entries(state.requestFiles)) {
+      state.requestFiles[key] = value.filter((item) => {
+        return item.folder_id != folderId
+      })
+    }
+  },
+  ON_DELETE_FILES(state, fileIds) {
+    for (const [key, value] of Object.entries(state.requestFiles)) {
+      state.requestFiles[key] = value.filter((item) => {
+        return item.id != fileIds
+      })
+    }
+  },
+  ON_UPDATE_FILE_NAME(state, payload) {
+    for (const [key, value] of Object.entries(state.requestFiles)) {
+      state.requestFiles[key] = value.map((item) => {
+        if (item.id === payload.id) {
+          item.name = payload.name
+        }
+        return item
+      })
+    }
   }
 }

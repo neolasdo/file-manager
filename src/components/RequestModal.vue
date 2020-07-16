@@ -10,6 +10,9 @@
                         <v-subheader inset>
                             Files
                             <v-spacer></v-spacer>
+                             <v-btn icon @click="resetList">
+                                <v-icon color="primary lighten-1">mdi-reload</v-icon>
+                            </v-btn>
                              <v-btn icon @click="showSelectFileDialog = true">
                                 <v-icon color="primary lighten-1">mdi-plus</v-icon>
                             </v-btn>
@@ -64,7 +67,6 @@
       return {
         reload: false,
         showSelectFileDialog: false,
-        files: []
       }
     },
     methods: {
@@ -75,7 +77,6 @@
         this.$fileStore.dispatch('reload')
       },
       closeModal() {
-        this.filesInfo = []
         this.hideRequestModal()
         if (this.reload) {
           this.reloadAction()
@@ -94,10 +95,13 @@
         this.$fileStore.dispatch('requestApproval', this.files)
       },
       removeFile(index) {
-        this.files.splice(index, 1)
+        this.$fileStore.dispatch('removeFileRequest', index)
       },
       select(selected) {
-        this.files = [...(this.files), ...selected]
+        this.$fileStore.dispatch('addFilesRequest', selected)
+      },
+      resetList() {
+        this.$fileStore.dispatch('resetRequestFiles')
       }
     },
     computed: {
@@ -109,6 +113,9 @@
       },
       type() {
         return this.$fileStore.state.requestingType
+      },
+      files() {
+        return this.$fileStore.state.requestFiles[this.type]
       }
     },
   }

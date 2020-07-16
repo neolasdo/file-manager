@@ -57,11 +57,9 @@ module.exports = function(app) {
       res.json(folder)
     })
 
-  app.route('/move')
+  app.route('/request-sign')
     .post(function (req, res) {
-      let folderId = req.body.dest
-      let folder = data.getByFolder(folderId? parseInt(folderId) : false);
-      res.json(folder)
+      res.json({status: true})
     })
 
 

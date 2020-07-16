@@ -28,6 +28,10 @@ export default {
   showFileContext: false,
   showRequestModal: false,
   requestingType: 'sign',
+  requestFiles: {
+    sign: [],
+    approval: []
+  },
   pointerEvent: {
     x: 0,
     y: 0

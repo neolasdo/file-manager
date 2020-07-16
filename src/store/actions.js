@@ -104,6 +104,7 @@ export default {
     let endpoint = this.$getEndpoint('deleteFolder', [payload])
     let response = executeAxios(this.$axios, endpoint, payload)
     await response.then(res => {
+      commit('ON_DELETE_FOLDER', payload)
       getMessage(res,this.$snackbar)
       dispatch('reload')
     }).catch(error => {
@@ -114,14 +115,16 @@ export default {
   async deleteSelected({dispatch, state, commit}) {
     commit('RESET_COMMENT_LIST');
     commit('LOADING')
+    let files = state.selectedFiles.map(item => {
+      return item.id
+    })
     let endpoint =  this.$getEndpoint('delete')
     let response = executeAxios(this.$axios, endpoint, {
-      files: state.selectedFiles.map(item => {
-        return item.id
-      })
+      files: files
     })
 
     await response.then(res => {
+      commit('ON_DELETE_FILES', files)
       getMessage(res,this.$snackbar)
       dispatch('reload')
     }).catch(error => {
@@ -246,6 +249,8 @@ export default {
       let response = executeAxios(this.$axios, endpoint, data)
       await response.then(res => {
         dispatch('reload')
+        dispatch('resetRequestFiles')
+        dispatch('hideRequestModal')
         getMessage(res,this.$snackbar)
       }).catch(error => {
         getErrorMessage(error,this.$snackbar, this.$trans)
@@ -265,6 +270,8 @@ export default {
       let response = executeAxios(this.$axios, endpoint, data)
       await response.then(res => {
         dispatch('reload')
+        dispatch('resetRequestFiles')
+        dispatch('hideRequestModal')
         getMessage(res,this.$snackbar)
       }).catch(error => {
         getErrorMessage(error,this.$snackbar, this.$trans)
@@ -287,6 +294,21 @@ export default {
   },
   resetState({commit}) {
     commit('RESET_STATE')
+  },
+  addFilesRequest({commit}, payload) {
+    commit('ADD_FILES_REQUEST', payload)
+  },
+  addSignFilesRequest({commit}, payload) {
+    commit('ADD_SIGN_FILES_REQUEST', payload)
+  },
+  addApprovalFilesRequest({commit}, payload) {
+    commit('ADD_APPROVAL_FILES_REQUEST', payload)
+  },
+  removeFileRequest({commit}, index) {
+    commit('REMOVE_FILES_REQUEST', index)
+  },
+  resetRequestFiles({commit}) {
+    commit('RESET_REQUEST_FILES')
   }
 }
 

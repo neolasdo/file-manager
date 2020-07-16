@@ -91,14 +91,16 @@
         }
         await this.handleResult(request)
       },
-      async handleResult(request) {
+      async handleResult(request, fileId) {
         await request.then(res => {
           if (res.data && res.data.message) {
             this.$snackbar(res.data.message, {
               color: 'success'
             })
           }
-
+          if (fileId) {
+            this.$fileStore.commit('ON_UPDATE_FILE_NAME', {id: fileId, name: this.name})
+          }
           this.$fileStore.dispatch('hideFormModal', true)
         }).catch(errors => {
           let status = errors.response.status;
@@ -161,7 +163,7 @@
                 data: data
               })
             }
-            this.handleResult(request)
+            this.handleResult(request, payload.id)
           }
         })
       },

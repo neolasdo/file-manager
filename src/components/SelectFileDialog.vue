@@ -117,15 +117,14 @@ export default {
     disabledSelect(item) {
       if (this.type === "sign") {
         return (
-          item.is_official &&
-          !item.count_signed_sign_request &&
-          !item.count_pending_sign_request &&
+          (item.is_official &&
+            !item.count_signed_sign_request &&
+            !item.count_pending_sign_request) ||
           this.disableFileIds.includes(item.id)
         );
       } else {
         return (
-          item.is_official &&
-          !item.count_pending_approval_request &&
+          (item.is_official && !item.count_pending_approval_request) ||
           this.disableFileIds.includes(item.id)
         );
       }
