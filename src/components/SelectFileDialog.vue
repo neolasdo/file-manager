@@ -29,7 +29,7 @@
               <v-list-item-content>
                 <v-list-item-title v-text="item.name"></v-list-item-title>
               </v-list-item-content>
-              <v-list-item-action>
+              <v-list-item-action v-if="item.document_count || item.hasChildren || (item.children && item.children.length)">
                 <v-btn icon small @click="getFolders(item.id)">
                   <v-icon color="grey lighten-1">mdi-chevron-right</v-icon>
                 </v-btn>
