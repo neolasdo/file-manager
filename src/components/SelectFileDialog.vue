@@ -64,8 +64,8 @@
         </v-list>
       </v-card-text>
       <v-card-actions>
-        <v-btn color="primary" text @click="submitSelect" :disabled="!selected.length">Select</v-btn>
-        <v-btn color="primary" text @click="close">Close</v-btn>
+        <v-btn color="primary" text @click="submitSelect" :disabled="!selected.length">{{ $trans('select') }}</v-btn>
+        <v-btn color="primary" text @click="close">{{ $trans('close') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -116,14 +116,14 @@ export default {
   methods: {
     disabledSelect(item) {
       if (this.type === "sign") {
-        return (
+        return !(
           (item.is_official &&
             !item.count_signed_sign_request &&
             !item.count_pending_sign_request) ||
           this.disableFileIds.includes(item.id)
         );
       } else {
-        return (
+        return !(
           (item.is_official && !item.count_pending_approval_request) ||
           this.disableFileIds.includes(item.id)
         );

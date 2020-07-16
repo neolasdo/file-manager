@@ -8,7 +8,7 @@
                 <v-card-text>
                     <v-list>
                         <v-subheader inset>
-                            Files
+                            {{ $trans('files') }}
                             <v-spacer></v-spacer>
                              <v-btn icon @click="resetList">
                                 <v-icon color="primary lighten-1">mdi-reload</v-icon>
