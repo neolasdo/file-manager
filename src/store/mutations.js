@@ -31,32 +31,6 @@ export default {
   ADD_FILE_SELECTED(state, payload) {
     state.selectedFiles.push(payload)
   },
-  ADD_FILES_TO_CLIPBOARD(state) {
-    state.clipboard.files = Array.from(new Set([...state.clipboard.files, ...state.selectedFiles]))
-  },
-  ADD_FOLDERS_TO_CLIPBOARD(state) {
-    if (state.selectedFolder.id) {
-      let index = state.clipboard.folders.findIndex(item => {
-        return item.id === state.selectedFolder.id
-      })
-      if (index === -1) {
-        state.clipboard.folders.push(state.selectedFolder)
-        state.selectedFolder = {}
-      }
-    }
-  },
-  REMOVE_FILE_IN_CLIPBOARD(state, payload) {
-    state.clipboard.files.splice(payload, 1);
-  },
-  REMOVE_FOLDER_IN_CLIPBOARD(state, payload) {
-    state.clipboard.folders.splice(payload, 1);
-  },
-  RESET_CLIPBOARD(state) {
-    state.clipboard = {
-      files: [],
-      folders: []
-    };
-  },
   LOADING(state) {
     state.isLoading = true;
   },
@@ -172,6 +146,17 @@ export default {
     state.showFolderContext = false
     state.showFileContext = false
   },
+  HIDE_REQUEST_MODAL(state) {
+    state.showRequestModal = false
+  },
+  SHOW_REQUEST_MODAL(state, payload) {
+    if (payload) {
+      state.requestingType = payload
+    } else {
+      state.requestingType = 'sign'
+    }
+    state.showRequestModal = true
+  },
   RESET_STATE(state) {
     Object.assign(state, {
       files: [],
@@ -191,10 +176,6 @@ export default {
           id: ''
         }
       ],
-      clipboard: {
-        files: [],
-        folders: []
-      },
       comments: [],
       commentPaginate: {},
       itemComment: undefined,

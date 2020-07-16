@@ -74,31 +74,11 @@ export default {
     commit('RESET_COMMENT_LIST', payload);
     commit('RESET_SELECTED_FOLDER');
   },
-  addFilesToClipboard({commit}) {
-    commit('ADD_FILES_TO_CLIPBOARD');
-  },
-  addFolderToClipboard({commit}) {
-    commit('ADD_FOLDERS_TO_CLIPBOARD');
-  },
-  removeFileInClipboard({commit}, payload) {
-    commit('REMOVE_FILE_IN_CLIPBOARD', payload);
-  },
-  removeFolderInClipboard({commit}, payload) {
-    commit('REMOVE_FOLDER_IN_CLIPBOARD', payload);
-  },
-  async moveFiles({state, dispatch, commit}, payload) {
+  async moveFiles({dispatch, commit}, payload) {
     commit('RESET_COMMENT_LIST');
-    let dest = state.current.id
-    let clipboard = state.clipboard
-    let files = clipboard.files
-    let folders = clipboard.folders
-    let resetClipBoard = true
-    if (payload) {
-      resetClipBoard = false
-      dest = payload.id
-      files = payload.files
-      folders = payload.folder ? [payload.folder] : []
-    }
+    let dest = payload.id
+    let files = payload.files
+    let folders = payload.folder ? [payload.folder] : []
     let endpoint = this.$getEndpoint('move')
     commit('LOADING')
     let data = {
@@ -110,33 +90,21 @@ export default {
       }),
       dest: dest ? dest : null
     }
-
     let response = executeAxios(this.$axios, endpoint, data)
-
     await response.then(res => {
       getMessage(res,this.$snackbar)
-
       dispatch('reload')
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
     })
-    if (resetClipBoard) {
-      commit('RESET_CLIPBOARD');
-    }
   },
-  async deleteFolder({dispatch, state, commit}, payload) {
+  async deleteFolder({dispatch, commit}, payload) {
     commit('RESET_COMMENT_LIST');
     commit('LOADING')
     let endpoint = this.$getEndpoint('deleteFolder', [payload])
     let response = executeAxios(this.$axios, endpoint, payload)
     await response.then(res => {
       getMessage(res,this.$snackbar)
-      let index = state.clipboard.folders.findIndex(folder => {
-        return folder.id === payload
-      })
-      if (index !== -1) {
-        dispatch('removeFolderInClipboard', index)
-      }
       dispatch('reload')
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
@@ -155,14 +123,6 @@ export default {
 
     await response.then(res => {
       getMessage(res,this.$snackbar)
-      state.selectedFiles.forEach(item => {
-        let index = state.clipboard.files.findIndex(file => {
-          return file.id === item.id
-        })
-        if (index !== -1) {
-          dispatch('removeFileInClipboard', index)
-        }
-      })
       dispatch('reload')
     }).catch(error => {
       getErrorMessage(error,this.$snackbar, this.$trans)
@@ -257,7 +217,12 @@ export default {
       })
     }
   },
-
+  hideRequestModal({commit}) {
+    commit('HIDE_REQUEST_MODAL')
+  },
+  showRequestModal({commit}, payload) {
+    commit('SHOW_REQUEST_MODAL', payload)
+  },
   reload({state, dispatch}) {
     if (state.keyword !== '') {
       dispatch('search', {keyword: state.keyword, filter: state.filter})
@@ -288,8 +253,24 @@ export default {
       commit('UNLOADING');
     }
   },
-  resetClipboard({commit}) {
-    commit('RESET_CLIPBOARD');
+  async requestApproval({commit, dispatch}, payload) {
+    if (payload.length) {
+      commit('LOADING')
+      let endpoint = this.$getEndpoint('request_approval')
+      let data = {
+        files: payload.map(item => {
+          return item.id
+        }),
+      }
+      let response = executeAxios(this.$axios, endpoint, data)
+      await response.then(res => {
+        dispatch('reload')
+        getMessage(res,this.$snackbar)
+      }).catch(error => {
+        getErrorMessage(error,this.$snackbar, this.$trans)
+      });
+      commit('UNLOADING');
+    }
   },
   showMainContextMenu({commit, dispatch}, payload) {
     commit('SHOW_MAIN_CONTEXT', payload)

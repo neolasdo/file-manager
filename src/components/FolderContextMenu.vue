@@ -18,13 +18,21 @@
             <v-list-item-title>{{ $trans('rename') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="addClipboard" v-if="$permissions.moveFolder">
-          <v-list-item-icon>
-            <v-icon>mdi-clipboard-plus-outline</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $trans('add_to_clipboard') }}</v-list-item-title>
-          </v-list-item-content>
+        <v-list-item @click="showRequestModal('sign')" v-if="$permissions.requestSign">
+            <v-list-item-icon>
+                <v-icon>mdi-signature-freehand</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+                <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
+            </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="showRequestModal('approval')" v-if="$permissions.approvalRequest">
+            <v-list-item-icon>
+                <v-icon>mdi-file-check</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+                <v-list-item-title>{{ $trans('approval_request') }}</v-list-item-title>
+            </v-list-item-content>
         </v-list-item>
         <v-list-item @click="move" v-if="$permissions.moveFolder">
           <v-list-item-icon>
@@ -101,15 +109,15 @@
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
       },
-      addClipboard() {
-        this.$fileStore.dispatch('addFolderToClipboard')
-      },
       move() {
         this.$refs.moveModal.showDialog()
       },
       openFolder() {
         this.getByFolder(this.item)
       },
+      showRequestModal(payload) {
+        this.$fileStore.dispatch('showRequestModal', payload)
+      }
     }
   }
 </script>

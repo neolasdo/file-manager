@@ -18,13 +18,21 @@
             <v-list-item-title>{{ $trans('upload') }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="moveFiles" v-if="$permissions.move && clipboard.files.length + clipboard.folders.length">
-          <v-list-item-icon>
-            <v-icon>mdi-file-move</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>{{ $trans('move_to_this') }}</v-list-item-title>
-          </v-list-item-content>
+        <v-list-item @click="showRequestModal('sign')" v-if="$permissions.requestSign">
+            <v-list-item-icon>
+                <v-icon>mdi-signature-freehand</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+                <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
+            </v-list-item-content>
+        </v-list-item>
+        <v-list-item @click="showRequestModal('approval')" v-if="$permissions.approvalRequest">
+            <v-list-item-icon>
+                <v-icon>mdi-file-check</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+                <v-list-item-title>{{ $trans('approval_request') }}</v-list-item-title>
+            </v-list-item-content>
         </v-list-item>
       </v-list>
     </v-menu>
@@ -40,9 +48,6 @@
       },
       current() {
         return this.$fileStore.state.current
-      },
-      clipboard() {
-        return this.$fileStore.state.clipboard
       },
       x() {
         return this.$fileStore.state.pointerEvent.x
@@ -71,15 +76,9 @@
       openFormModal(payload) {
         this.$fileStore.dispatch('openFormModal', payload)
       },
-      moveFiles() {
-        this.$confirm(this.$trans('confirm_move_files'), {
-          buttonTrueColor: 'warning'
-        }).then(res => {
-          if (res) {
-            this.$fileStore.dispatch('moveFiles')
-          }
-        })
-      },
+      showRequestModal(payload) {
+        this.$fileStore.dispatch('showRequestModal', payload)
+      }
     }
   }
 </script>

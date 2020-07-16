@@ -16,10 +16,6 @@ export default {
       id: ''
     }
   ],
-  clipboard: {
-    files: [],
-    folders: []
-  },
   comments: [],
   commentPaginate: {},
   itemComment: undefined,
@@ -30,6 +26,8 @@ export default {
   showMainContext: false,
   showFolderContext: false,
   showFileContext: false,
+  showRequestModal: false,
+  requestingType: 'sign',
   pointerEvent: {
     x: 0,
     y: 0

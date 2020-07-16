@@ -68,8 +68,9 @@
                   <detail-card @close="showDetail=false"/>
                 </div>
             </v-container>
-            <file-upload-modal ref="uploadModal"></file-upload-modal>
-            <form-modal ref="formModal"></form-modal>
+            <file-upload-modal ref="uploadModal"/>
+            <form-modal ref="formModal"/>
+            <request-modal/>
         </v-card>
     </v-app>
 </template>
@@ -85,6 +86,7 @@
   import ListView from "./ListView";
   import GridView from "./GridView";
   import FolderContextMenu from './FolderContextMenu'
+  import RequestModal from './RequestModal'
 
   export default {
     name: 'FileManager',
@@ -98,7 +100,8 @@
       'list-view': ListView,
       'grid-view': GridView,
       'file-context-menu': FileContextMenu,
-      'folder-context-menu': FolderContextMenu
+      'folder-context-menu': FolderContextMenu,
+      'request-modal': RequestModal
     },
     data() {
       return {

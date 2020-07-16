@@ -26,15 +26,6 @@
                         <span>{{ $trans('comments') }}</span>
                     </v-tooltip>
                 </v-tab>
-                <v-tab :href="'#clipboard'" v-if="clipboard.files.length + clipboard.folders.length"
-                       @click="showComments = false">
-                    <v-tooltip bottom>
-                        <template v-slot:activator="{ on }">
-                            <v-icon v-on="on" left>mdi-clipboard-outline</v-icon>
-                        </template>
-                        <span>{{ $trans('clipboard') }}</span>
-                    </v-tooltip>
-                </v-tab>
                 <v-tabs-items v-model="tab" class="tab-content">
                     <v-tab-item value="detail" class="tab-item">
                         <v-card-text>
@@ -88,64 +79,6 @@
                         <FileComments v-if="showComments" :comments="comments" @addComment="addComment($event)"
                                       :canAddComment="$permissions.addComment" @loadMore="loadMoreComment"/>
                     </v-tab-item>
-                    <v-tab-item value="clipboard" v-if="clipboard.files.length + clipboard.folders.length" class="tab-item">
-                        <v-card-text>
-                            <v-row>
-                                <v-col cols="12">
-                                    <v-subheader>{{ $trans('files') }}</v-subheader>
-                                    <v-list dense>
-                                        <v-list-item-group>
-                                            <v-list-item v-for="(item, i) in clipboard.files" :key="i">
-                                                <v-list-item-content>
-                                                    <v-list-item-title class="font-weight-bold"
-                                                                       v-text="item.name"></v-list-item-title>
-                                                </v-list-item-content>
-                                                <v-list-item-action>
-                                                    <v-btn icon small>
-                                                        <v-icon @click="removeFileInClipboard(i)"
-                                                                color="grey lighten-1">mdi-close
-                                                        </v-icon>
-                                                    </v-btn>
-                                                </v-list-item-action>
-                                            </v-list-item>
-                                        </v-list-item-group>
-                                    </v-list>
-                                </v-col>
-                                <v-col cols="12" v-if="$permissions.moveFolder">
-                                    <v-subheader>{{ $trans('folders') }}</v-subheader>
-                                    <v-list dense>
-                                        <v-list-item-group>
-                                            <v-list-item v-for="(item, i) in clipboard.folders" :key="i">
-                                                <v-list-item-content>
-                                                    <v-list-item-title class="font-weight-bold"
-                                                                       v-text="item.name"></v-list-item-title>
-                                                </v-list-item-content>
-                                                <v-list-item-action>
-                                                    <v-btn icon small>
-                                                        <v-icon @click="removeFolderInClipboard(i)"
-                                                                color="grey lighten-1">mdi-close
-                                                        </v-icon>
-                                                    </v-btn>
-                                                </v-list-item-action>
-                                            </v-list-item>
-                                        </v-list-item-group>
-                                    </v-list>
-                                </v-col>
-                            </v-row>
-                        </v-card-text>
-                        <v-card-actions
-                                v-if="clipboard.files.length && ($permissions.requestSign || $permissions.approvalRequest)">
-                            <v-btn color="primary" text v-if="canRequestSign" @click="requestSign">
-                                {{ $trans('request_sign') }}
-                            </v-btn>
-                            <v-btn color="primary" text v-if="$permissions.approvalRequest" @click="requestApproval">
-                                {{ $trans('approval_request') }}
-                            </v-btn>
-                            <v-btn color="primary" text @click="resetClipboard">
-                                {{ $trans('reset') }}
-                            </v-btn>
-                        </v-card-actions>
-                    </v-tab-item>
                 </v-tabs-items>
             </v-tabs>
         </v-container>
@@ -168,9 +101,6 @@
       }
     },
     computed: {
-      clipboard() {
-        return this.$fileStore.state.clipboard
-      },
       selectedFiles() {
         let files = this.$fileStore.state.selectedFiles
         let itemComment = this.$fileStore.state.itemComment
@@ -220,26 +150,11 @@
       loadMoreComment() {
         this.$fileStore.dispatch('loadMoreComments')
       },
-      requestSign() {
-        this.$fileStore.dispatch('requestSign', this.clipboard.files)
-      },
-      requestApproval() {
-        console.log('request approval', this.clipboard.files)
-      },
       close() {
         this.$emit('close')
       },
       removeFileSelected(payload) {
         this.$fileStore.dispatch('removeFileSelected', payload)
-      },
-      removeFileInClipboard(payload) {
-        this.$fileStore.dispatch('removeFileInClipboard', payload)
-      },
-      removeFolderInClipboard(payload) {
-        this.$fileStore.dispatch('removeFolderInClipboard', payload)
-      },
-      resetClipboard() {
-        this.$fileStore.dispatch('resetClipboard')
       },
       addComment(e) {
         this.$fileStore.dispatch('addComment', e)

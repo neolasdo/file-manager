@@ -8,11 +8,13 @@ let all = {
       children: [
         {
           name: 'Dir 2',
+          parent_id: 1,
           id: 2,
           children: [
             {
               name: 'Dir 3',
               id: 3,
+              parent_id: 2,
               children: [],
               files: []
             },
@@ -64,6 +66,7 @@ let all = {
         {
           name: 'Dir 5',
           id: 5,
+          parent_id: 4,
           children: [
             {
               name: 'Dir 6',
