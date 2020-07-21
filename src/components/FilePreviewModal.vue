@@ -15,7 +15,7 @@
                     <v-progress-circular indeterminate size="64"></v-progress-circular>
                 </v-overlay>
                 <iframe v-if="isDocType && renderIframe" width='100%' :height="(frameHeight - 26) + 'px'"
-                        frameborder='0' :src="itemViewPath" @load="onLoad" @error="onError($event)" ref="iframe">
+                        frameborder='0' :src="isPdf ? item.path :itemViewPath" @load="onLoad" @error="onError" ref="iframe">
                 </iframe>
                 <div :style="{'height': `${frameHeight - 20}px`, 'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}"
                      v-if="isImageType">
@@ -52,10 +52,21 @@
     },
     computed: {
       itemViewPath() {
-        return "https://docs.google.com/viewerng/viewer?url=" + encodeURIComponent(this.item.path) + "&embedded=true"
+        if (this.$pluginConfig.previewType === 'generate') {
+          /** Generate  link before preview */
+          return this.item.path
+        } 
+        else if (this.$pluginConfig.previewType === 'msoffice') {
+          return "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(this.item.path) + "&embedded=true"
+        } else {
+          return "https://docs.google.com/viewerng/viewer?url=" + encodeURIComponent(this.item.path) + "&embedded=true"
+        }
       },
       isDocType() {
         return isDocumentFile(this.item)
+      },
+      isPdf() {
+        return this.item.mime == 'application/pdf'
       },
       isImageType() {
         return isImageFile(this.item)
@@ -71,9 +82,8 @@
         this.loaded = true
         clearInterval(this.loadInterval)
       },
-      onError(e) {
+      onError() {
         this.loaded = true
-        console.log(e)
         clearInterval(this.loadInterval)
       },
       reloadIframe() {

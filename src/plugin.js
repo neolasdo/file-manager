@@ -33,6 +33,7 @@ let optionsDefaults = {
   accept_extensions: file.accept_extensions,
   sort: sort,
   detailConfig: detail,
+  previewType: 'google',
   file_max_size: 25000000,
   autoReload: true,
   reloadPreviewAfter: 5000,
@@ -149,6 +150,7 @@ class Manager {
     config.file_max_size = options.file_max_size;
     config.sortConfig = options.sort;
     config.detailConfig = options.detailConfig;
+    config.previewType = options.previewType
     Vue.prototype.$pluginConfig = config
 
     Vue.prototype.$getEndpoint = store.$getEndpoint;
@@ -168,6 +170,7 @@ class Manager {
       reloadPreviewAfter: opts.reloadPreviewAfter ? opts.reloadPreviewAfter : optionsDefaults.reloadPreviewAfter,
       permissions: {...optionsDefaults.permissions, ...opts.permissions},
       dict: optionsDefaults.dict,
+      previewType: ['generate','google','msoffice'].includes(opts.previewType) ? opts.previewType: optionsDefaults.previewType,
       accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
       accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions},
       sort: {...optionsDefaults.sort, ...opts.sort},
