@@ -288,6 +288,25 @@ export default {
       commit('UNLOADING');
     }
   },
+  async requestApproval({commit, dispatch}, payload) {
+    if (payload.length) {
+      commit('LOADING')
+      let endpoint = this.$getEndpoint('request_approval')
+      let data = {
+        files: payload.map(item => {
+          return item.id
+        }),
+      }
+      let response = executeAxios(this.$axios, endpoint, data)
+      await response.then(res => {
+        dispatch('reload')
+        getMessage(res,this.$snackbar)
+      }).catch(error => {
+        getErrorMessage(error,this.$snackbar, this.$trans)
+      });
+      commit('UNLOADING');
+    }
+  },
   resetClipboard({commit}) {
     commit('RESET_CLIPBOARD');
   },

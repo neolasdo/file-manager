@@ -171,7 +171,7 @@
         this.$fileStore.dispatch('requestSign', this.selectedFiles)
       },
       requestApproval() {
-        console.log('request approval', this.selectedFiles)
+        this.$fileStore.dispatch('requestApproval', this.selectedFiles)
       },
       getAllType() {
         let allTypes = [];

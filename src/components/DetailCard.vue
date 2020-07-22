@@ -224,7 +224,7 @@
         this.$fileStore.dispatch('requestSign', this.clipboard.files)
       },
       requestApproval() {
-        console.log('request approval', this.clipboard.files)
+        this.$fileStore.dispatch('requestApproval', this.clipboard.files)     
       },
       close() {
         this.$emit('close')

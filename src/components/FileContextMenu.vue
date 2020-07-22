@@ -126,7 +126,7 @@
         this.$fileStore.dispatch('requestSign', this.selectedItems)
       },
       requestApproval() {
-        console.log('request approval', this.selectedItems)
+        this.$fileStore.dispatch('requestApproval', this.selectedItems)
       },
       download() {
         let endpoint = this.$fileStore.$getEndpoint('download')
