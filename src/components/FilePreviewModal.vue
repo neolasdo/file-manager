@@ -29,7 +29,7 @@
           width="100%"
           :height="(frameHeight - 26) + 'px'"
           frameborder="0"
-          :src="itemViewPath"
+          :src="isPdf ? item.path :itemViewPath"
           @load="onLoad"
           @error="onError($event)"
           ref="iframe"
