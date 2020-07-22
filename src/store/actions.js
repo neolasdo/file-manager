@@ -259,7 +259,7 @@ export default {
   },
 
   reload({state, dispatch}) {
-    if (state.keyword !== '') {
+    if (state.isSearching) {
       dispatch('search', {keyword: state.keyword, filter: state.filter})
     } else {
       dispatch('getByFolder', state.current)

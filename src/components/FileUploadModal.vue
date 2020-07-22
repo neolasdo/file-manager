@@ -221,8 +221,7 @@
           this.files = [...(this.files), ...files]
           this.$nextTick(() => {
             const input = this.$refs.fileInput;
-            input.type = 'text';
-            input.type = 'file';
+            input.value = null
           })
         }
       },
