@@ -155,7 +155,7 @@
         })
       },
       canPreview() {
-        return this.selectedItems.length === 1 && canPreview(this.selectedItems[0])
+        return this.selectedItems.length === 1 && canPreview(this.selectedItems[0].mime ? this.selectedItems[0].mime: this.selectedItems[0].file_mime)
       },
       deleteAll() {
         this.$confirm(this.$trans('confirm_delete_files'), {

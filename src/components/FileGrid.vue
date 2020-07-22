@@ -85,7 +85,7 @@
         return getFileThumbnail(item)
       },
       preview() {
-        if (this.selectedItems.length === 1 && canPreview(this.selectedItems[0])) {
+        if (this.selectedItems.length === 1 && canPreview(this.selectedItems[0].mime ? this.selectedItems[0].mime: this.selectedItems[0].file_mime)) {
           this.$refs.filePreviewModal.showPreview(this.selectedItems[0])
         }
       },

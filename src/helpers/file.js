@@ -19,7 +19,7 @@ export function formatSize(num, MAX) {
   return d + suffix;
 }
 
-export function isDocumentFile(file) {
+export function isDocumentFile(mime) {
   return [
     'application/pdf',
     'application/msword',
@@ -28,19 +28,19 @@ export function isDocumentFile(file) {
     'application/vnd.openxmlformats-officedocument.presentationml.presentation',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-  ].includes(file.mime)
+  ].includes(mime)
 }
 
-export function isImageFile(file) {
+export function isImageFile(mime) {
   return [
     'image/jpg',
     'image/jpeg',
     'image/png',
-  ].includes(file.mime)
+  ].includes(mime)
 }
 
-export function canPreview(file) {
-  return isDocumentFile(file) || isImageFile(file)
+export function canPreview(mime) {
+  return isDocumentFile(mime) || isImageFile(mime)
 }
 
 export function getFileThumbnail(item) {
