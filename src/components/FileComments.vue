@@ -1,7 +1,7 @@
 <template>
     <div style="height: 100% !important;">
-        <v-card-text class="comment-view">
-            <div ref="containerMessageDisplay" class="container-message-display" id="scrollDiv">
+        <v-card-text class="comment-view" ref="containerMessageDisplay" id="scrollDiv">
+            <div class="container-message-display">
                 <div v-for="(item, index) in comments" :key="index" class="message-container"
                      v-scroll:#scrollDiv="onScroll">
                     <template v-if="!item.isMy">
