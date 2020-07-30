@@ -19,13 +19,14 @@
                             </v-progress-circular>
                         </v-overlay>
                         <v-form ref="form" v-model="valid">
+                          <label for="file">{{$trans('file_label')}}</label>
                             <input type="file" id="file" style="display: none" ref="fileInput" multiple
                                    @change="addFiles()" :accept="accept"/>
                             <v-combobox multiple chips v-model="files" @click="openSelectFile" disable-lookup
-                                        hide-no-data hide-selected :prepend-icon="'$file'" :label="$trans('file_label')"
+                                        hide-no-data hide-selected :prepend-inner-icon="'$file'"
                                         :error-messages="validate.files" :rules="rules.filesRules"
-                                        append-icon="" @click:prepend="openSelectFile" ref="upload_input"
-                                        onkeydown="return false" :disabled="uploading"
+                                        append-icon="" @click:prepend-inner="openSelectFile" ref="upload_input"
+                                        onkeydown="return false" :disabled="uploading" dense outlined hide-details
                                         deletable-chips class="tag-input" clearable @click:clear="removeAllFile">
                                 <template v-slot:selection="{ index }">
                                     <div v-if="index < 1">

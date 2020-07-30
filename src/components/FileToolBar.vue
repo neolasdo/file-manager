@@ -1,42 +1,37 @@
 <template>
     <div>
         <v-toolbar color="primary" dark dense>
-            <v-text-field dark v-model="keyword">
+            <v-text-field dark v-model="keyword" dense outlined hide-details>
                 <span slot="prepend-inner">
                   <v-menu v-model="menu" :close-on-content-click="false" :nudge-width="200" offset-y z-index="11">
                   <template v-slot:activator="{ on }">
                     <v-btn tile small v-on="on" text>
-                      {{ $trans('filter') }}
                       <v-icon small>mdi-menu</v-icon>
+                      <span class="pl-2">{{ $trans('filter') }}</span>
                     </v-btn>
                   </template>
-                  <v-card tile max-width="500px">
+                  <v-card tile max-width="450px">
                     <v-container>
                       <v-row align="center">
-                        <v-col cols="4">
-                          <v-subheader>{{ $trans('type') }}</v-subheader>
-                        </v-col>
-                        <v-col cols="8">
+                        <v-col cols="12">
+                          <label for="mime">{{ $trans('type') }}</label>
                           <v-select v-model="filter.mime" :items="getAllType()" item-text="text"
-                                    item-value="value"
+                                    item-value="value" dense outlined id="mime" class="mt-2"
                                     menu-props="auto" label="タイプ" hide-details single-line>
                           </v-select>
                         </v-col>
-                        <v-col cols="4">
-                          <v-subheader>{{ $trans('created_date') }}</v-subheader>
-                        </v-col>
-                        <v-col cols="8">
+                        <v-col cols="12">
+                          <label for="created_date">{{ $trans('created_date') }}</label>
                           <v-select v-model="filter.created_date" :items="timeRanges" item-text="text"
-                                    item-value="value"
+                                    item-value="value" dense outlined id="created_date" class="mt-2"
                                     menu-props="auto" label="作成日" hide-details single-line>
                           </v-select>
                         </v-col>
-                        <v-col cols="4">
-                          <v-subheader>{{ $trans('status') }}</v-subheader>
-                        </v-col>
-                        <v-col cols="8">
-                          <v-select v-model="filter.status" :items="statusList" item-text="text" item-value="value"
-                                    menu-props="auto" label="ステータス" hide-details single-line>
+                        <v-col cols="12">
+                          <label for="status">{{ $trans('status') }}</label>
+                          <v-select v-model="filter.status" :items="statusList" item-text="text" 
+                                    item-value="value" menu-props="auto" label="ステータス" class="mt-2" 
+                                    hide-details single-line dense outlined id="status">
                           </v-select>
                         </v-col>
                       </v-row>
@@ -49,7 +44,7 @@
                 </v-menu>
                 </span>
                 <v-btn tile text small slot="append" @click="search({keyword: keyword, filter: filter })">
-                    <v-icon small>mdi-magnify</v-icon>
+                    <v-icon>mdi-magnify</v-icon>
                 </v-btn>
             </v-text-field>
             <v-spacer></v-spacer>

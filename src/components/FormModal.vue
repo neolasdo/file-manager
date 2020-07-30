@@ -6,8 +6,9 @@
                     <v-form ref="form" v-model="valid" @submit.prevent="submitForm">
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field id="name" v-model="name" :rules="rules" :counter="50"
-                                              :error-messages="messages.name" :label="$trans('name_label')"></v-text-field>
+                              <label for="name" class="app-label required">{{$trans('name_label')}}</label>
+                              <v-text-field id="name" v-model="name" :rules="rules" :counter="50" dense outlined
+                                            hide-details :error-messages="messages.name" class="mt-2"/>
                             </v-col>
                         </v-row>
                     </v-form>
