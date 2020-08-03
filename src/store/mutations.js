@@ -208,7 +208,30 @@ export default {
       pointerEvent: {
         x: 0,
         y: 0
-      }
+      },
+      showRequestApprovalModal: false,
+      showRequestSignModal: false,
+      requestSignFiles: [],
+      requestApprovalFiles: []
     })
+  },
+  SHOW_APPROVAL_MODAL(state, payload) {
+    state.showRequestApprovalModal = true
+    state.requestApprovalFiles = payload
+  },
+  HIDE_APPROVAL_MODAL(state) {
+    state.showRequestApprovalModal = false
+    state.requestApprovalFiles = []
+  },
+  SHOW_SIGN_MODAL(state, payload) {
+    state.showRequestSignModal = true
+    state.requestSignFiles = payload
+  },
+  HIDE_SIGN_MODAL(state) {
+    state.showRequestSignModal = false
+    state.requestSignFiles = []
+  },
+  UPDATE_LIST_ADVISORS(state, payload) {
+    state.advisors = payload
   }
 }

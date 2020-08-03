@@ -3,9 +3,11 @@
     <v-dialog v-model="showDialog" persistent max-width="900px">
       <v-card>
         <v-card-title class="primary lighten-1" tile dark>
-          <span
-            style="color: #fff !important"
-          >{{$trans('upload_to', {'folder_name' : current.name ? current.name : $trans('home') })}}</span>
+          <span style="color: #fff !important">{{
+            $trans("upload_to", {
+              folder_name: current.name ? current.name : $trans("home"),
+            })
+          }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -17,10 +19,13 @@
                 :value="progress"
                 :width="10"
                 color="light-blue"
-              >{{ progress }}</v-progress-circular>
+                >{{ progress }}</v-progress-circular
+              >
             </v-overlay>
             <v-form ref="form" v-model="valid">
-              <label class="app-label" for="file">{{$trans('file_label')}}</label>
+              <label class="app-label" for="file">{{
+                $trans("file_label")
+              }}</label>
               <input
                 type="file"
                 id="file"
@@ -64,7 +69,8 @@
                       close
                       :key="key"
                       @click:close="removeFile(key)"
-                    >{{ file.name }} ({{ formatSize(file.size) }})</v-chip>
+                      >{{ file.name }} ({{ formatSize(file.size) }})</v-chip
+                    >
                   </div>
                 </template>
               </v-combobox>
@@ -77,7 +83,8 @@
                 class="app-label required"
                 for="advisor"
                 v-if="need_approval"
-              >{{$trans('advisor')}}</label>
+                >{{ $trans("advisor") }}</label
+              >
               <v-select
                 class="custom-input mt-2"
                 clearable
@@ -103,14 +110,16 @@
             tile
             v-if="files.length !== 0 && valid && !uploading"
             @click="uploadAll"
-          >{{ $trans('start_upload') }}</v-btn>
+            >{{ $trans("start_upload") }}</v-btn
+          >
           <v-btn
             color="default"
             dark
             tile
             @click="closeModal()"
             :disabled="uploading"
-          >{{ $trans('close') }}</v-btn>
+            >{{ $trans("close") }}</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -127,13 +136,13 @@ export default {
       reload: false,
       uploading: false,
       valid: true,
+      advisor_id: "",
       need_approval: false,
       files: [],
       errors: [],
       accept: this.$pluginConfig.accept_mimes.join(),
       maxSize: this.$pluginConfig.file_max_size,
       progress: 0,
-      advisors: [],
       validate: {
         files: "",
         advisor_id: "",
@@ -175,17 +184,6 @@ export default {
       if (this.$refs.fileInput && !this.uploading) {
         this.$refs.fileInput.click();
       }
-    },
-    async getAdvisorList() {
-      await this.$fileStore.$axios.get(
-        this.$fileStore.$getEndpoint("advisors").route, {
-          params: {
-            per_page: 10000
-          }
-        },
-      ).then( res => {
-        this.advisors = res.data.data.data;
-      });
     },
     checkMimeDocuments(documents) {
       let acceptMimes = this.accept.split(",");
@@ -374,9 +372,9 @@ export default {
     showDialog() {
       return this.$fileStore.state.showUploadModal;
     },
+    advisors() {
+      return this.$fileStore.state.advisors;
+    },
   },
-  beforeMount() {
-    this.getAdvisorList()
-  }
 };
 </script>

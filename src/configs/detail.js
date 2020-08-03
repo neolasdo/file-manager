@@ -1,4 +1,4 @@
-import {formatSize} from "../helpers/file";
+import { formatSize } from "../helpers/file";
 
 export default {
   fileDetail: [

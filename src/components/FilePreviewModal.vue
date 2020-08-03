@@ -14,28 +14,36 @@
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
-        <v-btn text @click="closeModal">{{ $trans('close') }}</v-btn>
+        <v-btn text @click="closeModal">{{ $trans("close") }}</v-btn>
       </v-toolbar>
       <v-card-text
         class="justify-content-center preview-area"
-        :style="{'height': `${frameHeight + 12}px`}"
+        :style="{ height: `${frameHeight + 12}px` }"
         style="position: relative"
       >
-        <v-overlay :value="isDocType && !loaded && this.$pluginConfig.autoReloadPreview" absolute>
+        <v-overlay
+          :value="isDocType && !loaded && this.$pluginConfig.autoReloadPreview"
+          absolute
+        >
           <v-progress-circular indeterminate size="64"></v-progress-circular>
         </v-overlay>
         <iframe
           v-if="isDocType && renderIframe"
           width="100%"
-          :height="(frameHeight - 26) + 'px'"
+          :height="frameHeight - 26 + 'px'"
           frameborder="0"
-          :src="isPdf ? item.path :itemViewPath"
+          :src="isPdf ? item.path : itemViewPath"
           @load="onLoad"
           @error="onError($event)"
           ref="iframe"
         ></iframe>
         <div
-          :style="{'height': `${frameHeight - 20}px`, 'display': 'flex', 'align-items': 'center', 'justify-content': 'center'}"
+          :style="{
+            height: `${frameHeight - 20}px`,
+            display: 'flex',
+            'align-items': 'center',
+            'justify-content': 'center',
+          }"
           v-if="isImageType"
         >
           <img :src="item.path" class="image-preview" aspect-ratio="1" />
@@ -63,9 +71,9 @@ export default {
         path: "http://localhost:3000/sample.pdf",
         mime: "document/pdf",
         size: 12512344,
-        created_at: "2019-01-01"
+        created_at: "2019-01-01",
       },
-      frameHeight: 0
+      frameHeight: 0,
     };
   },
   computed: {
@@ -104,7 +112,7 @@ export default {
     },
     isImageType() {
       return isImageFile(this.item.mime) || isImageFile(this.item.file_mime);
-    }
+    },
   },
   methods: {
     closeModal() {
@@ -137,7 +145,7 @@ export default {
     showPreview(item) {
       this.item = item;
       this.showModal = true;
-    }
+    },
   },
   beforeDestroy() {
     clearInterval(this.loadInterval);
@@ -154,9 +162,9 @@ export default {
             this.reloadIframe();
           }
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
 <style>

@@ -63,9 +63,9 @@ module.exports = function(app) {
       let folder = data.getByFolder(folderId? parseInt(folderId) : false);
       res.json(folder)
     })
+    
 
-
-  app.route('/upload')
+  app.route('/request-approval')
     .post(function (req, res) {
       setTimeout(function () {
         res.json({
@@ -73,4 +73,13 @@ module.exports = function(app) {
         })
       }, 7000)
     })
+
+    app.route('/upload')
+      .post(function (req, res) {
+        setTimeout(function () {
+          res.json({
+            message: 'upload success'
+          })
+        }, 7000)
+      })
 };

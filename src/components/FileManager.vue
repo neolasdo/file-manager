@@ -1,6 +1,9 @@
 <template>
   <v-app class="file-manager-app">
-    <v-card class="file-manage-card">
+    <v-overlay :value="loading" z-index="999">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+    <v-card class="file-manage-card" @contextmenu.prevent="preventAction">
       <file-toolbar />
       <v-container fluid class="pa-0" style="border-bottom: 1px solid #a5a5a5;">
         <v-row no-gutters>
@@ -9,7 +12,9 @@
           </v-col>
           <v-col cols="6" class="pa-2 text-right">
             <v-btn icon small @click="gridView = !gridView">
-              <v-icon>{{gridView ? 'mdi-view-list' : 'mdi-view-grid'}}</v-icon>
+              <v-icon>{{
+                gridView ? "mdi-view-list" : "mdi-view-grid"
+              }}</v-icon>
             </v-btn>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -20,22 +25,27 @@
                   active-class="active"
                   v-on="on"
                   class="ml-2"
-                  :color="showDetail ? 'primary': 'secondary'"
+                  :color="showDetail ? 'primary' : 'secondary'"
                   @click="showDetail = !showDetail"
                 >
                   <v-icon>mdi-information-outline</v-icon>
                 </v-btn>
               </template>
-              <span v-if="showDetail">{{ $trans('click_hide_detail') }}</span>
-              <span v-if="!showDetail">{{ $trans('click_show_detail') }}</span>
+              <span v-if="showDetail">{{ $trans("click_hide_detail") }}</span>
+              <span v-if="!showDetail">{{ $trans("click_show_detail") }}</span>
             </v-tooltip>
             <v-menu offset-y z-index="11">
               <template v-slot:activator="{ on }">
                 <v-btn text small v-on="on" light class="ml-2" tile>
                   {{ sortLabel }}
                   <v-icon>
-                    {{ sortType === '' ? 'mdi-sort' : (sortType.toUpperCase() === 'ASC' ?
-                    'mdi-sort-ascending' : 'mdi-sort-descending') }}
+                    {{
+                      sortType === ""
+                        ? "mdi-sort"
+                        : sortType.toUpperCase() === "ASC"
+                        ? "mdi-sort-ascending"
+                        : "mdi-sort-descending"
+                    }}
                   </v-icon>
                 </v-btn>
               </template>
@@ -51,8 +61,11 @@
                   <v-list-item-action v-if="sortKey === item.key && sortType">
                     <v-btn icon>
                       <v-icon color="grey lighten-1">
-                        {{ sortType.toUpperCase() === 'ASC' ?
-                        'mdi-sort-descending' : 'mdi-sort-ascending' }}
+                        {{
+                          sortType.toUpperCase() === "ASC"
+                            ? "mdi-sort-descending"
+                            : "mdi-sort-ascending"
+                        }}
                       </v-icon>
                     </v-btn>
                   </v-list-item-action>
@@ -64,9 +77,6 @@
       </v-container>
 
       <v-container fluid class="context-area pa-0">
-        <v-overlay :value="loading" absolute z-index="11">
-          <v-progress-circular indeterminate size="64"></v-progress-circular>
-        </v-overlay>
         <v-container
           fluid
           class="file-explorer pa-0"
@@ -74,11 +84,17 @@
           @contextmenu.prevent="showMainContextMenu($event)"
         >
           <v-alert
-            v-if="files.length === 0 && folders.length === 0 && !loading && loaded"
+            v-if="
+              files.length === 0 && folders.length === 0 && !loading && loaded
+            "
             text
             color="info"
           >
-            <h3>{{ isSearching ? $trans('search_empty') : $trans('empty_folder') }}</h3>
+            <h3>
+              {{
+                isSearching ? $trans("search_empty") : $trans("empty_folder")
+              }}
+            </h3>
           </v-alert>
           <grid-view v-if="gridView" />
           <list-view v-else />
@@ -87,11 +103,13 @@
         <folder-context-menu ref="folderContextMenu" />
         <file-context-menu ref="fileContextMenu" />
         <div v-if="showDetail" class="sidebar-detail">
-          <detail-card @close="showDetail=false" />
+          <detail-card @close="showDetail = false" />
         </div>
       </v-container>
       <file-upload-modal ref="uploadModal"></file-upload-modal>
       <form-modal ref="formModal"></form-modal>
+      <request-approval-modal />
+      <request-sign-modal />
     </v-card>
   </v-app>
 </template>
@@ -107,6 +125,8 @@ import FormModal from "./FormModal";
 import ListView from "./ListView";
 import GridView from "./GridView";
 import FolderContextMenu from "./FolderContextMenu";
+import RequestApprovalModal from "./RequestApprovalModal";
+import RequestSignModal from "./RequestSignModal";
 
 export default {
   name: "FileManager",
@@ -121,6 +141,8 @@ export default {
     "grid-view": GridView,
     "file-context-menu": FileContextMenu,
     "folder-context-menu": FolderContextMenu,
+    "request-approval-modal": RequestApprovalModal,
+    "request-sign-modal": RequestSignModal,
   },
   data() {
     return {
@@ -183,6 +205,9 @@ export default {
     getByFolder(payload) {
       this.$fileStore.dispatch("getByFolder", payload);
     },
+    getAdvisors() {
+      this.$fileStore.dispatch("getAdvisors");
+    },
     createFolder(payload) {
       this.$fileStore.dispatch("createFolder", payload);
     },
@@ -210,10 +235,18 @@ export default {
     onClickContainer() {
       this.$fileStore.dispatch("hideContext");
     },
+    preventAction() {
+      return false;
+    },
   },
   beforeMount() {
     this.getByFolder();
+    this.gridView = !this.$vuetify.breakpoint.xs;
+    if (this.$permissions.requestApproval) {
+      this.getAdvisors();
+    }
   },
+  mounted() {},
   beforeDestroy() {
     this.$fileStore.dispatch("resetState");
   },
@@ -270,8 +303,7 @@ export default {
   z-index: 10;
   right: 0;
   top: 0;
-  max-width: 300px;
-  min-width: 250px;
+  width: 300px;
 }
 
 label.app-label {
@@ -288,5 +320,29 @@ label.app-label {
   border-radius: 2px;
   font-size: 10px;
   height: 20px;
+}
+
+.scrollable {
+  overflow-y: auto;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 </style>

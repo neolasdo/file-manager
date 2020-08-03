@@ -25,9 +25,8 @@ let all = {
               mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
               size: 125133,
               created_at: '2019-01-01',
-              count_pending_approval_request: 1,
-              count_pending_sign_request: 0,
-              count_signed_sign_request: 0,
+              can_request_approval: true,
+              can_request_sign: true,
             },
             {
               name: 'File 6',
@@ -35,6 +34,8 @@ let all = {
               path: 'https://file-examples.com/wp-content/uploads/2017/02/file-sample_1MB.docx',
               mime: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
               size: 12512344,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
             {
@@ -43,6 +44,8 @@ let all = {
               path: 'https://file-examples.com/wp-content/uploads/2017/02/file_example_XLS_1000.xls',
               mime: 'application/vnd.ms-excel',
               size: 1211111,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
             {
@@ -51,6 +54,8 @@ let all = {
               path: 'https://file-examples.com/wp-content/uploads/2017/02/file_example_XLSX_1000.xlsx',
               mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
               size: 125123112,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
           ]
@@ -73,6 +78,8 @@ let all = {
                 {
                   name: 'File 9',
                   id: 9,
+                  can_request_approval: true,
+                  can_request_sign: true,
                   path: 'https://file-examples.com/wp-content/uploads/2017/02/file_example_XLSX_1000.xlsx',
                   mime: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                   size: 1251111,
@@ -84,6 +91,8 @@ let all = {
                   path: 'https://file-examples.com/wp-content/uploads/2017/10/file-example_PDF_500_kB.pdf',
                   mime: 'application/pdf',
                   size: 2512223,
+                  can_request_approval: true,
+                  can_request_sign: true,
                   created_at: '2019-01-01'
                 },
                 {
@@ -92,6 +101,8 @@ let all = {
                   path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_250kB.ppt',
                   mime: 'application/vnd.ms-powerpoint',
                   size: 12512312,
+                  can_request_approval: true,
+                  can_request_sign: true,
                   created_at: '2019-01-01'
                 },
                 {
@@ -100,6 +111,8 @@ let all = {
                   path: 'https://file-examples.com/wp-content/uploads/2017/08/file_example_PPT_1MB.ppt',
                   mime: 'application/vnd.ms-powerpoint',
                   size: 1251231,
+                  can_request_approval: true,
+                  can_request_sign: true,
                   created_at: '2019-01-01'
                 },
               ]
@@ -117,6 +130,8 @@ let all = {
               is_official: false,
               id: 13,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_JPG_1MB.jpg',
               mime: 'image/jpeg',
               size: 125133,
@@ -128,6 +143,8 @@ let all = {
               is_official: true,
               id: 14,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_PNG_1MB.png',
               mime: 'image/png',
               size: 12512344,
@@ -140,6 +157,8 @@ let all = {
               path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_GIF_1MB.gif',
               mime: 'image/gif',
               size: 1211111,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
             {
@@ -148,12 +167,16 @@ let all = {
               isDir: false,
               path: 'https://file-examples.com/wp-content/uploads/2017/10/file_example_favicon.ico',
               mime: 'image/gif',
+              can_request_approval: true,
+              can_request_sign: true,
               size: 125123112,
               created_at: '2019-01-01'
             },{
               name: 'File 17',
               id: 17,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'http://localhost/file13',
               mime: 'application/pdf',
               size: 125133,
@@ -163,6 +186,8 @@ let all = {
               name: 'File 18',
               id: 18,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'http://localhost/file14',
               mime: 'application/pdf',
               size: 12512344,
@@ -172,6 +197,8 @@ let all = {
               name: 'File 19',
               id: 19,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'http://localhost/file15',
               mime: 'application/pdf',
               size: 1211111,
@@ -185,6 +212,8 @@ let all = {
               path: 'http://localhost/file16',
               mime: 'application/pdf',
               size: 125123112,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
             {
@@ -194,6 +223,8 @@ let all = {
               path: 'http://localhost/file13',
               mime: 'application/pdf',
               size: 125133,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
             {
@@ -203,6 +234,8 @@ let all = {
               path: 'http://localhost/file14',
               mime: 'application/pdf',
               size: 12512344,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
             {
@@ -212,12 +245,16 @@ let all = {
               path: 'http://localhost/file15',
               mime: 'application/pdf',
               size: 1211111,
+              can_request_approval: true,
+              can_request_sign: true,
               created_at: '2019-01-01'
             },
             {
               name: 'File 24',
               id: 24,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'http://localhost/file16',
               mime: 'application/pdf',
               size: 125123112,
@@ -226,6 +263,8 @@ let all = {
               name: 'File 25',
               id: 25,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'http://localhost/file13',
               mime: 'application/pdf',
               size: 125133,
@@ -235,6 +274,8 @@ let all = {
               name: 'File 26',
               id: 26,
               isDir: false,
+              can_request_approval: true,
+              can_request_sign: true,
               path: 'http://localhost/file14',
               mime: 'application/pdf',
               size: 12512344,
@@ -243,6 +284,8 @@ let all = {
             {
               name: 'File 27',
               id: 27,
+              can_request_approval: true,
+              can_request_sign: true,
               isDir: false,
               path: 'http://localhost/file15',
               mime: 'application/pdf',
@@ -255,6 +298,8 @@ let all = {
               isDir: false,
               path: 'http://localhost/file16',
               mime: 'application/pdf',
+              can_request_approval: true,
+              can_request_sign: true,
               size: 125123112,
               created_at: '2019-01-01'
             },

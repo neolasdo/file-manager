@@ -33,5 +33,10 @@ export default {
   pointerEvent: {
     x: 0,
     y: 0
-  }
+  },
+  showRequestApprovalModal: false,
+  showRequestSignModal: false,
+  requestSignFiles: [],
+  requestApprovalFiles: [],
+  advisors: []
 }

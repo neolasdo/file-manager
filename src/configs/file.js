@@ -13,7 +13,7 @@ export default {
   accept_extensions: {
     'image/jpeg': 'jpeg',
     'image/png': 'png',
-    'application/pdf' : 'pdf',
+    'application/pdf': 'pdf',
     'application/msword': 'doc',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'docx',
     'application/vnd.ms-powerpoint': 'ppt',

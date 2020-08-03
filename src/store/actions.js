@@ -1,5 +1,5 @@
 export default {
-  async getByFolder({commit, state, dispatch}, item) {
+  async getByFolder({ commit, state, dispatch }, item) {
     let getEndpoint = this.$getEndpoint('get')
     commit('LOADING')
     commit('UPDATE_CURRENT', item);
@@ -15,14 +15,14 @@ export default {
       commit('UPDATE_LIST', res.data.data)
       commit('RESET_COMMENT_LIST')
       commit('UPDATE_CURRENT', res.data.data)
-      commit('UPDATE_BREADCRUMB', res.data.data.breadcrumb ? res.data.data: item);
+      commit('UPDATE_BREADCRUMB', res.data.data.breadcrumb ? res.data.data : item);
       commit('RESET_SEARCH');
 
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
 
       state.files.forEach(item => {
-        if (selectedFiles.findIndex(selected => {return selected.id === item.id}) !== -1) {
+        if (selectedFiles.findIndex(selected => { return selected.id === item.id }) !== -1) {
           dispatch('addFileSelected', item)
         }
       })
@@ -37,7 +37,7 @@ export default {
         commit('LOADED')
       }
     }).catch(error => {
-      getErrorMessage(error,this.$snackbar, this.$trans)
+      getErrorMessage(error, this.$snackbar, this.$trans)
       commit('UPDATE_BREADCRUMB', item);
       commit('RESET_SEARCH');
       commit('RESET_COMMENT_LIST');
@@ -49,44 +49,44 @@ export default {
       }
     })
   },
-  loading({commit}) {
+  loading({ commit }) {
     commit('LOADING')
   },
-  unloading({commit}) {
+  unloading({ commit }) {
     commit('UNLOADING')
   },
-  selectFolder({commit}, payload) {
+  selectFolder({ commit }, payload) {
     commit('RESET_SELECTED_FILES');
     commit('RESET_COMMENT_LIST');
     commit('SELECT_FOLDER', payload);
   },
-  resetSelectedFiles({commit}) {
+  resetSelectedFiles({ commit }) {
     commit('RESET_SELECTED_FILES');
     commit('RESET_COMMENT_LIST');
   },
-  removeFileSelected({commit}, payload) {
+  removeFileSelected({ commit }, payload) {
     commit('REMOVE_FILE_SELECTED', payload);
     commit('RESET_COMMENT_LIST', payload);
     commit('RESET_SELECTED_FOLDER');
   },
-  addFileSelected({commit}, payload) {
+  addFileSelected({ commit }, payload) {
     commit('ADD_FILE_SELECTED', payload);
     commit('RESET_COMMENT_LIST', payload);
     commit('RESET_SELECTED_FOLDER');
   },
-  addFilesToClipboard({commit}) {
+  addFilesToClipboard({ commit }) {
     commit('ADD_FILES_TO_CLIPBOARD');
   },
-  addFolderToClipboard({commit}) {
+  addFolderToClipboard({ commit }) {
     commit('ADD_FOLDERS_TO_CLIPBOARD');
   },
-  removeFileInClipboard({commit}, payload) {
+  removeFileInClipboard({ commit }, payload) {
     commit('REMOVE_FILE_IN_CLIPBOARD', payload);
   },
-  removeFolderInClipboard({commit}, payload) {
+  removeFolderInClipboard({ commit }, payload) {
     commit('REMOVE_FOLDER_IN_CLIPBOARD', payload);
   },
-  async moveFiles({state, dispatch, commit}, payload) {
+  async moveFiles({ state, dispatch, commit }, payload) {
     commit('RESET_COMMENT_LIST');
     let dest = state.current.id
     let clipboard = state.clipboard
@@ -114,23 +114,23 @@ export default {
     let response = executeAxios(this.$axios, endpoint, data)
 
     await response.then(res => {
-      getMessage(res,this.$snackbar)
+      getMessage(res, this.$snackbar)
 
       dispatch('reload')
     }).catch(error => {
-      getErrorMessage(error,this.$snackbar, this.$trans)
+      getErrorMessage(error, this.$snackbar, this.$trans)
     })
     if (resetClipBoard) {
       commit('RESET_CLIPBOARD');
     }
   },
-  async deleteFolder({dispatch, state, commit}, payload) {
+  async deleteFolder({ dispatch, state, commit }, payload) {
     commit('RESET_COMMENT_LIST');
     commit('LOADING')
     let endpoint = this.$getEndpoint('deleteFolder', [payload])
     let response = executeAxios(this.$axios, endpoint, payload)
     await response.then(res => {
-      getMessage(res,this.$snackbar)
+      getMessage(res, this.$snackbar)
       let index = state.clipboard.folders.findIndex(folder => {
         return folder.id === payload
       })
@@ -139,14 +139,14 @@ export default {
       }
       dispatch('reload')
     }).catch(error => {
-      getErrorMessage(error,this.$snackbar, this.$trans)
+      getErrorMessage(error, this.$snackbar, this.$trans)
     });
     commit('UNLOADING');
   },
-  async deleteSelected({dispatch, state, commit}) {
+  async deleteSelected({ dispatch, state, commit }) {
     commit('RESET_COMMENT_LIST');
     commit('LOADING')
-    let endpoint =  this.$getEndpoint('delete')
+    let endpoint = this.$getEndpoint('delete')
     let response = executeAxios(this.$axios, endpoint, {
       files: state.selectedFiles.map(item => {
         return item.id
@@ -154,7 +154,7 @@ export default {
     })
 
     await response.then(res => {
-      getMessage(res,this.$snackbar)
+      getMessage(res, this.$snackbar)
       state.selectedFiles.forEach(item => {
         let index = state.clipboard.files.findIndex(file => {
           return file.id === item.id
@@ -165,50 +165,50 @@ export default {
       })
       dispatch('reload')
     }).catch(error => {
-      getErrorMessage(error,this.$snackbar, this.$trans)
+      getErrorMessage(error, this.$snackbar, this.$trans)
     });
     commit('UNLOADING');
   },
-  openUploadModal({commit}) {
+  openUploadModal({ commit }) {
     commit('OPEN_UPLOAD_MODAL')
   },
-  hideUploadModal({commit}) {
+  hideUploadModal({ commit }) {
     commit('HIDE_UPLOAD_MODAL')
   },
-  openFormModal({commit}, createForm) {
+  openFormModal({ commit }, createForm) {
     commit('OPEN_FORM_MODAL', createForm)
   },
-  hideFormModal({commit, dispatch}, reload) {
+  hideFormModal({ commit, dispatch }, reload) {
     commit('HIDE_FORM_MODAL')
     if (reload) {
       dispatch('reload')
     }
   },
-  async search({commit}, payload) {
+  async search({ commit }, payload) {
     commit('LOADING')
     commit('SEARCH', payload)
     commit('RESET_COMMENT_LIST');
     let endpoint = this.$getEndpoint('search')
     let data = {
-      ...{keyword: payload.keyword},
+      ...{ keyword: payload.keyword },
       ...payload.filter
     }
     let response = executeAxios(this.$axios, endpoint, data)
 
     await response.then(res => {
-      getMessage(res,this.$snackbar)
+      getMessage(res, this.$snackbar)
       commit('UPDATE_LIST', res.data.data)
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
       commit('UNLOADING');
     }).catch(error => {
-      getErrorMessage(error,this.$snackbar, this.$trans)
+      getErrorMessage(error, this.$snackbar, this.$trans)
       commit('RESET_SELECTED_FILES');
       commit('RESET_SELECTED_FOLDER');
       commit('UNLOADING');
     })
   },
-  async getComments({state, commit}) {
+  async getComments({ state, commit }) {
     let data = {}
     let fileSelected = state.selectedFiles[0]
     commit('RESET_COMMENT_LIST')
@@ -220,16 +220,16 @@ export default {
       commit('LOAD_COMMENT', res.data.data)
     }).catch(error => {
       commit('UNLOADING')
-      getErrorMessage(error,this.$snackbar, this.$trans)
+      getErrorMessage(error, this.$snackbar, this.$trans)
     })
   },
-  async loadMoreComments({state, commit}) {
+  async loadMoreComments({ state, commit }) {
     let commentPaginate = state.commentPaginate
     let fileSelected = state.selectedFiles[0]
     if (commentPaginate.current < commentPaginate.last) {
       let endpoint = this.$getEndpoint('comments', [fileSelected.id])
       let response = executeAxios(this.$axios, endpoint, {
-        page:  commentPaginate.current ? commentPaginate.current + 1: 1
+        page: commentPaginate.current ? commentPaginate.current + 1 : 1
       })
       commit('LOADING')
       await response.then(res => {
@@ -237,39 +237,39 @@ export default {
         commit('ADD_COMMENTS', res.data.data)
       }).catch(error => {
         commit('UNLOADING')
-        getErrorMessage(error,this.$snackbar, this.$trans)
+        getErrorMessage(error, this.$snackbar, this.$trans)
       })
     }
   },
-  async addComment({state, commit, dispatch}, payload) {
+  async addComment({ state, commit, dispatch }, payload) {
     let fileSelected = state.selectedFiles[0]
     if (fileSelected) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('addComment', [fileSelected.id])
-      let response = executeAxios(this.$axios, endpoint, {message: payload})
+      let response = executeAxios(this.$axios, endpoint, { message: payload })
       await response.then(res => {
         getMessage(res, this.$snackbar)
         dispatch('getComments')
         commit('UNLOADING')
       }).catch(error => {
         commit('UNLOADING')
-        getErrorMessage(error,this.$snackbar, this.$trans)
+        getErrorMessage(error, this.$snackbar, this.$trans)
       })
     }
   },
 
-  reload({state, dispatch}) {
+  reload({ state, dispatch }) {
     if (state.isSearching) {
-      dispatch('search', {keyword: state.keyword, filter: state.filter})
+      dispatch('search', { keyword: state.keyword, filter: state.filter })
     } else {
       dispatch('getByFolder', state.current)
     }
   },
-  changeSort({commit}, payload) {
+  changeSort({ commit }, payload) {
     commit('UPDATE_SORT', payload)
     commit('UPDATE_LIST', payload)
   },
-  async requestSign({commit, dispatch}, payload) {
+  async requestSign({ commit, dispatch }, payload) {
     if (payload.length) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('request_sign')
@@ -281,49 +281,66 @@ export default {
       let response = executeAxios(this.$axios, endpoint, data)
       await response.then(res => {
         dispatch('reload')
-        getMessage(res,this.$snackbar)
+        commit('HIDE_SIGN_MODAL')
+        getMessage(res, this.$snackbar)
       }).catch(error => {
-        getErrorMessage(error,this.$snackbar, this.$trans)
+        getErrorMessage(error, this.$snackbar, this.$trans)
       });
       commit('UNLOADING');
     }
   },
-  async requestApproval({commit, dispatch}, payload) {
-    if (payload.length) {
+  async requestApproval({ commit, dispatch }, payload) {
+    if (payload.files.length && payload.advisor_id) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('request_approval')
       let data = {
-        files: payload.map(item => {
+        files: payload.files.map(item => {
           return item.id
         }),
+        advisor_id: payload.advisor_id
       }
       let response = executeAxios(this.$axios, endpoint, data)
       await response.then(res => {
         dispatch('reload')
-        getMessage(res,this.$snackbar)
+        getMessage(res, this.$snackbar)
+        commit('HIDE_APPROVAL_MODAL')
       }).catch(error => {
-        getErrorMessage(error,this.$snackbar, this.$trans)
+        getErrorMessage(error, this.$snackbar, this.$trans)
       });
       commit('UNLOADING');
     }
   },
-  resetClipboard({commit}) {
+  async getAdvisors({ commit }) {
+    commit('LOADING')
+    let endpoint = this.$getEndpoint('advisors')
+    let data = {
+      per_page: 10000
+    }
+    let response = executeAxios(this.$axios, endpoint, data)
+    await response.then(res => {
+      commit('UPDATE_LIST_ADVISORS', res.data.data.data)
+    }).catch(error => {
+      getErrorMessage(error, this.$snackbar, this.$trans)
+    });
+    commit('UNLOADING');
+  },
+  resetClipboard({ commit }) {
     commit('RESET_CLIPBOARD');
   },
-  showMainContextMenu({commit, dispatch}, payload) {
+  showMainContextMenu({ commit, dispatch }, payload) {
     commit('SHOW_MAIN_CONTEXT', payload)
     dispatch('resetSelectedFiles')
   },
-  showFileContextMenu({commit}, payload) {
+  showFileContextMenu({ commit }, payload) {
     commit('SHOW_FILE_CONTEXT', payload)
   },
-  showFolderContextMenu({commit}, payload) {
+  showFolderContextMenu({ commit }, payload) {
     commit('SHOW_FOLDER_CONTEXT', payload)
   },
-  hideContext({commit}) {
+  hideContext({ commit }) {
     commit('HIDE_CONTEXT')
   },
-  resetState({commit}) {
+  resetState({ commit }) {
     commit('RESET_STATE')
   }
 }

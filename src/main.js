@@ -31,7 +31,7 @@ let config = {}
 
 config.dict = lang
 config.hideNeedApprovalCheckBox = optionsDefaults.hideNeedApprovalCheckBox
-config.lang = 'en'
+config.lang = 'ja'
 
 config.accept_mimes = file.accept_mimes;
 config.accept_extensions = file.accept_extensions;

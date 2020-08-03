@@ -10,5 +10,5 @@ export default {
   moveFolder: false,
   moveFile: true,
   requestSign: true,
-  approvalRequest: true,
+  requestApproval: true,
 }
