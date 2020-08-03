@@ -80,4 +80,5 @@ export default {
   sign_request_pending: 'Waiting for Sign',
   sign_request_signed: 'Signed',
   sign_request_reject: 'Sign request reject',
+  advisor: 'Advisor'
 }

@@ -74,7 +74,7 @@
                     <v-list-item v-if="canRequestSign" @click="requestSign">
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item>
-                    <v-list-item v-if="$permissions.approvalRequest" @click="requestApproval">
+                    <v-list-item v-if="canRequestApproval" @click="requestApproval">
                         <v-list-item-title>{{ $trans('approval_request') }}</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-if="$permissions.download" @click="download">
@@ -128,10 +128,15 @@
       },
       canRequestSign() {
         let invalid = this.selectedFiles.find(item => {
-          return (item.is_official !== undefined && !item.is_official)
-          || (item.count_signed_sign_request + item.count_pending_sign_request > 0)
+          return !item.can_request_sign
         })
         return this.$permissions.requestSign && invalid === undefined
+      },
+      canRequestApproval() {
+        let invalid = this.selectedFiles.find(item => {
+          return !item.can_request_approval
+        })
+        return this.$permissions.requestApproval && invalid === undefined
       }
     },
     methods: {

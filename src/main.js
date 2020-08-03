@@ -22,7 +22,7 @@ let optionsDefaults = {
   previewType: 'google',
   sort: sort,
   detailConfig: detail,
-  hideNeedApprovalCheckBox: true
+  hideNeedApprovalCheckBox: false
 }
 
 Vue.config.productionTip = false

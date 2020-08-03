@@ -138,7 +138,7 @@
                             <v-btn color="primary" text v-if="canRequestSign" @click="requestSign">
                                 {{ $trans('request_sign') }}
                             </v-btn>
-                            <v-btn color="primary" text v-if="$permissions.approvalRequest" @click="requestApproval">
+                            <v-btn color="primary" text v-if="canRequestApproval" @click="requestApproval">
                                 {{ $trans('approval_request') }}
                             </v-btn>
                             <v-btn color="primary" text @click="resetClipboard">
@@ -188,10 +188,15 @@
       },
       canRequestSign() {
         let invalid = this.selectedFiles.find(item => {
-          return (item.is_official !== undefined && !item.is_official)
-            || (item.count_signed_sign_request + item.count_pending_sign_request > 0)
+          return !item.can_request_sign
         })
         return this.$permissions.requestSign && invalid === undefined
+      },
+      canRequestApproval() {
+        let invalid = this.selectedFiles.find(item => {
+          return !item.can_request_approval
+        })
+        return this.$permissions.requestApproval && invalid === undefined
       },
       title() {
         if (this.selectedFiles.length === 1) {

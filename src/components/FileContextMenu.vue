@@ -42,7 +42,7 @@
                         <v-list-item-title>{{ $trans('request_sign') }}</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item @click="requestApproval" v-if="$permissions.approvalRequest">
+                <v-list-item @click="requestApproval" v-if="canRequestApproval">
                     <v-list-item-icon>
                         <v-icon>mdi-file-check</v-icon>
                     </v-list-item-icon>
@@ -90,10 +90,15 @@
       },
       canRequestSign() {
         let invalid = this.selectedItems.find(item => {
-          return (item.is_official !== undefined && !item.is_official)
-          || (item.count_signed_sign_request + item.count_pending_sign_request > 0)
+          return !item.can_request_sign
         })
         return this.$permissions.requestSign && invalid === undefined
+      },
+      canRequestApproval() {
+        let invalid = this.selectedItems.find(item => {
+          return !item.can_request_approval
+        })
+        return this.$permissions.requestApproval && invalid === undefined
       },
       x() {
         return this.$fileStore.state.pointerEvent.x

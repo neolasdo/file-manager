@@ -54,5 +54,9 @@ export default {
   request_sign: {
     route: 'request-sign',
     method: 'POST'
+  },
+  advisors: {
+    route: 'advisors',
+    method: 'GET'
   }
 }

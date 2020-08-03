@@ -80,4 +80,5 @@ export default {
   sign_request_pending: '従業員署名待ち',
   sign_request_signed: '署名済み',
   sign_request_reject: '却下済み',
+  advisor: '社労士',
 }
