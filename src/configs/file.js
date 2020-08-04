@@ -11,7 +11,7 @@ export default {
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   ],
   accept_extensions: {
-    'image/jpeg': 'jpeg',
+    'image/jpeg': 'jpg/jpeg',
     'image/png': 'png',
     'application/pdf': 'pdf',
     'application/msword': 'doc',

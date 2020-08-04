@@ -33,7 +33,7 @@
                 ref="fileInput"
                 multiple
                 @change="addFiles()"
-                :accept="accept"
+                :accept="acceptExtensions"
               />
               <v-combobox
                 multiple
@@ -375,6 +375,21 @@ export default {
     advisors() {
       return this.$fileStore.state.advisors;
     },
+    acceptExtensions() {
+      let exts = []
+      Object.values(this.$pluginConfig.accept_extensions).forEach((ext) => {
+        if (ext.indexOf('/') !== -1) {
+          let arr = ext.split("/");
+          arr.forEach((item) => {
+            exts.push('.'+item)
+          })
+        } else {
+          exts.push('.' + ext)
+        }
+      })
+      
+      return exts.join(',')
+    }
   },
 };
 </script>
