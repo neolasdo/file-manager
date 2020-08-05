@@ -81,4 +81,6 @@ export default {
   sign_request_signed: '署名済み',
   sign_request_reject: '却下済み',
   advisor: '社労士',
+  alert_file_too_large: '<span>このファイルは大きすぎて、プレビューできません。</ span> <br> <span>下のボタンをクリックして、ダウンロードしてください。</ span>',
+  alert_cant_load: '<span>ファイルを読み込めません。</span><br><span>下のボタンをクリックして、ダウンロードしてください。</span>'
 }

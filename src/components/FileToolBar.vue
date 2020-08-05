@@ -153,8 +153,11 @@
 </template>
 
 <script>
+import DownloadMixin from "./DownloadMixin";
+
 export default {
   name: "FileToolBar",
+  mixins: [DownloadMixin],
   data() {
     return {
       keyword: "",
@@ -246,37 +249,11 @@ export default {
       }
       return allTypes;
     },
-    download() {
-      let endpoint = this.$fileStore.$getEndpoint("download");
-      this.$fileStore.dispatch("loading");
-      this.$fileStore
-        .$axios({
-          method: endpoint.method,
-          url: endpoint.route,
-          data: {
-            files: this.selectedFiles.map((item) => {
-              return item.id;
-            }),
-          },
-        })
-        .then((res) => {
-          this.$fileStore.dispatch("unloading");
-          if (res.data && res.data.data) {
-            window.open(res.data.data.link, "_self");
-          }
-        })
-        .catch((errors) => {
-          this.$fileStore.dispatch("unloading");
-          if (
-            errors.response &&
-            errors.response.data &&
-            errors.response.data.message
-          ) {
-            this.$snackbar(errors.response.data.message, {
-              color: "error",
-            });
-          }
-        });
+    downloadFiles() {
+      let files = this.selectedFiles.map((item) => {
+        return item.id;
+      })
+      this.download(files)
     },
   },
   watch: {

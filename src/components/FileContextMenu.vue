@@ -16,7 +16,7 @@
             <v-list-item-title>{{ $trans("preview") }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item @click="download" v-if="$permissions.download">
+        <v-list-item @click="downloadFiles" v-if="$permissions.download">
           <v-list-item-icon>
             <v-icon>mdi-download</v-icon>
           </v-list-item-icon>
@@ -93,9 +93,11 @@
 import { canPreview } from "@/helpers/file";
 import FilePreviewModal from "./FilePreviewModal";
 import MoveFilesModal from "./MoveFilesModal";
+import DownloadMixin from "./DownloadMixin";
 
 export default {
   name: "FileContextMenu",
+  mixins: [DownloadMixin],
   components: {
     "file-preview-modal": FilePreviewModal,
     "move-files-modal": MoveFilesModal,
@@ -149,38 +151,11 @@ export default {
     requestApproval() {
       this.$fileStore.commit("SHOW_APPROVAL_MODAL", this.selectedItems);
     },
-    download() {
-      let endpoint = this.$fileStore.$getEndpoint("download");
-      this.$fileStore.dispatch("loading");
-
-      this.$fileStore
-        .$axios({
-          method: endpoint.method,
-          url: endpoint.route,
-          data: {
-            files: this.selectedItems.map((item) => {
-              return item.id;
-            }),
-          },
-        })
-        .then((res) => {
-          this.$fileStore.dispatch("unloading");
-          if (res.data && res.data.data) {
-            window.open(res.data.data.link, "_self");
-          }
-        })
-        .catch((errors) => {
-          this.$fileStore.dispatch("unloading");
-          if (
-            errors.response &&
-            errors.response.data &&
-            errors.response.data.message
-          ) {
-            this.$snackbar(errors.response.data.message, {
-              color: "error",
-            });
-          }
-        });
+    downloadFiles() {
+      let files = this.selectedItems.map((item) => {
+        return item.id;
+      })
+      this.download(files)
     },
     canPreview() {
       return (

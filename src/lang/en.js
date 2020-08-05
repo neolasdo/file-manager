@@ -80,5 +80,7 @@ export default {
   sign_request_pending: 'Waiting for Sign',
   sign_request_signed: 'Signed',
   sign_request_reject: 'Sign request reject',
-  advisor: 'Advisor'
+  advisor: 'Advisor',
+  alert_file_too_large: '<span>This file too large to live preview</span><br><span>Please click to button to download</span>',
+  alert_cant_load: '<span>Can\'t load file to preview</span><br><span>Please click to button to download</span>'
 }

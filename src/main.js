@@ -19,7 +19,6 @@ let optionsDefaults = {
     baseURL: 'http://localhost:8001'
   }),
   permissions: permissions,
-  previewType: 'google',
   sort: sort,
   detailConfig: detail,
   hideNeedApprovalCheckBox: false
@@ -114,12 +113,12 @@ fileStore.$axios = optionsDefaults.axios
 fileStore.$snackbar = Vue.prototype.$snackbar
 Vue.prototype.$fileStore = fileStore
 config.autoReloadPreview = true;
+config.maxRetryTime = 3;
 config.reloadPreviewAfter = 5000;
 Vue.prototype.$getEndpoint = fileStore.$getEndpoint
 Vue.prototype.$axios = fileStore.$axios;
 Vue.prototype.$permissions = optionsDefaults.permissions;
 config.sortConfig = optionsDefaults.sort;
-config.previewType = 'google'
 config.detailConfig = optionsDefaults.detailConfig;
 Vue.prototype.$pluginConfig = config
 

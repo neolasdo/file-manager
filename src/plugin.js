@@ -22,6 +22,7 @@ import detail from "./configs/detail";
 import sort from "./configs/sort";
 import FileComments from "./components/FileComments";
 import MoveFilesModal from "./components/MoveFilesModal";
+import FileViewer from "./components/FileViewer";
 
 let optionsDefaults = {
   endpoints: endpoints,
@@ -33,10 +34,10 @@ let optionsDefaults = {
   accept_extensions: file.accept_extensions,
   sort: sort,
   detailConfig: detail,
-  previewType: 'google',
   file_max_size: 25000000,
   autoReload: true,
   reloadPreviewAfter: 5000,
+  maxRetryTime: 3,
   hideNeedApprovalCheckBox: false
 }
 let Vue;
@@ -143,6 +144,7 @@ class Manager {
     store.$trans = Vue.prototype.$trans
     store.$sortConfig = options.sort
     Vue.prototype.$fileStore = store;
+    config.maxRetryTime = options.maxRetryTime;
     config.autoReloadPreview = options.autoReload;
     config.reloadPreviewAfter = options.reloadPreviewAfter;
     config.accept_mimes = options.accept_mimes;
@@ -150,7 +152,6 @@ class Manager {
     config.file_max_size = options.file_max_size;
     config.sortConfig = options.sort;
     config.detailConfig = options.detailConfig;
-    config.previewType = options.previewType
     Vue.prototype.$pluginConfig = config
 
     Vue.prototype.$getEndpoint = store.$getEndpoint;
@@ -167,10 +168,10 @@ class Manager {
       axios: opts.axios ? opts.axios : optionsDefaults.axios,
       lang: opts.lang ? opts.lang : optionsDefaults.lang,
       autoReload: opts.autoReload !== undefined ? opts.autoReload : true,
+      maxRetryTime: opts.maxRetryTime ? opts.maxRetryTime : optionsDefaults.maxRetryTime,
       reloadPreviewAfter: opts.reloadPreviewAfter ? opts.reloadPreviewAfter : optionsDefaults.reloadPreviewAfter,
       permissions: {...optionsDefaults.permissions, ...opts.permissions},
       dict: optionsDefaults.dict,
-      previewType: ['generate','google','msoffice'].includes(opts.previewType) ? opts.previewType: optionsDefaults.previewType,
       accept_mimes: [...optionsDefaults.accept_mimes, ...opts.accept_mimes],
       accept_extensions: {...optionsDefaults.accept_extensions, ...opts.accept_extensions},
       sort: {...optionsDefaults.sort, ...opts.sort},
@@ -238,6 +239,7 @@ function install(_Vue) {
   _Vue.component('file-list', FileList)
   _Vue.component('file-manager', FileManager)
   _Vue.component('file-preview-modal', FilePreviewModal)
+  _Vue.component('file-viewer', FileViewer)
   _Vue.component('file-tool-bar', FileToolBar)
   _Vue.component('file-upload-modal', FileUploadModal)
   _Vue.component('folder-context-menu', FolderContextMenu)
@@ -257,5 +259,5 @@ export default {
 
 export {
   FileComments,
-  FilePreviewModal
+  FileViewer
 }

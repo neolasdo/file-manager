@@ -19,9 +19,8 @@ export function formatSize(num, MAX) {
   return d + suffix;
 }
 
-export function isDocumentFile(mime) {
+export function isDocType(mime) {
   return [
-    'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.ms-powerpoint',
@@ -31,7 +30,11 @@ export function isDocumentFile(mime) {
   ].includes(mime)
 }
 
-export function isImageFile(mime) {
+export function isPdfType(mime) {
+  return mime == "application/pdf";
+}
+
+export function isImageType(mime) {
   return [
     'image/jpg',
     'image/jpeg',
@@ -40,7 +43,7 @@ export function isImageFile(mime) {
 }
 
 export function canPreview(mime) {
-  return isDocumentFile(mime) || isImageFile(mime)
+  return isDocType(mime) || isImageType(mime) || isPdfType(mime)
 }
 
 export function getFileThumbnail(item) {
