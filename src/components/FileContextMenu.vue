@@ -93,11 +93,11 @@
 import { canPreview } from "@/helpers/file";
 import FilePreviewModal from "./FilePreviewModal";
 import MoveFilesModal from "./MoveFilesModal";
-import DownloadMixin from "./DownloadMixin";
+import download from '@/mixins/download'
 
 export default {
   name: "FileContextMenu",
-  mixins: [DownloadMixin],
+  mixins: [download],
   components: {
     "file-preview-modal": FilePreviewModal,
     "move-files-modal": MoveFilesModal,
@@ -146,10 +146,10 @@ export default {
       this.$fileStore.dispatch("addFilesToClipboard");
     },
     requestSign() {
-      this.$fileStore.commit("SHOW_SIGN_MODAL", this.selectedItems);
+      this.$fileStore.commit("SHOW_SIGN_MODAL", {files: this.selectedItems});
     },
     requestApproval() {
-      this.$fileStore.commit("SHOW_APPROVAL_MODAL", this.selectedItems);
+      this.$fileStore.commit("SHOW_APPROVAL_MODAL", {files: this.selectedItems});
     },
     downloadFiles() {
       let files = this.selectedItems.map((item) => {

@@ -38,5 +38,6 @@ export default {
   showRequestSignModal: false,
   requestSignFiles: [],
   requestApprovalFiles: [],
-  advisors: []
+  advisors: [],
+  clearClipboard: false
 }

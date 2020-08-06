@@ -39,12 +39,12 @@
 
 <script>
 import FileViewer from "./FileViewer";
-import DownloadMixin from "./DownloadMixin";
+import download from '@/mixins/download'
 
 export default {
   name: "FilePreviewModal",
   components: { FileViewer },
-  mixins: [DownloadMixin],
+  mixins: [download],
   data() {
     return {
       showModal: false,

@@ -217,7 +217,8 @@ export default {
   },
   SHOW_APPROVAL_MODAL(state, payload) {
     state.showRequestApprovalModal = true
-    state.requestApprovalFiles = payload
+    state.requestApprovalFiles = payload.files
+    state.clearClipboard = payload.resetClipboard ? payload.resetClipboard : false
   },
   HIDE_APPROVAL_MODAL(state) {
     state.showRequestApprovalModal = false
@@ -225,7 +226,8 @@ export default {
   },
   SHOW_SIGN_MODAL(state, payload) {
     state.showRequestSignModal = true
-    state.requestSignFiles = payload
+    state.requestSignFiles = payload.files
+    state.clearClipboard = payload.resetClipboard ? payload.resetClipboard : false
   },
   HIDE_SIGN_MODAL(state) {
     state.showRequestSignModal = false

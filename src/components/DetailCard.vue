@@ -299,10 +299,16 @@ export default {
       this.$fileStore.dispatch("loadMoreComments");
     },
     requestSign() {
-      this.$fileStore.commit("SHOW_SIGN_MODAL", this.clipboard.files);
+      this.$fileStore.commit("SHOW_SIGN_MODAL", {
+        files: this.clipboard.files,
+        resetClipboard: true
+      });
     },
     requestApproval() {
-      this.$fileStore.commit("SHOW_APPROVAL_MODAL", this.clipboard.files);
+      this.$fileStore.commit("SHOW_APPROVAL_MODAL", {
+        files: this.clipboard.files,
+        resetClipboard: true
+      });
     },
     close() {
       this.$emit("close");

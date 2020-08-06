@@ -269,7 +269,7 @@ export default {
     commit('UPDATE_SORT', payload)
     commit('UPDATE_LIST', payload)
   },
-  async requestSign({ commit, dispatch }, payload) {
+  async requestSign({ state, commit, dispatch }, payload) {
     if (payload.length) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('request_sign')
@@ -281,15 +281,18 @@ export default {
       let response = executeAxios(this.$axios, endpoint, data)
       await response.then(res => {
         dispatch('reload')
-        commit('HIDE_SIGN_MODAL')
         getMessage(res, this.$snackbar)
+        commit('HIDE_SIGN_MODAL')
+        if (state.clearClipboard) {
+          commit('RESET_CLIPBOARD')
+        }
       }).catch(error => {
         getErrorMessage(error, this.$snackbar, this.$trans)
       });
       commit('UNLOADING');
     }
   },
-  async requestApproval({ commit, dispatch }, payload) {
+  async requestApproval({ state, commit, dispatch }, payload) {
     if (payload.files.length && payload.advisor_id) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('request_approval')
@@ -304,6 +307,9 @@ export default {
         dispatch('reload')
         getMessage(res, this.$snackbar)
         commit('HIDE_APPROVAL_MODAL')
+        if (state.clearClipboard) {
+          commit('RESET_CLIPBOARD')
+        }
       }).catch(error => {
         getErrorMessage(error, this.$snackbar, this.$trans)
       });

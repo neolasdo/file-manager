@@ -1,4 +1,3 @@
-<script>
 export default {
   methods: {
     download(files) {
@@ -34,4 +33,3 @@ export default {
     },
   },
 };
-</script>

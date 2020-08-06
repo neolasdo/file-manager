@@ -153,11 +153,11 @@
 </template>
 
 <script>
-import DownloadMixin from "./DownloadMixin";
+import download from "@/mixins/download";
 
 export default {
   name: "FileToolBar",
-  mixins: [DownloadMixin],
+  mixins: [download],
   data() {
     return {
       keyword: "",
@@ -234,10 +234,10 @@ export default {
       this.search({ keyword: this.keyword, filter: this.filter });
     },
     requestSign() {
-      this.$fileStore.commit("SHOW_SIGN_MODAL", this.selectedFiles);
+      this.$fileStore.commit("SHOW_SIGN_MODAL", {files: this.selectedItems});
     },
     requestApproval() {
-      this.$fileStore.commit("SHOW_APPROVAL_MODAL", this.selectedFiles);
+      this.$fileStore.commit("SHOW_APPROVAL_MODAL", {files: this.selectedItems});
     },
     getAllType() {
       let allTypes = [];
