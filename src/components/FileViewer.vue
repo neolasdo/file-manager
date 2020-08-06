@@ -78,9 +78,9 @@ export default {
       default() {
         return {
           max_size_preview: {
-            "image/jpeg": 52428800,
-            "image/png": 52428800,
-            "application/pdf": 52428800,
+            "image/jpeg": 15728640,
+            "image/png": 15728640,
+            "application/pdf": 15728640,
             "application/msword": 10485760,
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document": 10485760,
             "application/vnd.ms-powerpoint": 10485760,
@@ -100,7 +100,7 @@ export default {
     googleCheckInterval: {
       type: Number,
       default() {
-        return 3000;
+        return 4000;
       },
     },
     googleMaxRetryTime: {
