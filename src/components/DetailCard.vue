@@ -260,10 +260,17 @@ export default {
       return this.$fileStore.state.current;
     },
     canRequestSign() {
-      let invalid = this.selectedFiles.find((item) => {
-        return !item.can_request_sign;
+      let canRequestSign = this.selectedFiles.filter((item) => {
+        return item.can_request_sign;
       });
-      return this.$permissions.requestSign && invalid === undefined;
+      let canRequestSign3Party = this.selectedFiles.filter((item) => {
+        return item.can_request_sign_third_party;
+      });
+      return (
+        this.$permissions.requestSign &&
+        (canRequestSign.length === this.selectedFiles.length ||
+          canRequestSign3Party.length === this.selectedFiles.length)
+      );
     },
     canRequestApproval() {
       let invalid = this.selectedFiles.find((item) => {

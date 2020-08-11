@@ -93,7 +93,7 @@
 import { canPreview } from "@/helpers/file";
 import FilePreviewModal from "./FilePreviewModal";
 import MoveFilesModal from "./MoveFilesModal";
-import download from '@/mixins/download'
+import download from "@/mixins/download";
 
 export default {
   name: "FileContextMenu",
@@ -107,10 +107,17 @@ export default {
       return this.$fileStore.state.selectedFiles;
     },
     canRequestSign() {
-      let invalid = this.selectedItems.find((item) => {
-        return !item.can_request_sign;
+      let canRequestSign = this.selectedItems.filter((item) => {
+        return item.can_request_sign;
       });
-      return this.$permissions.requestSign && invalid === undefined;
+      let canRequestSign3Party = this.selectedItems.filter((item) => {
+        return item.can_request_sign_third_party;
+      });
+      return (
+        this.$permissions.requestSign &&
+        (canRequestSign.length === this.selectedItems.length ||
+          canRequestSign3Party.length === this.selectedItems.length)
+      );
     },
     canRequestApproval() {
       let invalid = this.selectedItems.find((item) => {
@@ -146,16 +153,18 @@ export default {
       this.$fileStore.dispatch("addFilesToClipboard");
     },
     requestSign() {
-      this.$fileStore.commit("SHOW_SIGN_MODAL", {files: this.selectedItems});
+      this.$fileStore.commit("SHOW_SIGN_MODAL", { files: this.selectedItems });
     },
     requestApproval() {
-      this.$fileStore.commit("SHOW_APPROVAL_MODAL", {files: this.selectedItems});
+      this.$fileStore.commit("SHOW_APPROVAL_MODAL", {
+        files: this.selectedItems,
+      });
     },
     downloadFiles() {
       let files = this.selectedItems.map((item) => {
         return item.id;
-      })
-      this.download(files)
+      });
+      this.download(files);
     },
     canPreview() {
       return (

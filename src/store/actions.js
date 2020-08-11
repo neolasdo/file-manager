@@ -270,13 +270,18 @@ export default {
     commit('UPDATE_LIST', payload)
   },
   async requestSign({ state, commit, dispatch }, payload) {
-    if (payload.length) {
+    if (payload.files.length) {
       commit('LOADING')
       let endpoint = this.$getEndpoint('request_sign')
       let data = {
-        files: payload.map(item => {
+        files: payload.files.map(item => {
           return item.id
         }),
+      }
+      data.send_third_party = payload.sendThirdParty
+      if (payload.sendThirdParty) {
+        data.email = payload.thirdPartyEmail
+        data.phone = payload.thirdPartyPhone
       }
       let response = executeAxios(this.$axios, endpoint, data)
       await response.then(res => {
