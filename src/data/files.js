@@ -27,6 +27,7 @@ let all = {
               created_at: '2019-01-01',
               can_request_approval: true,
               can_request_sign: true,
+              can_request_sign_third_party: true,
             },
             {
               name: 'File 6',

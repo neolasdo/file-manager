@@ -27,7 +27,7 @@
               <v-col cols="12">
                 <v-switch
                   v-model="sendThirdParty"
-                  :readOnly="readOnlySwitch"
+                  :readonly="readOnlySwitch"
                   class="v-input--reverse"
                 >
                   <template #label>
@@ -43,7 +43,7 @@
                   class="custom-input mt-2"
                   dense
                   :counter="20"
-                  :error-messages="validate.emailErrors"
+                  :error-messages="validate.email"
                   :rules="rules.emailRules"
                   outlined
                   hide-details
@@ -59,7 +59,7 @@
                   class="custom-input mt-2"
                   dense
                   :counter="320"
-                  :error-messages="validate.phoneErrors"
+                  :error-messages="validate.phone"
                   :rules="rules.phoneRules"
                   outlined
                   hide-details
@@ -114,8 +114,8 @@ export default {
         ],
       },
       validate: {
-        phoneErrors: [],
-        emailErrors: [],
+        phone: [],
+        email: [],
       },
     };
   },
@@ -139,11 +139,93 @@ export default {
       return formatSize(size);
     },
     requestSign() {
-      this.$fileStore.dispatch("requestSign", {
-        files: this.files,
-        sendThirdParty: this.sendThirdParty,
-        thirdPartyEmail: this.thirdPartyEmail,
-        thirdPartyPhone: this.thirdPartyPhone,
+      let formData = {
+        files: this.files.map(item => {
+          return item.id
+        }),
+      }
+      if (this.sendThirdParty) {
+        formData.send_third_party = this.sendThirdParty
+        formData.email = this.thirdPartyEmail
+        formData.phone = this.thirdPartyPhone
+      }
+      if (this.readOnlySwitch) {
+        this.createThirdPartySignRequest(formData)
+      } else {
+        this.createSignRequest(formData)
+      }
+    },
+    async createSignRequest(data) {
+      this.$fileStore.commit('LOADING');
+      let endpoint = this.$getEndpoint('request_sign')
+      let response = this.$axios({
+        method: endpoint.method,
+        url: endpoint.route,
+        data: data
+      })
+      await response.then(res => {
+        this.$fileStore.commit('UNLOADING');
+        this.$fileStore.dispatch('reload')
+        if (res.data && res.data.message) {
+          this.$snackbar(res.data.message, {
+            color: 'success'
+          })
+        }
+        this.$fileStore.commit('HIDE_SIGN_MODAL')
+        if (this.$fileStore.state.clearClipboard) {
+          this.$fileStore.commit('RESET_CLIPBOARD')
+        }
+      }).catch(errors => {
+        this.$fileStore.commit('UNLOADING');
+        this.valid = false;
+        let status = errors.response.status;
+        if(status === 400) {
+          let err = errors.response.data.data;
+          for (let field in err) {
+            this.validate[field] = err[field]
+          }
+        }
+        if([403, 500, 404].includes(status)) {
+          this.$snackbar(errors.response.data.message, {
+            color: 'error'
+          });
+        }
+      });
+    },
+    async createThirdPartySignRequest(data) {
+      let endpoint = this.$getEndpoint('request_sign_third_party')
+      let response = this.$axios({
+        method: endpoint.method,
+        url: endpoint.route,
+        data: data
+      })
+      await response.then(res => {
+        this.$fileStore.commit('UNLOADING');
+        this.$fileStore.dispatch('reload')
+        if (res.data && res.data.message) {
+          this.$snackbar(res.data.message, {
+            color: 'success'
+          })
+        }
+        this.$fileStore.commit('HIDE_SIGN_MODAL')
+        if (this.$fileStore.state.clearClipboard) {
+          this.$fileStore.commit('RESET_CLIPBOARD')
+        }
+      }).catch(errors => {
+        this.$fileStore.commit('UNLOADING');
+        this.valid = false;
+        let status = errors.response.status;
+        if(status === 400) {
+          let err = errors.response.data.data;
+          for (let field in err) {
+            this.validate[field] = err[field]
+          }
+        }
+        if([403, 500, 404].includes(status)) {
+          this.$snackbar(errors.response.data.message, {
+            color: 'error'
+          });
+        }
       });
     },
   },
@@ -160,12 +242,6 @@ export default {
     isValid() {
       return (this.sendThirdParty && this.valid) || !this.sendThirdParty;
     },
-    forceSend() {
-      let canRequestSign3Party = this.files.filter((item) => {
-        return item.can_request_sign_third_party;
-      });
-      return canRequestSign3Party.length === this.files.length
-    }
   },
   watch: {
     showDialog(newVal) {
@@ -173,16 +249,25 @@ export default {
         if (this.$refs.form) {
           this.$refs.form.reset();
         }
+        let canRequestSign3Party = this.files.filter((item) => {
+          return item.can_request_sign_third_party;
+        });
+        if (canRequestSign3Party.length === this.files.length) {
+          this.sendThirdParty = true
+          this.readOnlySwitch = true
+        } else {
+          this.sendThirdParty = false
+          this.readOnlySwitch = false
+        }
       }
     },
-    forceSend(val) {
-      if (val) {
-        this.sendThirdParty = true
-        this.readOnlySwitch = true
-      } else {
-        this.sendThirdParty = false
-        this.readOnlySwitch = false
-      }
+    thirdPartyEmail() {
+      this.valid = true;
+      this.validate['email'] = '';
+    },
+    thirdPartyPhonne() {
+      this.valid = true;
+      this.validate['phone'] = '';
     }
   },
 };

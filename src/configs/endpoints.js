@@ -55,6 +55,10 @@ export default {
     route: 'request-sign',
     method: 'POST'
   },
+  request_sign_third_party: {
+    route: 'request-sign-third-party',
+    method: 'POST'
+  },
   advisors: {
     route: 'advisors',
     method: 'GET'
