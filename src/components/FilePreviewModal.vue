@@ -21,15 +21,24 @@
         :style="{ height: `${frameHeight + 12}px` }"
         style="position: relative"
       >
+        <v-overlay :value="loading" absolute>
+          <v-progress-circular indeterminate size="64"></v-progress-circular>
+        </v-overlay>
         <file-viewer
           :mime="mime"
           :path="path"
           :height="height"
           :size="size"
-          v-if="showModal"
-          :googleCheckInterval="$pluginConfig.reloadPreviewAfter ? $pluginConfig.reloadPreviewAfter: 4000"
+          v-if="pathLoaded"
+          :googleCheckInterval="
+            $pluginConfig.reloadPreviewAfter
+              ? $pluginConfig.reloadPreviewAfter
+              : 4000
+          "
           :googleCheckContentLoaded="$pluginConfig.autoReloadPreview"
-          :googleMaxRetryTime="$pluginConfig.maxRetryTime ? $pluginConfig.maxRetryTime: 3"
+          :googleMaxRetryTime="
+            $pluginConfig.maxRetryTime ? $pluginConfig.maxRetryTime : 3
+          "
           @download="downloadFile"
         />
       </v-card-text>
@@ -39,7 +48,7 @@
 
 <script>
 import FileViewer from "./FileViewer";
-import download from '@/mixins/download'
+import download from "@/mixins/download";
 
 export default {
   name: "FilePreviewModal",
@@ -48,6 +57,9 @@ export default {
   data() {
     return {
       showModal: false,
+      pathLoaded: false,
+      loading: false,
+      path: "",
       item: {
         name: "",
         id: "",
@@ -60,9 +72,6 @@ export default {
     };
   },
   computed: {
-    path() {
-      return  this.item.path ? this.item.path : this.item.file_path;
-    },
     mime() {
       return this.item.mime ? this.item.mime : this.item.file_mime;
     },
@@ -76,14 +85,38 @@ export default {
   methods: {
     closeModal() {
       this.showModal = false;
+      this.pathLoaded = false;
     },
-    showPreview(item) {
+    async showPreview(item) {
       this.item = item;
       this.showModal = true;
+      this.loading = true;
+      let endpoint = this.$getEndpoint("getFileUri", [this.item.id]);
+      await this.$fileStore.$axios
+        .get(endpoint.route)
+        .then((res) => {
+          this.path = res.data.data;
+          this.loading = false;
+          this.pathLoaded = true;
+        })
+        .catch((errors) => {
+          this.path = "";
+          this.loading = false;
+          this.pathLoaded = true;
+          if (
+            errors.response &&
+            errors.response.data &&
+            errors.response.data.message
+          ) {
+            this.$snackbar(errors.response.data.message, {
+              color: "error",
+            });
+          }
+        });
     },
     downloadFile() {
-      this.download([this.item.id])
-    }
+      this.download([this.item.id]);
+    },
   },
   watch: {
     showModal: {

@@ -62,5 +62,9 @@ export default {
   advisors: {
     route: 'advisors',
     method: 'GET'
-  }
+  },
+  getFileUri: {
+    route: 'file/:id/path',
+    method: 'GET'
+  },
 }
