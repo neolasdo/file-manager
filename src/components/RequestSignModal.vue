@@ -4,7 +4,7 @@
       <v-card>
         <v-card-title class="primary lighten-1" tile dark>
           <span style="color: #fff !important">{{
-            $trans("request_sign")
+            $trans(readOnlySwitch?"request_sign_3th_party":"request_sign_modal_title")
           }}</span>
         </v-card-title>
         <v-card-text>
@@ -27,13 +27,14 @@
               <v-col cols="12">
                 <v-switch
                   v-model="sendThirdParty"
-                  :readonly="readOnlySwitch"
+                  v-if="!readOnlySwitch"
                   class="v-input--reverse"
                 >
                   <template #label>
                     第三者に署名依頼を送信
                   </template>
                 </v-switch>
+                <span v-else class="font-weight-bold">{{$trans('thirt_party_info')}}</span>
               </v-col>
               <v-col cols="12" v-if="sendThirdParty">
                 <label for="email" class="app-label required"
@@ -194,6 +195,7 @@ export default {
     },
     async createThirdPartySignRequest(data) {
       let endpoint = this.$getEndpoint('request_sign_third_party')
+      this.$fileStore.commit('LOADING');
       let response = this.$axios({
         method: endpoint.method,
         url: endpoint.route,
