@@ -203,14 +203,14 @@
                 </v-col>
               </v-row>
             </v-card-text>
-            <v-card-actions v-if="clipboard.files.length && (canRequestSign || canRequestApproval)" class="mt-2">
+            <v-card-actions v-if="clipboard.files.length || canRequestSign || canRequestApproval" class="mt-2">
               <v-btn color="primary" text small v-if="canRequestSign" @click="requestSign">
                 {{ $trans("request_sign") }}
               </v-btn>
               <v-btn color="primary" text small v-if="canRequestApproval" @click="requestApproval">
                 {{ $trans("approval_request") }}
               </v-btn>
-              <v-btn color="primary" text small @click="resetClipboard">
+              <v-btn color="primary" v-if="clipboard.files.length" text small @click="resetClipboard">
                 {{ $trans("reset") }}
               </v-btn>
             </v-card-actions>
@@ -260,20 +260,20 @@ export default {
       return this.$fileStore.state.current;
     },
     canRequestSign() {
-      let canRequestSign = this.selectedFiles.filter((item) => {
+      let canRequestSign = this.clipboard.files.filter((item) => {
         return item.can_request_sign;
       });
-      let canRequestSign3Party = this.selectedFiles.filter((item) => {
+      let canRequestSign3Party = this.clipboard.files.filter((item) => {
         return item.can_request_sign_third_party;
       });
       return (
         this.$permissions.requestSign &&
-        (canRequestSign.length === this.selectedFiles.length ||
-          canRequestSign3Party.length === this.selectedFiles.length)
+        (canRequestSign.length === this.clipboard.files.length ||
+          canRequestSign3Party.length === this.clipboard.files.length)
       );
     },
     canRequestApproval() {
-      let invalid = this.selectedFiles.find((item) => {
+      let invalid = this.clipboard.files.find((item) => {
         return !item.can_request_approval;
       });
       return this.$permissions.requestApproval && invalid === undefined;
