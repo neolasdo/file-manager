@@ -16,7 +16,6 @@
                   :counter="50"
                   dense
                   outlined
-                  hide-details
                   :error-messages="messages.name"
                   class="mt-2"
                 />

@@ -91,7 +91,6 @@
                 dense
                 outlined
                 id="advisor"
-                hide-details
                 v-model="advisor_id"
                 :items="advisors"
                 :rules="rules.advisorRules"

@@ -43,11 +43,10 @@
                 <v-text-field
                   class="custom-input mt-2"
                   dense
-                  :counter="20"
+                  :counter="320"
                   :error-messages="validate.email"
                   :rules="rules.emailRules"
                   outlined
-                  hide-details
                   v-if="sendThirdParty"
                   v-model="thirdPartyEmail"
                   id="email"
@@ -59,11 +58,10 @@
                 <v-text-field
                   class="custom-input mt-2"
                   dense
-                  :counter="320"
+                  :counter="20"
                   :error-messages="validate.phone"
                   :rules="rules.phoneRules"
                   outlined
-                  hide-details
                   v-model="thirdPartyPhone"
                   id="phone"
                 ></v-text-field>
