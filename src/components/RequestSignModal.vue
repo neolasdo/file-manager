@@ -267,7 +267,7 @@ export default {
       this.valid = true;
       this.validate['email'] = '';
     },
-    thirdPartyPhonne() {
+    thirdPartyPhone() {
       this.valid = true;
       this.validate['phone'] = '';
     }
