@@ -24,7 +24,7 @@
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "vue-template-compiler": "^2.6.11",
-    "node-sass": "^4.14.0",
+    "node-sass": "^7.0.0",
     "sass-loader": "^8.0.2",
     "@mdi/font": "^5.2.45",
     "axios": "^0.19.2",
